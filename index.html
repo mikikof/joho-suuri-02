@@ -40,7 +40,7 @@
   }
 
   * { box-sizing: border-box; margin: 0; padding: 0; }
-  html { scroll-behavior: smooth; scroll-padding-top: 24px; }
+  html, body { height: 100%; overflow: hidden; }
   body {
     font-family: var(--font-jp);
     background: var(--bg);
@@ -52,10 +52,10 @@
   }
 
   /* ====================== LAYOUT ====================== */
-  .shell { display: grid; grid-template-columns: 280px 1fr; min-height: 100vh; }
+  .shell { display: grid; grid-template-columns: 280px 1fr; height: 100vh; overflow: hidden; }
 
   .sidebar {
-    position: sticky; top: 0; height: 100vh;
+    height: 100vh;
     background: var(--surface-2);
     border-right: 1px solid var(--line);
     padding: 32px 20px;
@@ -102,10 +102,200 @@
   .nav-link.active .num { background: white; border-color: var(--blue-bg-2); color: var(--blue); }
 
   .main {
-    padding: 80px 64px 120px;
-    max-width: 1000px;
-    margin: 0 auto;
+    position: relative;
+    height: 100vh;
+    overflow: hidden;
   }
+  .slide-deck { position: relative; height: 100%; width: 100%; }
+  .slide {
+    position: absolute; inset: 0;
+    padding: 56px 72px 88px;
+    overflow-y: auto;
+    opacity: 0; visibility: hidden; pointer-events: none;
+    transition: opacity 0.25s ease;
+  }
+  .slide.active { opacity: 1; visibility: visible; pointer-events: auto; }
+  .slide-inner { max-width: 1280px; width: 100%; margin: 0 auto; }
+  .slide-inner .section-sub { max-width: none; font-size: 20px; line-height: 1.75; margin-bottom: 28px; }
+  .slide-inner .lede { max-width: none; font-size: 22px; line-height: 1.75; }
+  .slide-inner h1 { font-size: 80px; }
+  .slide-inner h2 { font-size: 52px; margin-top: 8px; margin-bottom: 16px; line-height: 1.25; }
+  .slide-inner h3 { font-size: 22px; }
+  .slide-inner .eyebrow { font-size: 14px; letter-spacing: 0.16em; margin-bottom: 14px; }
+  .slide-inner .hr-section { margin: 0 0 28px; }
+  .slide-inner .hr-section .label { font-size: 13px; }
+  .slide-inner .control-label { font-size: 16px; }
+  .slide-inner .control-value { font-size: 18px; }
+  .slide-inner .stat { padding: 20px; }
+  .slide-inner .stat-label { font-size: 13px; margin-bottom: 8px; }
+  .slide-inner .stat-value { font-size: 40px; }
+  .slide-inner .stat-unit { font-size: 16px; }
+  .slide-inner .stat-delta { font-size: 13px; }
+  .slide-inner .callout { padding: 20px 22px; }
+  .slide-inner .callout .body { font-size: 17px; line-height: 1.8; }
+  .slide-inner .equation { font-size: 28px; padding: 24px 28px; }
+  .slide-inner .equation.light { font-size: 26px; }
+  .slide-inner .eq-arrow { font-size: 15px; }
+  .slide-inner .big-answer .number { font-size: 88px; }
+  .slide-inner .big-answer .label { font-size: 13px; }
+  .slide-inner .big-answer .unit { font-size: 26px; }
+  .slide-inner .big-answer .hint { font-size: 15px; }
+  .slide-inner .plan-name { font-size: 19px; }
+  .slide-inner .plan-price { font-size: 48px; }
+  .slide-inner .plan-price .yen { font-size: 18px; }
+  .slide-inner .plan-breakdown { font-size: 14px; }
+  .slide-inner .terminal { font-size: 17px; padding: 24px 26px; }
+  .slide-inner .terminal .line { padding: 6px 0; min-height: 28px; }
+  .slide-inner .btn { font-size: 15px; padding: 10px 16px; }
+  .slide-inner .principle-card { padding: 24px 28px; }
+  .slide-inner .principle-card .num { font-size: 56px; }
+  .slide-inner .principle-card h4 { font-size: 20px; }
+  .slide-inner .principle-card p { font-size: 16px; }
+  .slide-inner code { font-size: 0.9em; }
+
+  /* 扉系は縦中央寄せ */
+  .slide.gate, .slide.title-cover, .slide.tease, .slide.closing {
+    display: flex; align-items: center; justify-content: center;
+  }
+
+  /* ====================== TITLE COVER ====================== */
+  .title-cover { background: linear-gradient(135deg, #0F172A 0%, #1E3A8A 60%, #1D4ED8 100%); color: white; }
+  .title-cover .cover-meta { font-size: 15px; letter-spacing: 0.18em; text-transform: uppercase; color: #93C5FD; font-weight: 500; margin-bottom: 28px; }
+  .title-cover .cover-title { font-family: var(--font-jp); font-weight: 900; font-size: 34px; line-height: 1.3; color: #DBEAFE; margin-bottom: 8px; }
+  .title-cover .cover-num { font-family: var(--font-serif); font-size: 104px; line-height: 1; font-weight: 400; color: white; margin-bottom: 36px; }
+  .title-cover .cover-sub { font-family: var(--font-jp); font-weight: 900; font-size: 96px; line-height: 1.15; color: white; letter-spacing: -0.02em; margin-bottom: 56px; }
+  .title-cover .cover-author { font-size: 20px; color: #CBD5E1; letter-spacing: 0.08em; }
+
+  /* ====================== PART GATE ====================== */
+  .slide.gate { background: var(--ink); color: white; }
+  .gate-inner { width: 100%; max-width: 1100px; text-align: left; padding: 0 8px; }
+  .gate-part-num { font-family: var(--font-mono); font-size: 16px; letter-spacing: 0.34em; color: #93C5FD; margin-bottom: 28px; font-weight: 500; }
+  .gate-title { font-family: var(--font-jp); font-weight: 900; font-size: 120px; line-height: 1.1; letter-spacing: -0.02em; color: white; margin-bottom: 28px; }
+  .gate-sub { font-size: 24px; color: #CBD5E1; max-width: 46ch; line-height: 1.7; }
+  .gate-accent { color: #60A5FA; }
+
+  /* ====================== TEASE ====================== */
+  .tease { background: linear-gradient(180deg, #F8FAFC 0%, #EFF6FF 100%); }
+  .tease-inner { width: 100%; max-width: 1100px; text-align: center; }
+  .tease-eyebrow { font-size: 15px; letter-spacing: 0.2em; color: var(--blue-dark); text-transform: uppercase; font-weight: 600; margin-bottom: 20px; }
+  .tease-title { font-size: 68px; line-height: 1.2; font-weight: 900; color: var(--ink); margin-bottom: 52px; letter-spacing: -0.02em; }
+  .vs-compare { display: grid; grid-template-columns: 1fr auto 1fr; align-items: stretch; gap: 24px; margin-bottom: 24px; }
+  .vs-card { padding: 36px 28px; border-radius: var(--radius-lg); background: var(--surface); border: 1px solid var(--line); box-shadow: var(--shadow); text-align: left; position: relative; }
+  .vs-card.b { background: linear-gradient(135deg, #1E3A8A 0%, #1D4ED8 100%); color: white; border-color: transparent; }
+  .vs-card .vs-label { font-family: var(--font-serif); font-size: 44px; font-weight: 400; color: var(--blue-dark); margin-bottom: 14px; line-height: 1; }
+  .vs-card.b .vs-label { color: #93C5FD; }
+  .vs-card .vs-plan { font-size: 17px; color: var(--ink-2); margin-bottom: 24px; line-height: 1.6; }
+  .vs-card.b .vs-plan { color: #CBD5E1; }
+  .vs-card .vs-amount { font-family: var(--font-serif); font-size: 64px; line-height: 1.1; color: var(--ink); font-weight: 400; }
+  .vs-card.b .vs-amount { color: white; }
+  .vs-card .vs-amount small { font-size: 20px; color: var(--ink-3); margin-left: 4px; }
+  .vs-card.b .vs-amount small { color: #93C5FD; }
+  .vs-card .vs-note { font-size: 15px; color: var(--ink-3); margin-top: 10px; }
+  .vs-card.b .vs-note { color: #93C5FD; }
+  .vs-divider { display: flex; align-items: center; justify-content: center; font-family: var(--font-serif); font-size: 52px; color: var(--ink-3); font-weight: 400; }
+  .tease-hint { font-size: 17px; color: var(--ink-3); margin-top: 28px; }
+
+  /* ====================== STORY ====================== */
+  .story-block { background: var(--surface); border: 1px solid var(--line); border-radius: var(--radius-lg); padding: 36px 40px; margin: 20px 0; box-shadow: var(--shadow-sm); }
+  .story-label { font-size: 14px; letter-spacing: 0.16em; text-transform: uppercase; color: var(--ink-3); font-weight: 600; margin-bottom: 16px; }
+  .story-text { font-size: 26px; line-height: 1.85; color: var(--ink); }
+  .story-text strong { color: var(--blue-dark); font-weight: 700; }
+  .story-q { font-size: 36px; font-weight: 900; color: var(--ink); margin-top: 32px; line-height: 1.4; }
+  .story-q em { color: var(--blue-dark); font-style: normal; }
+
+  /* ====================== RATE COMPARE ====================== */
+  .rate-compare { display: grid; grid-template-columns: repeat(3, 1fr); gap: 18px; margin-top: 24px; }
+  .rate-card { padding: 28px 24px; border-radius: var(--radius-lg); background: var(--surface); border: 1px solid var(--line); text-align: center; }
+  .rate-card.mid { background: var(--blue-bg); border-color: var(--blue-bg-2); }
+  .rate-card.high { background: var(--ink); color: white; border-color: var(--ink); }
+  .rate-card .rate-label { font-family: var(--font-mono); font-size: 40px; color: var(--blue-dark); font-weight: 700; margin-bottom: 6px; }
+  .rate-card.high .rate-label { color: #93C5FD; }
+  .rate-card .rate-arrow { color: var(--ink-3); font-size: 20px; margin: 10px 0; }
+  .rate-card.high .rate-arrow { color: #64748B; }
+  .rate-card .rate-amount { font-family: var(--font-serif); font-size: 56px; line-height: 1.1; color: var(--ink); font-weight: 400; }
+  .rate-card.mid .rate-amount { color: var(--blue-dark); }
+  .rate-card.high .rate-amount { color: white; }
+  .rate-card .rate-amount small { font-family: var(--font-jp); font-size: 20px; font-weight: 500; color: var(--ink-3); margin-left: 4px; }
+  .rate-card.high .rate-amount small { color: #94A3B8; }
+
+  /* ====================== APPLY GRID (PART 5 応用) ====================== */
+  .apply-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; margin-top: 20px; }
+  .apply-card { padding: 28px 30px; border-radius: var(--radius-lg); background: var(--surface); border: 1px solid var(--line); }
+  .apply-card.dark { background: var(--ink); color: white; border-color: var(--ink); }
+  .apply-card .apply-title { font-size: 20px; font-weight: 700; color: var(--ink); margin-bottom: 12px; }
+  .apply-card.dark .apply-title { color: white; }
+  .apply-card .apply-body { font-size: 16px; color: var(--ink-2); line-height: 1.8; }
+  .apply-card.dark .apply-body { color: #CBD5E1; }
+  .apply-summary { margin-top: 24px; padding: 24px 28px; background: var(--blue-bg); border-left: 4px solid var(--blue); border-radius: var(--radius-md); font-size: 18px; color: var(--ink); line-height: 1.7; }
+
+  /* ====================== PROBLEM VALUES ====================== */
+  .problem-values { display: grid; grid-template-columns: repeat(3, 1fr); gap: 16px; margin: 24px 0; }
+  .problem-values .pv { background: var(--surface-2); border: 1px solid var(--line); border-radius: var(--radius-md); padding: 24px; text-align: center; }
+  .problem-values .pv-label { font-size: 14px; letter-spacing: 0.08em; color: var(--ink-3); margin-bottom: 10px; font-weight: 500; }
+  .problem-values .pv-value { font-family: var(--font-serif); font-size: 40px; line-height: 1.1; color: var(--ink); }
+  .problem-values .pv-value small { font-family: var(--font-jp); font-size: 18px; color: var(--ink-3); margin-left: 4px; }
+
+  /* ====================== EQ TRANSFORM ====================== */
+  .eq-transform { display: grid; grid-template-columns: 1fr; gap: 14px; margin: 28px 0; }
+  .eq-step { padding: 22px 24px; background: var(--surface-2); border: 1px solid var(--line); border-radius: var(--radius-md); font-family: var(--font-mono); font-size: 26px; text-align: center; color: var(--ink); }
+  .eq-step.final { background: var(--ink); color: white; border-color: var(--ink); font-size: 30px; }
+  .eq-step-label { font-size: 14px; color: var(--ink-3); text-align: center; font-family: var(--font-jp); }
+
+  /* ====================== EXCEL HANDS-ON BOX ====================== */
+  .excel-box { margin-top: 24px; padding: 24px 28px; background: #ECFDF5; border: 1px solid #A7F3D0; border-left: 5px solid #059669; border-radius: var(--radius-lg); }
+  .excel-box .excel-head { display: flex; align-items: center; gap: 10px; font-size: 14px; font-weight: 700; color: #047857; letter-spacing: 0.08em; text-transform: uppercase; margin-bottom: 14px; }
+  .excel-box .excel-head::before { content: "⊞"; font-size: 18px; color: #059669; }
+  .excel-box .excel-title { font-size: 20px; font-weight: 700; color: var(--ink); margin-bottom: 12px; }
+  .excel-steps { display: grid; gap: 12px; }
+  .excel-step { display: grid; grid-template-columns: 28px 1fr; gap: 12px; align-items: start; }
+  .excel-step .sn { width: 26px; height: 26px; background: #059669; color: white; border-radius: 50%; display: grid; place-items: center; font-family: var(--font-mono); font-size: 13px; font-weight: 700; }
+  .excel-step .desc { font-size: 15px; color: var(--ink); line-height: 1.7; }
+  .excel-step .desc code { font-family: var(--font-mono); font-size: 14px; background: #0F172A; color: #6EE7B7; padding: 2px 8px; border-radius: 4px; font-weight: 500; }
+  .excel-box .excel-note { margin-top: 14px; padding: 12px 14px; background: white; border: 1px dashed #A7F3D0; border-radius: var(--radius-sm); font-size: 14px; color: #047857; }
+
+  /* ====================== PRACTICE SLIDE ====================== */
+  .practice-slide { background: #FFFBEB; }
+  .practice-head { display: flex; align-items: center; gap: 12px; margin-bottom: 20px; }
+  .practice-head .ribbon { font-size: 13px; letter-spacing: 0.18em; font-weight: 700; color: #B45309; background: #FEF3C7; padding: 6px 14px; border-radius: 100px; text-transform: uppercase; }
+  .practice-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 16px; margin-top: 20px; }
+  .practice-card { padding: 22px 24px; background: white; border: 1px solid #FDE68A; border-left: 4px solid var(--amber); border-radius: var(--radius-md); }
+  .practice-card .p-num { font-family: var(--font-mono); font-size: 13px; font-weight: 700; color: #B45309; letter-spacing: 0.12em; margin-bottom: 8px; }
+  .practice-card .p-part { font-size: 11px; color: var(--ink-3); font-weight: 500; margin-bottom: 6px; letter-spacing: 0.08em; }
+  .practice-card .p-q { font-size: 16px; color: var(--ink); line-height: 1.7; }
+  .practice-card .p-q strong { color: #B45309; }
+  .practice-card .p-hint { margin-top: 10px; font-size: 13px; color: var(--ink-2); padding: 8px 10px; background: var(--surface-2); border-radius: var(--radius-sm); }
+
+  /* ====================== CHALLENGE SLIDE ====================== */
+  .challenge-slide { background: linear-gradient(135deg, #1E1B4B 0%, #4C1D95 60%, #6D28D9 100%); color: white; }
+  .challenge-slide .slide-inner { color: white; }
+  .challenge-slide h2 { color: white !important; }
+  .challenge-eyebrow { display: inline-block; font-size: 13px; letter-spacing: 0.22em; font-weight: 700; color: #C4B5FD; background: rgba(124, 58, 237, 0.3); padding: 6px 14px; border-radius: 100px; text-transform: uppercase; margin-bottom: 20px; border: 1px solid rgba(196, 181, 253, 0.3); }
+  .challenge-lead { font-size: 19px; color: #DDD6FE; line-height: 1.85; margin-bottom: 28px; }
+  .challenge-box { padding: 28px 32px; background: rgba(255, 255, 255, 0.06); border: 1px solid rgba(196, 181, 253, 0.22); border-radius: var(--radius-lg); backdrop-filter: blur(6px); }
+  .challenge-q-label { font-size: 12px; letter-spacing: 0.2em; font-weight: 700; color: #C4B5FD; margin-bottom: 12px; text-transform: uppercase; }
+  .challenge-q { font-size: 22px; line-height: 1.75; color: white; font-weight: 500; }
+  .challenge-q strong { color: #FCD34D; }
+  .challenge-points { display: grid; grid-template-columns: repeat(3, 1fr); gap: 14px; margin-top: 24px; }
+  .challenge-point { padding: 18px 20px; background: rgba(255, 255, 255, 0.08); border: 1px solid rgba(196, 181, 253, 0.2); border-radius: var(--radius-md); }
+  .challenge-point .cp-num { font-family: var(--font-serif); font-size: 28px; color: #FCD34D; line-height: 1; margin-bottom: 8px; }
+  .challenge-point .cp-label { font-size: 12px; font-weight: 600; color: #C4B5FD; letter-spacing: 0.1em; text-transform: uppercase; margin-bottom: 6px; }
+  .challenge-point .cp-body { font-size: 14px; line-height: 1.7; color: #E9E4FF; }
+  .challenge-hint { margin-top: 20px; padding: 14px 18px; background: rgba(253, 224, 71, 0.08); border-left: 3px solid #FCD34D; border-radius: var(--radius-sm); font-size: 14px; color: #FEF3C7; }
+
+  /* ====================== SLIDE NAVIGATION ====================== */
+  .slide-nav { position: fixed; bottom: 20px; right: 24px; display: flex; align-items: center; gap: 10px; background: rgba(255, 255, 255, 0.94); backdrop-filter: blur(8px); -webkit-backdrop-filter: blur(8px); border: 1px solid var(--line); border-radius: 100px; padding: 6px 10px; box-shadow: var(--shadow); z-index: 40; font-family: var(--font-mono); font-size: 12px; }
+  .slide-nav button { width: 32px; height: 32px; display: grid; place-items: center; border: none; background: transparent; color: var(--ink-2); cursor: pointer; border-radius: 50%; font-size: 18px; line-height: 1; transition: all 0.12s; }
+  .slide-nav button:hover:not(:disabled) { background: var(--blue-bg); color: var(--blue-dark); }
+  .slide-nav button:disabled { opacity: 0.3; cursor: not-allowed; }
+  .slide-counter { min-width: 54px; text-align: center; color: var(--ink-2); font-weight: 500; letter-spacing: 0.04em; }
+  .slide-counter .sep { color: var(--ink-3); margin: 0 2px; }
+
+  /* ====================== MOBILE MENU ====================== */
+  .menu-btn { display: none; position: fixed; top: 14px; left: 14px; width: 40px; height: 40px; background: var(--surface); border: 1px solid var(--line); border-radius: var(--radius-sm); box-shadow: var(--shadow-sm); cursor: pointer; z-index: 50; align-items: center; justify-content: center; font-size: 18px; color: var(--ink); }
+  .sidebar-backdrop { display: none; position: fixed; inset: 0; background: rgba(15, 23, 42, 0.35); z-index: 45; }
+  .sidebar-backdrop.open { display: block; }
+  .nav-link .sub-num { margin-left: auto; font-family: var(--font-mono); font-size: 10px; color: var(--ink-3); opacity: 0.8; }
+  .nav-link.active .sub-num { color: var(--blue); }
 
   /* ====================== TYPOGRAPHY ====================== */
   .eyebrow {
@@ -231,7 +421,8 @@
   }
 
   input[type="range"] {
-    -webkit-appearance: none; width: 100%; height: 4px;
+    -webkit-appearance: none; appearance: none;
+    width: 100%; height: 4px;
     background: var(--line); border-radius: 100px;
     outline: none; cursor: pointer;
   }
@@ -430,23 +621,62 @@
   /* ====================== MOBILE ====================== */
   @media (max-width: 900px) {
     .shell { grid-template-columns: 1fr; }
-    .sidebar { display: none; }
-    .main { padding: 40px 20px 80px; }
-    h1 { font-size: 36px; }
-    h2 { font-size: 28px; margin-top: 48px; }
-    .controls.grid-3, .controls.grid-2 { grid-template-columns: 1fr; }
-    .stat-row { grid-template-columns: 1fr; }
+    .sidebar { position: fixed; top: 0; left: 0; width: 280px; max-width: 80vw; transform: translateX(-100%); transition: transform 0.2s ease; z-index: 50; box-shadow: var(--shadow-lg); }
+    .sidebar.open { transform: translateX(0); }
+    .menu-btn { display: flex; }
+    .slide { padding: 64px 20px 90px; }
+    .slide-nav { bottom: 14px; right: 14px; }
+    .slide-inner h1 { font-size: 40px; }
+    .slide-inner h2 { font-size: 30px; margin-top: 8px; }
+    .slide-inner .section-sub { font-size: 16px; }
+    .slide-inner .stat-value { font-size: 30px; }
+    .slide-inner .equation { font-size: 20px; padding: 16px 18px; }
+    .slide-inner .equation.light { font-size: 18px; }
+    .slide-inner .big-answer .number { font-size: 56px; }
+    .slide-inner .plan-price { font-size: 36px; }
+    .slide-inner .terminal { font-size: 13px; padding: 16px; }
+    .slide-inner .callout .body { font-size: 14px; }
+    .controls.grid-3, .controls.grid-2 { grid-template-columns: 1fr; gap: 14px; }
+    .stat-row { grid-template-columns: 1fr; gap: 10px; }
     .tocbar { grid-template-columns: repeat(2, 1fr); }
     .plan-row { grid-template-columns: 1fr; }
-    .big-answer .number { font-size: 52px; }
+    .split-answer { grid-template-columns: 1fr !important; }
+    .gate-title { font-size: 60px; }
+    .gate-sub { font-size: 18px; }
+    .tease-title { font-size: 40px; }
+    .title-cover .cover-sub { font-size: 48px; }
+    .title-cover .cover-num { font-size: 64px; }
+    .title-cover .cover-title { font-size: 24px; }
+    .vs-compare { grid-template-columns: 1fr; }
+    .vs-divider { padding: 8px 0; font-size: 28px; }
+    .vs-card .vs-label { font-size: 32px; }
+    .vs-card .vs-amount { font-size: 44px; }
+    .rate-compare { grid-template-columns: 1fr; }
+    .rate-card .rate-label { font-size: 32px; }
+    .rate-card .rate-amount { font-size: 40px; }
+    .apply-grid { grid-template-columns: 1fr; }
+    .problem-values { grid-template-columns: 1fr; }
+    .problem-values .pv-value { font-size: 30px; }
+    .story-block { padding: 24px; }
+    .story-text { font-size: 18px; }
+    .story-q { font-size: 24px; }
+    .eq-step { font-size: 18px; }
+    .eq-step.final { font-size: 20px; }
+    .practice-grid { grid-template-columns: 1fr; }
+    .challenge-points { grid-template-columns: 1fr; }
+    .challenge-q { font-size: 17px; }
+    .challenge-lead { font-size: 15px; }
+    .excel-step .desc { font-size: 14px; }
   }
 </style>
 </head>
 <body>
+<button class="menu-btn" id="menu-btn" aria-label="メニューを開く">≡</button>
+<div class="sidebar-backdrop" id="sidebar-backdrop"></div>
 <div class="shell">
 
   <!-- ============================ SIDEBAR ============================ -->
-  <aside class="sidebar">
+  <aside class="sidebar" id="sidebar">
     <div class="sidebar-brand">
       <div class="mark">f</div>
       <div>
@@ -456,444 +686,942 @@
     </div>
 
     <div class="nav-group">
-      <div class="nav-group-label">概要</div>
-      <a class="nav-link" href="#top"><span class="icon">◇</span>はじめに</a>
-      <a class="nav-link" href="#overview"><span class="icon">⌂</span>今日の全体像</a>
+      <div class="nav-group-label">イントロ</div>
+      <a class="nav-link" href="#slide-1" data-slide="1"><span class="icon">◇</span>表紙<span class="sub-num">1</span></a>
+      <a class="nav-link" href="#slide-2" data-slide="2"><span class="icon">⌂</span>今日の全体像<span class="sub-num">2</span></a>
+      <a class="nav-link" href="#slide-3" data-slide="3"><span class="icon">?</span>30 日後、どっちが得？<span class="sub-num">3</span></a>
     </div>
 
     <div class="nav-group">
-      <div class="nav-group-label">本編</div>
-      <a class="nav-link" href="#part1"><span class="icon">1</span>複利<span class="num">P1</span></a>
-      <a class="nav-link" href="#aside"><span class="icon">·</span>小話：0.1+0.2</a>
-      <a class="nav-link" href="#part2"><span class="icon">2</span>1 次方程式<span class="num">P2</span></a>
-      <a class="nav-link" href="#part3"><span class="icon">3</span>1 次不等式<span class="num">P3</span></a>
-      <a class="nav-link" href="#part4"><span class="icon">4</span>連立方程式<span class="num">P4</span></a>
-      <a class="nav-link" href="#part5"><span class="icon">5</span>指数爆発<span class="num">P5</span></a>
+      <div class="nav-group-label">PART 1 ｜ 複利</div>
+      <a class="nav-link" href="#slide-4" data-slide="4" data-slide-range="4-7"><span class="icon">1</span>『数』と『式』<span class="sub-num">4–7</span></a>
+    </div>
+
+    <div class="nav-group">
+      <div class="nav-group-label">小話</div>
+      <a class="nav-link" href="#slide-8" data-slide="8" data-slide-range="8-9"><span class="icon">·</span>0.1 + 0.2 は？<span class="sub-num">8–9</span></a>
+    </div>
+
+    <div class="nav-group">
+      <div class="nav-group-label">PART 2 ｜ 1 次方程式</div>
+      <a class="nav-link" href="#slide-10" data-slide="10" data-slide-range="10-13"><span class="icon">2</span>方程式を「点」で見る<span class="sub-num">10–13</span></a>
+    </div>
+
+    <div class="nav-group">
+      <div class="nav-group-label">PART 3 ｜ 1 次不等式</div>
+      <a class="nav-link" href="#slide-14" data-slide="14" data-slide-range="14-16"><span class="icon">3</span>不等式を「領域」で見る<span class="sub-num">14–16</span></a>
+    </div>
+
+    <div class="nav-group">
+      <div class="nav-group-label">PART 4 ｜ 連立方程式</div>
+      <a class="nav-link" href="#slide-17" data-slide="17" data-slide-range="17-19"><span class="icon">4</span>2 本の直線<span class="sub-num">17–19</span></a>
+    </div>
+
+    <div class="nav-group">
+      <div class="nav-group-label">PART 5 ｜ 指数爆発</div>
+      <a class="nav-link" href="#slide-20" data-slide="20" data-slide-range="20-22"><span class="icon">5</span>指数は爆発する<span class="sub-num">20–22</span></a>
     </div>
 
     <div class="nav-group">
       <div class="nav-group-label">まとめ</div>
-      <a class="nav-link" href="#summary"><span class="icon">★</span>三つの統一原理</a>
-      <a class="nav-link" href="#next"><span class="icon">→</span>次回予告</a>
+      <a class="nav-link" href="#slide-23" data-slide="23"><span class="icon">◆</span>三つの統一原理<span class="sub-num">23</span></a>
+      <a class="nav-link" href="#slide-24" data-slide="24"><span class="icon">→</span>次回予告<span class="sub-num">24</span></a>
     </div>
   </aside>
 
   <!-- ============================ MAIN ============================ -->
-  <main class="main" id="top">
+  <main class="main">
+    <div class="slide-deck" id="slide-deck">
 
-    <!-- ============================ HERO ============================ -->
-    <section class="hero reveal">
-      <div class="hero-badge"><span class="dot"></span>平成国際大学 情報デザイン学部 ／ 情報数理入門 第 2 回</div>
-      <h1>式で世界を、<br><span class="accent">動かしてみる。</span></h1>
-      <p class="lede">
-        方程式・不等式・連立方程式・指数関数。<br>
-        バラバラに見える話は、「式 → グラフ → 位置探し」で繋がっている。<br>
-        スライダーを動かして、式が数を生み、グラフを描き、答えが見える流れを手で確かめよう。
-      </p>
-
-
-
-      <!-- Table of contents bar -->
-      <div class="tocbar" id="overview" style="margin-top: 48px;">
-        <a class="toc-item" href="#part1">
-          <div class="toc-num">PART 1</div>
-          <div class="toc-name">複利</div>
-          <div class="toc-hint">バイト代が育つ</div>
-        </a>
-        <a class="toc-item" href="#part2">
-          <div class="toc-num">PART 2</div>
-          <div class="toc-name">1 次方程式</div>
-          <div class="toc-hint">何時間働く？</div>
-        </a>
-        <a class="toc-item" href="#part3">
-          <div class="toc-num">PART 3</div>
-          <div class="toc-name">1 次不等式</div>
-          <div class="toc-hint">どっちが安い？</div>
-        </a>
-        <a class="toc-item" href="#part4">
-          <div class="toc-num">PART 4</div>
-          <div class="toc-name">連立方程式</div>
-          <div class="toc-hint">2 つのバイト</div>
-        </a>
-        <a class="toc-item" href="#part5">
-          <div class="toc-num">PART 5</div>
-          <div class="toc-name">指数爆発</div>
-          <div class="toc-hint">30 日で 10 億</div>
-        </a>
+    <!-- ============================ SLIDE 1 : COVER ============================ -->
+    <section class="slide title-cover" id="slide-1" data-title="表紙">
+      <div class="slide-inner" style="text-align: center;">
+        <div class="cover-meta">平成国際大学 情報デザイン学部 ／ Lecture 02</div>
+        <div class="cover-title">情報数理入門</div>
+        <div class="cover-num">第 2 回</div>
+        <div class="cover-sub">式で見る、<br>数の世界。</div>
+        <div class="cover-author">小船 幹生</div>
       </div>
     </section>
 
-    <!-- ============================ PART 1 : 複利 ============================ -->
-    <section id="part1">
-      <div class="hr-section"><span class="label">PART 1 ／ COMPOUND INTEREST</span></div>
-      <div class="eyebrow">Part 1 ｜ 複利</div>
-      <h2>バイト代 100 万円、<br>30 年後にいくら？</h2>
-      <p class="section-sub">
-        漸化式 <code style="font-family: var(--font-mono); background: var(--surface-2); padding: 2px 6px; border-radius: 4px;">a<sub>n</sub> = a<sub>n-1</sub> × (1 + r)</code>
-        から、年ごとの残高が並ぶ。元本・利率・年数を動かして挙動を確認する。
-      </p>
-
-      <div class="block">
-        <div class="controls grid-3">
-          <div class="control-row">
-            <div class="control-label">
-              <span>元本（バイト代で貯めた）</span>
-              <span class="control-value" id="c1-p-val">1,000,000 円</span>
-            </div>
-            <input type="range" id="c1-p" min="100000" max="5000000" value="1000000" step="100000">
-          </div>
-          <div class="control-row">
-            <div class="control-label">
-              <span>年利</span>
-              <span class="control-value" id="c1-r-val">3.0 %</span>
-            </div>
-            <input type="range" id="c1-r" min="0" max="10" value="3" step="0.1">
-          </div>
-          <div class="control-row">
-            <div class="control-label">
-              <span>年数</span>
-              <span class="control-value" id="c1-y-val">30 年</span>
-            </div>
-            <input type="range" id="c1-y" min="1" max="50" value="30" step="1">
-          </div>
-        </div>
-
-        <div class="stat-row">
-          <div class="stat">
-            <div class="stat-label">元本</div>
-            <div class="stat-value" id="c1-stat-p">100<span class="stat-unit">万円</span></div>
-          </div>
-          <div class="stat accent">
-            <div class="stat-label">増えた分</div>
-            <div class="stat-value" id="c1-stat-g">+143<span class="stat-unit">万円</span></div>
-            <div class="stat-delta" id="c1-stat-mult">× 2.43</div>
-          </div>
-          <div class="stat primary">
-            <div class="stat-label">最終残高</div>
-            <div class="stat-value" id="c1-stat-t">243<span class="stat-unit">万円</span></div>
-          </div>
-        </div>
-
-        <div class="chart-wrap" style="padding-top: 20px;">
-          <canvas id="chart1" height="220"></canvas>
-        </div>
-
-        <div class="callout">
-          <div class="ico">◎</div>
-          <div class="body">
-            年利 3 % と 5 % の差は、1 年では小さい。30 年後には数字の差が大きく開く。時間が差を増幅する性質が、複利の特徴。
-          </div>
-        </div>
-      </div>
-    </section>
-
-    <!-- ============================ ASIDE: 0.1 + 0.2 ============================ -->
-    <section id="aside">
-      <div class="hr-section"><span class="label">COFFEE BREAK ／ FLOATING POINT</span></div>
-      <div class="eyebrow">小話 ｜ コンピュータの内部事情</div>
-      <h2>0.1 + 0.2 は、<br>本当に 0.3 ？</h2>
-      <p class="section-sub">
-        電卓でも、表計算でも、プログラミング言語でも起きる現象。ボタンを押して計算結果を確認しよう。
-      </p>
-
-      <div class="block dark">
-        <div class="btn-row" style="margin-top: 0;">
-          <button class="btn" data-expr="0.1 + 0.2" style="background: #1E293B; color: #E2E8F0; border-color: #334155;">= 0.1 + 0.2</button>
-          <button class="btn" data-expr="(0.1 + 0.2) - 0.3" style="background: #1E293B; color: #E2E8F0; border-color: #334155;">= (0.1 + 0.2) − 0.3</button>
-          <button class="btn" data-expr="0.3 - 0.1" style="background: #1E293B; color: #E2E8F0; border-color: #334155;">= 0.3 − 0.1</button>
-          <button class="btn" data-expr="0.1 * 3" style="background: #1E293B; color: #E2E8F0; border-color: #334155;">= 0.1 × 3</button>
-          <button class="btn" data-expr="1 - 0.9" style="background: #1E293B; color: #E2E8F0; border-color: #334155;">= 1 − 0.9</button>
-        </div>
-
-        <div class="terminal" id="fp-terminal">
-          <div class="line"><span class="prompt">&gt; </span><span class="expr">0.1 + 0.2</span><span class="arrow">→</span><span class="result warn">0.30000000000000004</span></div>
-          <div class="line"><span class="prompt">&gt; </span><span class="expr">(0.1 + 0.2) - 0.3</span><span class="arrow">→</span><span class="result warn">5.551115123125783e-17</span></div>
-        </div>
-
-        <p style="color: #94A3B8; font-size: 14px; margin-top: 18px;">
-          <strong style="color: white;">なぜ起きるか。</strong> &nbsp; コンピュータは 2 進数で数を扱う。10 進の <span style="font-family: var(--font-mono); color: #A5B4FC;">0.1</span> は 2 進数では
-          <span style="font-family: var(--font-mono); color: #A5B4FC;">0.0001100110011…</span> と循環する。有限の桁で打ち切るため、端数が残る。
+    <!-- ============================ SLIDE 2 : OVERVIEW ============================ -->
+    <section class="slide" id="slide-2" data-title="今日の全体像">
+      <div class="slide-inner">
+        <div class="eyebrow">Overview ｜ 今日の全体像</div>
+        <h2>今日、辿る 5 つの道。</h2>
+        <p class="section-sub">
+          身近なお題を 5 つ。スライダーを動かしながら、式 → グラフ → 答えの繋がりを体感する。
         </p>
-      </div>
-
-      <div class="callout amber">
-        <div class="ico">!</div>
-        <div class="body">
-          会計処理で微小な誤差が大量の取引に積もり、金額のずれとして現れた事例がある。金融や計測の現場では、誤差を前提にした設計が必要になる。
+        <div class="tocbar" id="overview" style="margin-top: 24px;">
+          <a class="toc-item" href="#slide-4" data-slide="4">
+            <div class="toc-num">01 ／ PART 1</div>
+            <div class="toc-name">複利</div>
+            <div class="toc-hint">バイト代が時間で育つ仕組み</div>
+          </a>
+          <a class="toc-item" href="#slide-10" data-slide="10">
+            <div class="toc-num">02 ／ PART 2</div>
+            <div class="toc-name">1 次方程式</div>
+            <div class="toc-hint">目標金額まで、何時間働く？</div>
+          </a>
+          <a class="toc-item" href="#slide-14" data-slide="14">
+            <div class="toc-num">03 ／ PART 3</div>
+            <div class="toc-name">1 次不等式</div>
+            <div class="toc-hint">どっちの料金プランが安い？</div>
+          </a>
+          <a class="toc-item" href="#slide-17" data-slide="17">
+            <div class="toc-num">04 ／ PART 4</div>
+            <div class="toc-name">連立方程式</div>
+            <div class="toc-hint">バイト 2 つ、時間配分は？</div>
+          </a>
+          <a class="toc-item" href="#slide-20" data-slide="20">
+            <div class="toc-num">05 ／ PART 5</div>
+            <div class="toc-name">指数爆発</div>
+            <div class="toc-hint">30 日で 10 億円になる話</div>
+          </a>
         </div>
       </div>
     </section>
 
-    <!-- ============================ PART 2 : 1次方程式 ============================ -->
-    <section id="part2">
-      <div class="hr-section"><span class="label">PART 2 ／ LINEAR EQUATION</span></div>
-      <div class="eyebrow">Part 2 ｜ 1 次方程式</div>
-      <h2>欲しい家電、<br>何時間バイトすれば買える？</h2>
-      <p class="section-sub">
-        方程式を解く＝グラフが x 軸と交わる点を探すこと。家電の値段・貯金・時給を動かすと、必要な労働時間が連動して変わる。
-      </p>
-
-      <div class="block">
-        <div class="controls grid-3">
-          <div class="control-row">
-            <div class="control-label">
-              <span>欲しい家電の値段</span>
-              <span class="control-value" id="c2-g-val">55,000 円</span>
-            </div>
-            <input type="range" id="c2-g" min="5000" max="200000" value="55000" step="1000">
+    <!-- ============================ SLIDE 3 : TEASER ============================ -->
+    <section class="slide tease" id="slide-3" data-title="30 日後、どっちが得？">
+      <div class="tease-inner">
+        <div class="tease-eyebrow">今日の最終問題・問いから始める</div>
+        <div class="tease-title">30 日後、<br>どっちが得？</div>
+        <div class="vs-compare">
+          <div class="vs-card">
+            <div class="vs-label">A 案</div>
+            <div class="vs-plan">毎日定額で</div>
+            <div class="vs-amount">10,000<small> 円</small></div>
+            <div class="vs-note">固定でもらう</div>
           </div>
-          <div class="control-row">
-            <div class="control-label">
-              <span>いまの貯金</span>
-              <span class="control-value" id="c2-s-val">11,000 円</span>
-            </div>
-            <input type="range" id="c2-s" min="0" max="100000" value="11000" step="1000">
-          </div>
-          <div class="control-row">
-            <div class="control-label">
-              <span>時給</span>
-              <span class="control-value" id="c2-w-val">1,100 円</span>
-            </div>
-            <input type="range" id="c2-w" min="800" max="3000" value="1100" step="50">
+          <div class="vs-divider">VS</div>
+          <div class="vs-card b">
+            <div class="vs-label">B 案</div>
+            <div class="vs-plan">初日 1 円 → 毎日</div>
+            <div class="vs-amount">2<small> 倍</small></div>
+            <div class="vs-note">前日の金額を倍にする</div>
           </div>
         </div>
-
-        <div class="equation light">
-          <span class="var" id="c2-eq-w">1,100</span> <span class="op">×</span> <span class="var">x</span> <span class="op">+</span> <span class="var" id="c2-eq-s">11,000</span> <span class="op">=</span> <span class="var" id="c2-eq-g">55,000</span>
-        </div>
-        <div class="eq-arrow">↓ &nbsp;右辺を 0 に寄せる</div>
-        <div class="equation">
-          f (<span class="var">x</span>) <span class="op">=</span> <span class="var" id="c2-eq-w2">1,100</span> <span class="var">x</span> <span class="op">−</span> <span class="var" id="c2-eq-d">44,000</span> <span class="op">=</span> 0
-        </div>
-
-        <div style="display: grid; grid-template-columns: 1.2fr 1fr; gap: 20px; margin-top: 24px; align-items: center;">
-          <div class="chart-wrap" style="padding: 12px 8px 0;">
-            <canvas id="chart2" height="240"></canvas>
-          </div>
-          <div class="big-answer">
-            <div class="label">必要なバイト時間</div>
-            <div class="number" id="c2-answer">40<span class="unit">時間</span></div>
-            <div class="hint" id="c2-hint">週 10 時間なら、約 1 ヶ月</div>
-          </div>
-        </div>
-
-        <div class="callout">
-          <div class="ico">◎</div>
-          <div class="body">
-            スライダーを動かすと、直線の傾き・切片・x 軸との交点が連動する。式・グラフ・解は、同じ情報の別の表現。
-          </div>
-        </div>
+        <div class="tease-hint">— 答え合わせは、PART 5 で。</div>
       </div>
     </section>
 
-    <!-- ============================ PART 3 : 1次不等式 ============================ -->
-    <section id="part3">
-      <div class="hr-section"><span class="label">PART 3 ／ LINEAR INEQUALITY</span></div>
-      <div class="eyebrow">Part 3 ｜ 1 次不等式</div>
-      <h2>どっちの料金プランが、得？</h2>
-      <p class="section-sub">
-        方程式の解は点、不等式の解は領域。月間通信量を動かして、プラン A・B のどちらが安くなるかを確認する。
-      </p>
-
-      <div class="block">
-        <div class="control-row" style="margin-bottom: 24px;">
-          <div class="control-label">
-            <span>今月、何 GB 使う？</span>
-            <span class="control-value" id="c3-gb-val">8 GB</span>
-          </div>
-          <input type="range" id="c3-gb" min="0" max="30" value="8" step="0.5">
-        </div>
-
-        <div class="plan-row">
-          <div class="plan" id="plan-a">
-            <div class="plan-name">
-              <span>プラン A</span><span class="plan-badge">◎ 勝ち</span>
-            </div>
-            <div style="font-size: 12px; color: var(--ink-3); margin-bottom: 4px;">基本料 0 円 ＋ 500 円 / GB</div>
-            <div class="plan-price"><span id="c3-a-price">4,000</span><span class="yen">円 / 月</span></div>
-            <div class="plan-breakdown" id="c3-a-breakdown">0 + 500 × 8 = 4,000</div>
-          </div>
-          <div class="plan" id="plan-b">
-            <div class="plan-name">
-              <span>プラン B</span><span class="plan-badge">◎ 勝ち</span>
-            </div>
-            <div style="font-size: 12px; color: var(--ink-3); margin-bottom: 4px;">基本料 3,000 円 ＋ 100 円 / GB</div>
-            <div class="plan-price"><span id="c3-b-price">3,800</span><span class="yen">円 / 月</span></div>
-            <div class="plan-breakdown" id="c3-b-breakdown">3,000 + 100 × 8 = 3,800</div>
-          </div>
-        </div>
-
-        <div class="chart-wrap" style="padding-top: 20px;">
-          <canvas id="chart3" height="220"></canvas>
-        </div>
-
-        <div class="callout">
-          <div class="ico">◎</div>
-          <div class="body">
-            交点は x = 7.5 GB。それ未満なら A、それ超なら B が安い。不等式 <code style="font-family: var(--font-mono); background: var(--surface-2); padding: 2px 6px; border-radius: 4px;">500x &lt; 3000 + 100x</code> を解くことと、グラフで「どちらの直線が下にあるか」を見ることは、同じ作業。
-          </div>
-        </div>
-      </div>
-    </section>
-
-    <!-- ============================ PART 4 : 連立 ============================ -->
-    <section id="part4">
-      <div class="hr-section"><span class="label">PART 4 ／ SIMULTANEOUS EQUATIONS</span></div>
-      <div class="eyebrow">Part 4 ｜ 連立方程式</div>
-      <h2>バイトを 2 つ、<br>どう配分する？</h2>
-      <p class="section-sub">
-        カフェ（時給 1,000 円）と塾講師（時給 2,000 円）。合計時間と目標金額を入力すると、2 本の直線の交点が配分の解になる。
-      </p>
-
-      <div class="block">
-        <div class="controls grid-2">
-          <div class="control-row">
-            <div class="control-label">
-              <span>合計で働きたい時間</span>
-              <span class="control-value" id="c4-h-val">25 時間</span>
-            </div>
-            <input type="range" id="c4-h" min="10" max="50" value="25" step="1">
-          </div>
-          <div class="control-row">
-            <div class="control-label">
-              <span>目標金額</span>
-              <span class="control-value" id="c4-t-val">40,000 円</span>
-            </div>
-            <input type="range" id="c4-t" min="10000" max="100000" value="40000" step="1000">
-          </div>
-        </div>
-
-        <div class="equation light" style="font-size: 18px;">
-          <span class="var">x</span> <span class="op">+</span> <span class="var">y</span> <span class="op">=</span> <span class="var" id="c4-eq-h">25</span>
-          &nbsp;&nbsp;,&nbsp;&nbsp;
-          <span class="var">1000 x</span> <span class="op">+</span> <span class="var">2000 y</span> <span class="op">=</span> <span class="var" id="c4-eq-t">40,000</span>
-        </div>
-
-        <div style="display: grid; grid-template-columns: 1.2fr 1fr; gap: 20px; margin-top: 16px; align-items: stretch;">
-          <div class="chart-wrap" style="padding-top: 16px;">
-            <canvas id="chart4" height="280"></canvas>
-          </div>
-          <div style="display: grid; gap: 12px;">
-            <div class="stat accent" style="padding: 18px;">
-              <div class="stat-label">カフェ　時給 1,000 円</div>
-              <div class="stat-value" id="c4-ans-cafe">10<span class="stat-unit">時間</span></div>
-            </div>
-            <div class="stat primary" style="padding: 18px;">
-              <div class="stat-label">塾講師　時給 2,000 円</div>
-              <div class="stat-value" id="c4-ans-tutor">15<span class="stat-unit">時間</span></div>
-            </div>
-            <div id="c4-feasible-box" class="callout" style="margin: 0;">
-              <div class="ico">◎</div>
-              <div class="body"><strong id="c4-feasible-msg">この配分なら、実現可能です。</strong></div>
-            </div>
-          </div>
-        </div>
-      </div>
-    </section>
-
-    <!-- ============================ PART 5 : 指数爆発 ============================ -->
-    <section id="part5">
-      <div class="hr-section"><span class="label">PART 5 ／ EXPONENTIAL EXPLOSION</span></div>
-      <div class="eyebrow">Part 5 ｜ 指数爆発</div>
-      <h2>毎日 1 万円 vs 毎日 2 倍、<br>30 日でどっちが勝つ？</h2>
-      <p class="section-sub">
-        冒頭で出した問題の答え合わせ。日数を動かすと、A が優勢の期間と、B が追い抜いて急上昇する転換点が見える。
-      </p>
-
-      <div class="block">
-        <div class="control-row" style="margin-bottom: 28px;">
-          <div class="control-label">
-            <span>何日目まで見る？</span>
-            <span class="control-value" id="c5-d-val">30 日目</span>
-          </div>
-          <input type="range" id="c5-d" min="1" max="30" value="30" step="1">
-        </div>
-
-        <div class="stat-row" style="grid-template-columns: 1fr 1fr;">
-          <div class="stat" style="background: var(--blue-bg); border-color: var(--blue-bg-2);">
-            <div class="stat-label">A 案 ／ 毎日 1 万円</div>
-            <div class="stat-value" id="c5-a-val" style="color: var(--blue-dark);">30<span class="stat-unit">万円</span></div>
-            <div class="stat-delta" id="c5-a-delta">累計</div>
-          </div>
-          <div class="stat primary">
-            <div class="stat-label">B 案 ／ 毎日 2 倍</div>
-            <div class="stat-value" id="c5-b-val">10.7<span class="stat-unit">億円</span></div>
-            <div class="stat-delta" id="c5-b-delta">累計</div>
-          </div>
-        </div>
-
-        <div class="chart-wrap" style="padding-top: 20px;">
-          <canvas id="chart5" height="240"></canvas>
-        </div>
-
-        <div class="btn-row">
-          <button class="btn" id="c5-toggle-log">対数目盛りに切り替え</button>
-          <button class="btn" id="c5-animate">30 日間を自動再生</button>
-        </div>
-
-        <div class="callout">
-          <div class="ico">◎</div>
-          <div class="body">
-            <span id="c5-msg">B は A の約 3,579 倍。</span> 20 日目あたりまでは A のほうが多いが、そこから B が追い越し、グラフはほぼ垂直に立ち上がる。
-          </div>
-        </div>
-      </div>
-    </section>
-
-    <!-- ============================ SUMMARY ============================ -->
-    <section id="summary">
-      <div class="hr-section"><span class="label">SUMMARY ／ UNIFIED PRINCIPLES</span></div>
-      <div class="eyebrow">本日のまとめ</div>
-      <h2>三つの、統一原理。</h2>
-      <p class="section-sub">
-        今日扱った 5 つのテーマは、次の 3 つの原理に集約できる。
-      </p>
-
-      <div class="principle-card">
-        <div class="num">01</div>
-        <div class="content">
-          <h4>式は数を生成する</h4>
-          <p>1 本の式から、数十・数百の数が導かれる。人間は式を読み、コンピュータは式から数を並べる。</p>
-        </div>
-      </div>
-      <div class="principle-card">
-        <div class="num">02</div>
-        <div class="content">
-          <h4>方程式・不等式・連立は「位置探し」</h4>
-          <p>方程式＝点、不等式＝領域、連立＝交点。いずれもグラフ上の位置を特定する作業。</p>
-        </div>
-      </div>
-      <div class="principle-card">
-        <div class="num">03</div>
-        <div class="content">
-          <h4>指数的変化は直感と合わない</h4>
-          <p>倍々の増加は初期は目立たず、ある時点から急に大きくなる。金利・感染・拡散など多くの現象に現れる。</p>
-        </div>
-      </div>
-    </section>
-
-    <!-- ============================ NEXT ============================ -->
-    <section id="next" style="margin-top: 56px;">
-      <div class="block dark" style="padding: 40px 36px;">
-        <div style="font-size: 12px; letter-spacing: 0.12em; color: #93C5FD; font-weight: 500; margin-bottom: 12px;">NEXT LECTURE ／ 第 3 回</div>
-        <h3 style="font-family: var(--font-serif); font-size: 40px; font-weight: 400; color: white; line-height: 1.2; margin-bottom: 16px; letter-spacing: -0.01em;">
-          『変化を追う』—— 微分の入口
-        </h3>
-        <p style="color: #CBD5E1; font-size: 15px; max-width: 56ch;">
-          グラフの「傾き」を主題に扱う。今日描いた折れ線を、さらに細かく読み解く。<br>
-          「利率が高いほど傾きが急になる」という観察を、式として記述する。
+    <!-- ============================ SLIDE 4 : PART 1 GATE ============================ -->
+    <section class="slide gate" id="slide-4" data-title="PART 1 ｜ 扉">
+      <div class="gate-inner">
+        <div class="gate-part-num">P A R T  &nbsp;1</div>
+        <h1 class="gate-title">『数』と<br><span class="gate-accent">『式』</span>。</h1>
+        <p class="gate-sub">
+          複利の世界で、<strong style="color: white;">式から数が無数に生まれる</strong>感覚を掴む。
         </p>
       </div>
     </section>
 
-    <footer>
-      <div>情報数理入門 第 2 回 ／ 小船 幹生 ／ 平成国際大学 情報デザイン学部</div>
-    </footer>
+    <!-- ============================ SLIDE 5 : PART 1 STORY ============================ -->
+    <section class="slide" id="slide-5" data-title="PART 1 ｜ ストーリー">
+      <div class="slide-inner">
+        <div class="eyebrow">Story ｜ バイト代 100 万円、どうする？</div>
+        <h2>バイトで、<br>コツコツ貯めた 100 万円。</h2>
+        <div class="story-block">
+          <div class="story-label">Scenario</div>
+          <div class="story-text">
+            バイトでコツコツ貯めた <strong>100 万円</strong>。<br>
+            年利 <strong>3 %</strong> の銀行口座に預けて、<strong>30 年</strong>そのままにしたら？
+          </div>
+          <div class="story-q">—— <em>いくら</em>になっていると思いますか？</div>
+        </div>
+      </div>
+    </section>
 
+    <!-- ============================ SLIDE 6 : PART 1 INTERACTION ============================ -->
+    <section class="slide" id="slide-6" data-title="PART 1 ｜ 30 年後の残高">
+      <div class="slide-inner">
+        <div class="eyebrow">Interactive ｜ 30 年後の残高は …</div>
+        <h2>元本・利率・年数を、<br>動かしてみる。</h2>
+        <p class="section-sub">
+          漸化式 <code style="font-family: var(--font-mono); background: var(--surface-2); padding: 2px 6px; border-radius: 4px;">a<sub>n</sub> = a<sub>n-1</sub> × (1 + r)</code> から、年ごとの残高が並ぶ。
+        </p>
+
+        <div class="block">
+          <div class="controls grid-3">
+            <div class="control-row">
+              <div class="control-label">
+                <span>元本（バイト代で貯めた）</span>
+                <span class="control-value" id="c1-p-val">1,000,000 円</span>
+              </div>
+              <input type="range" id="c1-p" min="100000" max="5000000" value="1000000" step="100000">
+            </div>
+            <div class="control-row">
+              <div class="control-label">
+                <span>年利</span>
+                <span class="control-value" id="c1-r-val">3.0 %</span>
+              </div>
+              <input type="range" id="c1-r" min="0" max="10" value="3" step="0.1">
+            </div>
+            <div class="control-row">
+              <div class="control-label">
+                <span>年数</span>
+                <span class="control-value" id="c1-y-val">30 年</span>
+              </div>
+              <input type="range" id="c1-y" min="1" max="50" value="30" step="1">
+            </div>
+          </div>
+
+          <div class="stat-row">
+            <div class="stat">
+              <div class="stat-label">元本</div>
+              <div class="stat-value" id="c1-stat-p">100<span class="stat-unit">万円</span></div>
+            </div>
+            <div class="stat accent">
+              <div class="stat-label">増えた分</div>
+              <div class="stat-value" id="c1-stat-g">+143<span class="stat-unit">万円</span></div>
+              <div class="stat-delta" id="c1-stat-mult">× 2.43</div>
+            </div>
+            <div class="stat primary">
+              <div class="stat-label">最終残高</div>
+              <div class="stat-value" id="c1-stat-t">243<span class="stat-unit">万円</span></div>
+            </div>
+          </div>
+
+          <div class="chart-wrap" style="padding-top: 20px;">
+            <canvas id="chart1" height="220"></canvas>
+          </div>
+        </div>
+
+        <div class="excel-box">
+          <div class="excel-head">Excel / Sheets で再現してみる</div>
+          <div class="excel-title">タブ <code style="font-family: var(--font-mono); background: var(--surface-2); padding: 2px 6px; border-radius: 4px;">1_複利</code> ／ 式 1 本で 30 年分の数を生成</div>
+          <div class="excel-steps">
+            <div class="excel-step"><div class="sn">1</div><div class="desc">C9 に初期値 <code>1000000</code>。C10 に <code>=C9*1.03</code> と入力。</div></div>
+            <div class="excel-step"><div class="sn">2</div><div class="desc">C10 を選択 → 右下の■を C39 までドラッグ → 式 1 本で 30 個の数が生成。</div></div>
+            <div class="excel-step"><div class="sn">3</div><div class="desc">B9:C39 を選択 → 挿入 → グラフ → 折れ線 → 指数的カーブが現れる。</div></div>
+          </div>
+          <div class="excel-note">
+            <strong>実験：</strong> 式の <code style="font-family: var(--font-mono);">1.03</code> を <code style="font-family: var(--font-mono);">1.05</code>、<code style="font-family: var(--font-mono);">1.07</code> に変えて、グラフの変化を観察。
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ============================ SLIDE 7 : PART 1 RATE COMPARE ============================ -->
+    <section class="slide" id="slide-7" data-title="PART 1 ｜ 利率の差">
+      <div class="slide-inner">
+        <div class="eyebrow">Comparison ｜ 利率が 2 % 違うだけで、この差</div>
+        <h2>時間が、<br>差を増幅する。</h2>
+        <p class="section-sub">元本 100 万円、30 年後。利率 2 % の差が、積み上がるとこうなる。</p>
+        <div class="rate-compare">
+          <div class="rate-card">
+            <div class="rate-label">3 %</div>
+            <div class="rate-arrow">↓ 30 年</div>
+            <div class="rate-amount">約 243<small>万円</small></div>
+          </div>
+          <div class="rate-card mid">
+            <div class="rate-label">5 %</div>
+            <div class="rate-arrow">↓ 30 年</div>
+            <div class="rate-amount">約 432<small>万円</small></div>
+          </div>
+          <div class="rate-card high">
+            <div class="rate-label">7 %</div>
+            <div class="rate-arrow">↓ 30 年</div>
+            <div class="rate-amount">約 761<small>万円</small></div>
+          </div>
+        </div>
+        <div class="callout" style="margin-top: 24px;">
+          <div class="ico">◎</div>
+          <div class="body">
+            1 年では「たった 2 %」。30 年で<strong>約 3 倍の差</strong>に開く。<strong>時間が差を増幅する</strong>性質こそが、複利の特徴。
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ============================ SLIDE 8 : ASIDE 0.1 + 0.2 ============================ -->
+    <section class="slide" id="slide-8" data-title="小話 ｜ 0.1 + 0.2">
+      <div class="slide-inner">
+        <div class="hr-section"><span class="label">COFFEE BREAK ／ FLOATING POINT</span></div>
+        <div class="eyebrow">小話 ｜ コンピュータの内部事情</div>
+        <h2>0.1 + 0.2 は、<br>本当に 0.3 ？</h2>
+        <p class="section-sub">
+          電卓でも、表計算でも、プログラミング言語でも起きる現象。ボタンを押して計算結果を確認しよう。
+        </p>
+
+        <div class="block dark">
+          <div class="btn-row" style="margin-top: 0;">
+            <button class="btn" data-expr="0.1 + 0.2" style="background: #1E293B; color: #E2E8F0; border-color: #334155;">= 0.1 + 0.2</button>
+            <button class="btn" data-expr="(0.1 + 0.2) - 0.3" style="background: #1E293B; color: #E2E8F0; border-color: #334155;">= (0.1 + 0.2) − 0.3</button>
+            <button class="btn" data-expr="0.3 - 0.1" style="background: #1E293B; color: #E2E8F0; border-color: #334155;">= 0.3 − 0.1</button>
+            <button class="btn" data-expr="0.1 * 3" style="background: #1E293B; color: #E2E8F0; border-color: #334155;">= 0.1 × 3</button>
+            <button class="btn" data-expr="1 - 0.9" style="background: #1E293B; color: #E2E8F0; border-color: #334155;">= 1 − 0.9</button>
+          </div>
+
+          <div class="terminal" id="fp-terminal">
+            <div class="line"><span class="prompt">&gt; </span><span class="expr">0.1 + 0.2</span><span class="arrow">→</span><span class="result warn">0.30000000000000004</span></div>
+            <div class="line"><span class="prompt">&gt; </span><span class="expr">(0.1 + 0.2) - 0.3</span><span class="arrow">→</span><span class="result warn">5.551115123125783e-17</span></div>
+          </div>
+
+          <p style="color: #94A3B8; font-size: 14px; margin-top: 18px;">
+            <strong style="color: white;">なぜ起きるか。</strong> &nbsp; コンピュータは 2 進数で数を扱う。10 進の <span style="font-family: var(--font-mono); color: #A5B4FC;">0.1</span> は 2 進数では
+            <span style="font-family: var(--font-mono); color: #A5B4FC;">0.0001100110011…</span> と循環する。有限の桁で打ち切るため、<strong style="color: white;">必ず小さな誤差</strong>が残る。
+          </p>
+        </div>
+      </div>
+    </section>
+
+    <!-- ============================ SLIDE 9 : ASIDE EXAMPLES ============================ -->
+    <section class="slide" id="slide-9" data-title="小話 ｜ 現実に起きたこと">
+      <div class="slide-inner">
+        <div class="eyebrow">Real World ｜ 小さな誤差が、大きな結果に</div>
+        <h2>現実に、起きたこと。</h2>
+        <p class="section-sub">
+          「小数点以下のわずかな誤差」は、積み重なると無視できない結果を招く。
+        </p>
+        <div class="apply-grid">
+          <div class="apply-card">
+            <div class="apply-title">◎ &nbsp; 会計システムの累積誤差</div>
+            <div class="apply-body">
+              わずかな丸め誤差が、数百万回の取引で積もって大きな金額差に。金融では<strong>誤差を前提にした設計</strong>（固定小数点、整数化など）が必要になる。
+            </div>
+          </div>
+          <div class="apply-card dark">
+            <div class="apply-title">! &nbsp; 1991 年・湾岸戦争</div>
+            <div class="apply-body">
+              ミサイル迎撃システム「パトリオット」の時刻計算で、<strong>小数演算の誤差が時間とともに累積</strong>し、迎撃に失敗。死者を出した歴史的事例。
+            </div>
+          </div>
+        </div>
+        <div class="apply-summary">
+          <strong>誤差は、必ず起こる。</strong> 起こることを前提に、どの桁まで信じるか・どこで丸めるかを設計する。
+        </div>
+      </div>
+    </section>
+
+    <!-- ============================ SLIDE 10 : PART 2 GATE ============================ -->
+    <section class="slide gate" id="slide-10" data-title="PART 2 ｜ 扉">
+      <div class="gate-inner">
+        <div class="gate-part-num">P A R T  &nbsp;2</div>
+        <h1 class="gate-title">方程式を、<br><span class="gate-accent">「点」</span>で見る。</h1>
+        <p class="gate-sub">
+          1 次方程式の解は、直線が x 軸を横切る <strong style="color: white;">1 点</strong>。
+        </p>
+      </div>
+    </section>
+
+    <!-- ============================ SLIDE 11 : PART 2 PROBLEM ============================ -->
+    <section class="slide" id="slide-11" data-title="PART 2 ｜ お題">
+      <div class="slide-inner">
+        <div class="eyebrow">Problem</div>
+        <h2>欲しい家電、<br>何時間バイトすれば買える？</h2>
+        <div class="problem-values">
+          <div class="pv">
+            <div class="pv-label">欲しい家電</div>
+            <div class="pv-value">55,000<small> 円</small></div>
+          </div>
+          <div class="pv">
+            <div class="pv-label">いまの貯金</div>
+            <div class="pv-value">11,000<small> 円</small></div>
+          </div>
+          <div class="pv">
+            <div class="pv-label">時給</div>
+            <div class="pv-value">1,100<small> 円</small></div>
+          </div>
+        </div>
+        <p class="section-sub" style="margin-top: 24px; font-size: 22px;">
+          <strong>あと何時間</strong>、バイトすれば買える？
+        </p>
+      </div>
+    </section>
+
+    <!-- ============================ SLIDE 12 : PART 2 EQ TRANSFORM ============================ -->
+    <section class="slide" id="slide-12" data-title="PART 2 ｜ 式に置き換える">
+      <div class="slide-inner">
+        <div class="eyebrow">Translate ｜ 言葉を、式に置き換える</div>
+        <h2>言葉を、<br>式に置き換える。</h2>
+        <div class="eq-transform">
+          <div class="eq-step-label">日本語で書くと</div>
+          <div class="eq-step">時給 × 時間 ＋ いまの貯金 ＝ 目標金額</div>
+          <div class="eq-step-label">数字を入れると</div>
+          <div class="eq-step">1,100 x ＋ 11,000 ＝ 55,000</div>
+          <div class="eq-step-label">右辺を 0 に寄せると</div>
+          <div class="eq-step final">f(x) ＝ 1,100 x − 44,000 ＝ 0</div>
+        </div>
+        <p class="section-sub" style="margin-top: 20px;">
+          あとは <strong>f(x) = 0</strong> を満たす x を、グラフから見つけるだけ。
+        </p>
+      </div>
+    </section>
+
+    <!-- ============================ SLIDE 13 : PART 2 INTERACTION ============================ -->
+    <section class="slide" id="slide-13" data-title="PART 2 ｜ グラフ x 軸と交わる点">
+      <div class="slide-inner">
+        <div class="eyebrow">Interactive ｜ グラフが x 軸と交わる点</div>
+        <h2>交点の x 座標が、<br>答え。</h2>
+
+        <div class="block">
+          <div class="controls grid-3">
+            <div class="control-row">
+              <div class="control-label">
+                <span>欲しい家電の値段</span>
+                <span class="control-value" id="c2-g-val">55,000 円</span>
+              </div>
+              <input type="range" id="c2-g" min="5000" max="200000" value="55000" step="1000">
+            </div>
+            <div class="control-row">
+              <div class="control-label">
+                <span>いまの貯金</span>
+                <span class="control-value" id="c2-s-val">11,000 円</span>
+              </div>
+              <input type="range" id="c2-s" min="0" max="100000" value="11000" step="1000">
+            </div>
+            <div class="control-row">
+              <div class="control-label">
+                <span>時給</span>
+                <span class="control-value" id="c2-w-val">1,100 円</span>
+              </div>
+              <input type="range" id="c2-w" min="800" max="3000" value="1100" step="50">
+            </div>
+          </div>
+
+          <div class="equation light">
+            <span class="var" id="c2-eq-w">1,100</span> <span class="op">×</span> <span class="var">x</span> <span class="op">+</span> <span class="var" id="c2-eq-s">11,000</span> <span class="op">=</span> <span class="var" id="c2-eq-g">55,000</span>
+          </div>
+          <div class="eq-arrow">↓ &nbsp;右辺を 0 に寄せる</div>
+          <div class="equation">
+            f (<span class="var">x</span>) <span class="op">=</span> <span class="var" id="c2-eq-w2">1,100</span> <span class="var">x</span> <span class="op">−</span> <span class="var" id="c2-eq-d">44,000</span> <span class="op">=</span> 0
+          </div>
+
+          <div class="split-answer" style="display: grid; grid-template-columns: 1.2fr 1fr; gap: 20px; margin-top: 24px; align-items: center;">
+            <div class="chart-wrap" style="padding: 12px 8px 0;">
+              <canvas id="chart2" height="240"></canvas>
+            </div>
+            <div class="big-answer">
+              <div class="label">必要なバイト時間</div>
+              <div class="number" id="c2-answer">40<span class="unit">時間</span></div>
+              <div class="hint" id="c2-hint">週 10 時間なら、約 1 ヶ月</div>
+            </div>
+          </div>
+        </div>
+
+        <div class="excel-box">
+          <div class="excel-head">Excel / Sheets で再現してみる</div>
+          <div class="excel-title">タブ <code style="font-family: var(--font-mono); background: var(--surface-2); padding: 2px 6px; border-radius: 4px;">3_次方程式</code> ／ ドローン配達の例で解く</div>
+          <div class="excel-steps">
+            <div class="excel-step"><div class="sn">1</div><div class="desc">ストーリー変更：ドローン配達、<strong>基本料 500 円＋ 80 円 / km</strong>。予算 2,000 円で何 km まで飛ばせる？ → <code>f(x) = 80x − 1500 = 0</code>。</div></div>
+            <div class="excel-step"><div class="sn">2</div><div class="desc">C10 に <code>=80*B10-1500</code>。B 列は x (km)、0 〜 30 まで並べる。</div></div>
+            <div class="excel-step"><div class="sn">3</div><div class="desc">C10 を C40 までドラッグ → 挿入 → グラフ → 折れ線。x 軸と交わる点 <strong>x = 18.75</strong>。</div></div>
+          </div>
+          <div class="excel-note">
+            <strong>発見：</strong> 紙で解いた <code style="font-family: var(--font-mono);">x = 1500/80 = 18.75</code> と、グラフで読んだ交点は完全一致。
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ============================ SLIDE 14 : PART 3 GATE ============================ -->
+    <section class="slide gate" id="slide-14" data-title="PART 3 ｜ 扉">
+      <div class="gate-inner">
+        <div class="gate-part-num">P A R T  &nbsp;3</div>
+        <h1 class="gate-title">不等式を、<br><span class="gate-accent">「領域」</span>で見る。</h1>
+        <p class="gate-sub">
+          方程式の解は点。不等式の解は、<strong style="color: white;">範囲（領域）</strong>。
+        </p>
+      </div>
+    </section>
+
+    <!-- ============================ SLIDE 15 : PART 3 INTERACTION ============================ -->
+    <section class="slide" id="slide-15" data-title="PART 3 ｜ どっちの料金プラン？">
+      <div class="slide-inner">
+        <div class="eyebrow">Interactive ｜ どっちの料金プランが、得？</div>
+        <h2>料金プラン A と B、<br>どこで逆転する？</h2>
+
+        <div class="block">
+          <div class="control-row" style="margin-bottom: 24px;">
+            <div class="control-label">
+              <span>今月、何 GB 使う？</span>
+              <span class="control-value" id="c3-gb-val">8 GB</span>
+            </div>
+            <input type="range" id="c3-gb" min="0" max="30" value="8" step="0.5">
+          </div>
+
+          <div class="plan-row">
+            <div class="plan" id="plan-a">
+              <div class="plan-name">
+                <span>プラン A</span><span class="plan-badge">◎ 勝ち</span>
+              </div>
+              <div style="font-size: 12px; color: var(--ink-3); margin-bottom: 4px;">基本料 0 円 ＋ 500 円 / GB ／ 少なく使う人向き</div>
+              <div class="plan-price"><span id="c3-a-price">4,000</span><span class="yen">円 / 月</span></div>
+              <div class="plan-breakdown" id="c3-a-breakdown">0 + 500 × 8 = 4,000</div>
+            </div>
+            <div class="plan" id="plan-b">
+              <div class="plan-name">
+                <span>プラン B</span><span class="plan-badge">◎ 勝ち</span>
+              </div>
+              <div style="font-size: 12px; color: var(--ink-3); margin-bottom: 4px;">基本料 3,000 円 ＋ 100 円 / GB ／ たくさん使う人向き</div>
+              <div class="plan-price"><span id="c3-b-price">3,800</span><span class="yen">円 / 月</span></div>
+              <div class="plan-breakdown" id="c3-b-breakdown">3,000 + 100 × 8 = 3,800</div>
+            </div>
+          </div>
+
+          <div class="chart-wrap" style="padding-top: 20px;">
+            <canvas id="chart3" height="220"></canvas>
+          </div>
+        </div>
+
+        <div class="excel-box">
+          <div class="excel-head">Excel / Sheets で再現してみる</div>
+          <div class="excel-title">タブ <code style="font-family: var(--font-mono); background: var(--surface-2); padding: 2px 6px; border-radius: 4px;">5_1次不等式</code> ／ 2 本の直線と、どちらが下か</div>
+          <div class="excel-steps">
+            <div class="excel-step"><div class="sn">1</div><div class="desc">C10 に <code>=500*B10</code>、D10 に <code>=3000+100*B10</code>。B 列は x (GB)、0〜30。</div></div>
+            <div class="excel-step"><div class="sn">2</div><div class="desc">E10 に <code>=IF(C10&lt;D10,"A","B")</code>。→ 各 x でどちらが安いか、境界が一目で見える。</div></div>
+            <div class="excel-step"><div class="sn">3</div><div class="desc">B9:D30 を選択 → 挿入 → グラフ → 折れ線。2 本の直線の交点＝<strong>x = 7.5 GB</strong>。</div></div>
+          </div>
+          <div class="excel-note">
+            <strong>ポイント：</strong> 不等式の解は「交点の<strong>片側の領域</strong>」。代数的に解くのも、IF 関数で判定するのも、グラフで眺めるのも、同じ結論。
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ============================ SLIDE 16 : PART 3 INTERPRETATION ============================ -->
+    <section class="slide" id="slide-16" data-title="PART 3 ｜ 不等式の解は領域">
+      <div class="slide-inner">
+        <div class="eyebrow">Interpretation ｜ 2 本の直線が交わる「その先」</div>
+        <h2>不等式の解は、<br><span style="color: var(--blue-dark);">「領域」</span>。</h2>
+        <div class="rate-compare" style="margin-top: 24px;">
+          <div class="rate-card">
+            <div class="rate-label" style="font-size: 28px;">x &lt; 7.5 GB</div>
+            <div class="rate-arrow">↓</div>
+            <div class="rate-amount" style="font-size: 36px;">A が得</div>
+          </div>
+          <div class="rate-card mid">
+            <div class="rate-label" style="font-size: 28px;">x = 7.5 GB</div>
+            <div class="rate-arrow">交点</div>
+            <div class="rate-amount" style="font-size: 36px;">同額</div>
+          </div>
+          <div class="rate-card high">
+            <div class="rate-label" style="font-size: 28px;">x &gt; 7.5 GB</div>
+            <div class="rate-arrow">↓</div>
+            <div class="rate-amount" style="font-size: 36px;">B が得</div>
+          </div>
+        </div>
+        <div class="callout" style="margin-top: 24px;">
+          <div class="ico">◎</div>
+          <div class="body">
+            不等式 <code style="font-family: var(--font-mono); background: var(--surface-2); padding: 2px 6px; border-radius: 4px;">500x &lt; 3000 + 100x</code> を解くことと、グラフで「<strong>どちらの直線が下にあるか</strong>」を見ることは、同じ作業。
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ============================ SLIDE 17 : PART 4 GATE ============================ -->
+    <section class="slide gate" id="slide-17" data-title="PART 4 ｜ 扉">
+      <div class="gate-inner">
+        <div class="gate-part-num">P A R T  &nbsp;4</div>
+        <h1 class="gate-title">連立方程式：<br><span class="gate-accent">2 本の直線</span>。</h1>
+        <p class="gate-sub">
+          2 つの条件を同時に満たすのは、<strong style="color: white;">2 本の直線が交わる 1 点</strong>。
+        </p>
+      </div>
+    </section>
+
+    <!-- ============================ SLIDE 18 : PART 4 PROBLEM ============================ -->
+    <section class="slide" id="slide-18" data-title="PART 4 ｜ お題">
+      <div class="slide-inner">
+        <div class="eyebrow">Problem ｜ バイトを 2 つ、どう配分する？</div>
+        <h2>合計時間と合計給料から、<br>内訳を逆算する。</h2>
+        <div class="vs-compare" style="margin: 32px 0 12px;">
+          <div class="vs-card" style="text-align: center;">
+            <div class="vs-label">カフェ</div>
+            <div class="vs-plan" style="color: var(--ink-3);">時給</div>
+            <div class="vs-amount">1,000<small> 円</small></div>
+          </div>
+          <div class="vs-divider">＆</div>
+          <div class="vs-card b" style="text-align: center;">
+            <div class="vs-label">塾講師</div>
+            <div class="vs-plan" style="color: #93C5FD;">時給</div>
+            <div class="vs-amount">2,000<small> 円</small></div>
+          </div>
+        </div>
+        <p class="section-sub" style="text-align: center; margin-top: 20px; font-size: 22px;">
+          <strong>カフェは何時間、塾は何時間</strong>？
+        </p>
+      </div>
+    </section>
+
+    <!-- ============================ SLIDE 19 : PART 4 INTERACTION ============================ -->
+    <section class="slide" id="slide-19" data-title="PART 4 ｜ 2 本の直線の交点">
+      <div class="slide-inner">
+        <div class="eyebrow">Interactive ｜ 2 本の直線の交点が、答え</div>
+        <h2>合計時間と目標金額から、<br>交点を求める。</h2>
+
+        <div class="block">
+          <div class="controls grid-2">
+            <div class="control-row">
+              <div class="control-label">
+                <span>合計で働きたい時間</span>
+                <span class="control-value" id="c4-h-val">25 時間</span>
+              </div>
+              <input type="range" id="c4-h" min="10" max="50" value="25" step="1">
+            </div>
+            <div class="control-row">
+              <div class="control-label">
+                <span>目標金額</span>
+                <span class="control-value" id="c4-t-val">40,000 円</span>
+              </div>
+              <input type="range" id="c4-t" min="10000" max="100000" value="40000" step="1000">
+            </div>
+          </div>
+
+          <div class="equation light" style="font-size: 20px;">
+            <span class="var">x</span> <span class="op">+</span> <span class="var">y</span> <span class="op">=</span> <span class="var" id="c4-eq-h">25</span>
+            &nbsp;&nbsp;,&nbsp;&nbsp;
+            <span class="var">1000 x</span> <span class="op">+</span> <span class="var">2000 y</span> <span class="op">=</span> <span class="var" id="c4-eq-t">40,000</span>
+          </div>
+
+          <div class="split-answer" style="display: grid; grid-template-columns: 1.2fr 1fr; gap: 20px; margin-top: 16px; align-items: stretch;">
+            <div class="chart-wrap" style="padding-top: 16px;">
+              <canvas id="chart4" height="280"></canvas>
+            </div>
+            <div style="display: grid; gap: 12px;">
+              <div class="stat accent" style="padding: 18px;">
+                <div class="stat-label">カフェ　時給 1,000 円</div>
+                <div class="stat-value" id="c4-ans-cafe">10<span class="stat-unit">時間</span></div>
+              </div>
+              <div class="stat primary" style="padding: 18px;">
+                <div class="stat-label">塾講師　時給 2,000 円</div>
+                <div class="stat-value" id="c4-ans-tutor">15<span class="stat-unit">時間</span></div>
+              </div>
+              <div id="c4-feasible-box" class="callout" style="margin: 0;">
+                <div class="ico">◎</div>
+                <div class="body"><strong id="c4-feasible-msg">この配分なら、実現可能です。</strong></div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="excel-box">
+          <div class="excel-head">Excel / Sheets で再現してみる</div>
+          <div class="excel-title">タブ <code style="font-family: var(--font-mono); background: var(--surface-2); padding: 2px 6px; border-radius: 4px;">6_連立方程式</code> ／ A 豆・B 豆ブレンドの例</div>
+          <div class="excel-steps">
+            <div class="excel-step"><div class="sn">1</div><div class="desc">ストーリー変更：A 豆 500 円/100g、B 豆 800 円/100g。合計 500g で 3,200 円。→ 連立 <code>x + y = 500</code>、<code>5x + 8y = 3200</code>。</div></div>
+            <div class="excel-step"><div class="sn">2</div><div class="desc">y について解く： <code>y₁ = 500 − x</code>、<code>y₂ = (3200 − 5x)/8</code>。C15 に <code>=500-B15</code>、D15 に <code>=(3200-5*B15)/8</code>。</div></div>
+            <div class="excel-step"><div class="sn">3</div><div class="desc">B14:D25 → 挿入 → 折れ線。2 直線の交点 <strong>(x, y) ≒ (266.7, 233.3)</strong>。</div></div>
+          </div>
+          <div class="excel-note">
+            <strong>実験：</strong> 条件2 の 3,200 を 5,000 に変えると交点が範囲外へ＝<strong>解なし</strong>が視覚化される。
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ============================ SLIDE 20 : PART 5 GATE ============================ -->
+    <section class="slide gate" id="slide-20" data-title="PART 5 ｜ 扉">
+      <div class="gate-inner">
+        <div class="gate-part-num">P A R T  &nbsp;5</div>
+        <h1 class="gate-title">指数は、<br><span class="gate-accent">爆発</span>する。</h1>
+        <p class="gate-sub">
+          冒頭の問い「30 日後、どっちが得？」—— いよいよ答え合わせ。
+        </p>
+      </div>
+    </section>
+
+    <!-- ============================ SLIDE 21 : PART 5 ANSWER ============================ -->
+    <section class="slide" id="slide-21" data-title="PART 5 ｜ 答え合わせ">
+      <div class="slide-inner">
+        <div class="eyebrow">Answer ｜ 30 日後、どっちが得？</div>
+        <h2>毎日 1 万円 vs 毎日 2 倍、<br>結論はこう。</h2>
+
+        <div class="block">
+          <div class="control-row" style="margin-bottom: 28px;">
+            <div class="control-label">
+              <span>何日目まで見る？</span>
+              <span class="control-value" id="c5-d-val">30 日目</span>
+            </div>
+            <input type="range" id="c5-d" min="1" max="30" value="30" step="1">
+          </div>
+
+          <div class="stat-row" style="grid-template-columns: 1fr 1fr;">
+            <div class="stat" style="background: var(--blue-bg); border-color: var(--blue-bg-2);">
+              <div class="stat-label">A 案 ／ 毎日 1 万円</div>
+              <div class="stat-value" id="c5-a-val" style="color: var(--blue-dark);">30<span class="stat-unit">万円</span></div>
+              <div class="stat-delta" id="c5-a-delta">累計</div>
+            </div>
+            <div class="stat primary">
+              <div class="stat-label">B 案 ／ 毎日 2 倍</div>
+              <div class="stat-value" id="c5-b-val">10.7<span class="stat-unit">億円</span></div>
+              <div class="stat-delta" id="c5-b-delta">累計</div>
+            </div>
+          </div>
+
+          <div class="chart-wrap" style="padding-top: 20px;">
+            <canvas id="chart5" height="240"></canvas>
+          </div>
+
+          <div class="btn-row">
+            <button class="btn" id="c5-toggle-log">対数目盛りに切り替え</button>
+            <button class="btn" id="c5-animate">30 日間を自動再生</button>
+          </div>
+
+          <div class="callout" style="margin-top: 16px;">
+            <div class="ico">◎</div>
+            <div class="body">
+              <span id="c5-msg">B は A の約 3,579 倍。</span> <strong>20 日目あたりまでは A のほうが多い</strong>が、そこから B が追い越し、グラフはほぼ垂直に立ち上がる。<strong>直感スケールを、式が越えていく</strong>。
+            </div>
+          </div>
+        </div>
+
+        <div class="excel-box">
+          <div class="excel-head">Excel / Sheets で再現してみる</div>
+          <div class="excel-title">タブ <code style="font-family: var(--font-mono); background: var(--surface-2); padding: 2px 6px; border-radius: 4px;">7_30日チャレンジ</code> ／ 直感を裏切る瞬間</div>
+          <div class="excel-steps">
+            <div class="excel-step"><div class="sn">1</div><div class="desc">C9 に <code>10000</code>、D9 に <code>1</code>。C10 に <code>=C9+10000</code>、D10 に <code>=D9*2</code>。</div></div>
+            <div class="excel-step"><div class="sn">2</div><div class="desc">C10:D10 を C38:D38 までドラッグ → A 案 30 万、B 案 2²⁹ ≒ 約 5.37 億。</div></div>
+            <div class="excel-step"><div class="sn">3</div><div class="desc">グラフの<strong>縦軸を対数目盛り</strong>に → 指数関数は対数スケールで直線になる。</div></div>
+          </div>
+          <div class="excel-note">
+            <strong>答え合わせ：</strong> A 案 30 万円。B 案 2³⁰ − 1 ≒ <strong>約 10.7 億円</strong>。
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ============================ SLIDE 22 : PART 5 APPLY ============================ -->
+    <section class="slide" id="slide-22" data-title="PART 5 ｜ 指数の応用">
+      <div class="slide-inner">
+        <div class="eyebrow">Apply ｜ 指数の仕組みは、お金の世界のあちこちに</div>
+        <h2>倍々の動きが見えたら、<br>「指数の仕組み」を思い出す。</h2>
+        <div class="apply-grid">
+          <div class="apply-card">
+            <div class="apply-title">◎ &nbsp; 積立投資・複利</div>
+            <div class="apply-body">
+              毎月 3 万円を年利 5 % で積み立てると、30 年で元本 1,080 万円 → <strong>約 2,500 万円</strong>。味方につけると、時間が資産を育てる。
+            </div>
+          </div>
+          <div class="apply-card dark">
+            <div class="apply-title">! &nbsp; リボ払い・借金</div>
+            <div class="apply-body">
+              同じ仕組みが敵に回ると怖い。<strong>10 万円のリボが、気づけば膨らんでいる</strong>。
+            </div>
+          </div>
+          <div class="apply-card">
+            <div class="apply-title">◎ &nbsp; 昇給・手取りの差</div>
+            <div class="apply-body">
+              毎年 3 % 昇給と 5 % 昇給。10 年後の差は月収で数万円、<strong>生涯年収で大きく開く</strong>。
+            </div>
+          </div>
+          <div class="apply-card dark">
+            <div class="apply-title">! &nbsp; インフレ・お金の価値</div>
+            <div class="apply-body">
+              毎年 3 % 物価が上がると、20 年後には同じ 100 万円で買えるものが、<strong>約半分に</strong>。
+            </div>
+          </div>
+        </div>
+        <div class="apply-summary">
+          倍々の動き・怪しさが見えたら、<strong>「指数の仕組み」を思い出す</strong>。
+        </div>
+      </div>
+    </section>
+
+    <!-- ============================ SLIDE 23 : SUMMARY ============================ -->
+    <section class="slide" id="slide-23" data-title="三つの統一原理">
+      <div class="slide-inner">
+        <div class="hr-section"><span class="label">SUMMARY ／ UNIFIED PRINCIPLES</span></div>
+        <div class="eyebrow">本日のまとめ</div>
+        <h2>三つの、統一原理。</h2>
+        <p class="section-sub">
+          今日扱った 5 つのテーマは、次の 3 つの原理に集約できる。
+        </p>
+
+        <div class="principle-card">
+          <div class="num">01</div>
+          <div class="content">
+            <h4>式は数を生成する</h4>
+            <p>1 本の式から、数十・数百の数が導かれる。人間は式を読み、コンピュータは式から数を並べる。</p>
+          </div>
+        </div>
+        <div class="principle-card">
+          <div class="num">02</div>
+          <div class="content">
+            <h4>方程式・不等式・連立は「位置探し」</h4>
+            <p>方程式＝点、不等式＝領域、連立＝交点。いずれもグラフ上の位置を特定する作業。</p>
+          </div>
+        </div>
+        <div class="principle-card">
+          <div class="num">03</div>
+          <div class="content">
+            <h4>指数的変化は直感と合わない</h4>
+            <p>倍々の増加は初期は目立たず、ある時点から急に大きくなる。金利・感染・拡散など多くの現象に現れる。</p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ============================ SLIDE 24 : NEXT ============================ -->
+    <section class="slide closing" id="slide-24" data-title="次回予告">
+      <div class="slide-inner">
+        <div class="block dark" style="padding: 48px 40px;">
+          <div style="font-size: 12px; letter-spacing: 0.12em; color: #93C5FD; font-weight: 500; margin-bottom: 12px;">NEXT LECTURE ／ 第 3 回</div>
+          <h3 style="font-family: var(--font-serif); font-size: 44px; font-weight: 400; color: white; line-height: 1.2; margin-bottom: 16px; letter-spacing: -0.01em;">
+            『変化を追う』—— 微分の入口
+          </h3>
+          <p style="color: #CBD5E1; font-size: 15px; max-width: 56ch;">
+            グラフの「傾き」を主題に扱う。今日描いた折れ線を、さらに細かく読み解く。<br>
+            「利率が高いほど傾きが急になる」という観察を、式として記述する。
+          </p>
+        </div>
+        <footer style="margin-top: 32px; padding-top: 20px; border-top: 1px solid var(--line); color: var(--ink-3); font-size: 13px; text-align: center;">
+          情報数理入門 第 2 回 ／ 小船 幹生 ／ 平成国際大学 情報デザイン学部
+        </footer>
+      </div>
+    </section>
+
+    </div><!-- /.slide-deck -->
   </main>
 </div>
 
+<!-- ============================ SLIDE NAV ============================ -->
+<nav class="slide-nav" id="slide-nav" aria-label="スライドナビゲーション">
+  <button id="nav-prev" aria-label="前のスライド">‹</button>
+  <div class="slide-counter"><span id="nav-current">1</span><span class="sep">/</span><span id="nav-total">24</span></div>
+  <button id="nav-next" aria-label="次のスライド">›</button>
+</nav>
+
 <script>
+// ====================== SLIDE DECK ======================
+(() => {
+  const slides = Array.from(document.querySelectorAll('.slide'));
+  const total = slides.length;
+  const navPrev = document.getElementById('nav-prev');
+  const navNext = document.getElementById('nav-next');
+  const navCur = document.getElementById('nav-current');
+  const navTotal = document.getElementById('nav-total');
+  const sidebar = document.getElementById('sidebar');
+  const backdrop = document.getElementById('sidebar-backdrop');
+  const menuBtn = document.getElementById('menu-btn');
+  const navLinks = Array.from(document.querySelectorAll('.nav-link[data-slide]'));
+  if (navTotal) navTotal.textContent = total;
+
+  const getSlideFromHash = () => {
+    const m = (location.hash || '').match(/^#slide-(\d+)$/);
+    if (m) {
+      const n = parseInt(m[1], 10);
+      if (n >= 1 && n <= total) return n;
+    }
+    return 1;
+  };
+
+  let current = getSlideFromHash();
+
+  const resizeChartsIn = (slide) => {
+    if (!window.Chart) return;
+    slide.querySelectorAll('canvas').forEach((c) => {
+      const chart = Chart.getChart(c);
+      if (chart) chart.resize();
+    });
+  };
+
+  const closeSidebar = () => {
+    sidebar?.classList.remove('open');
+    backdrop?.classList.remove('open');
+  };
+
+  const go = (n, { updateHash = true } = {}) => {
+    const target = Math.min(Math.max(1, n), total);
+    slides.forEach((el, i) => el.classList.toggle('active', (i + 1) === target));
+    current = target;
+    if (navCur) navCur.textContent = target;
+    if (navPrev) navPrev.disabled = target === 1;
+    if (navNext) navNext.disabled = target === total;
+    navLinks.forEach((a) => {
+      const slideNum = parseInt(a.dataset.slide, 10);
+      const range = a.dataset.slideRange;
+      let active = slideNum === target;
+      if (range) {
+        const [lo, hi] = range.split('-').map((s) => parseInt(s, 10));
+        active = target >= lo && target <= hi;
+      }
+      a.classList.toggle('active', active);
+    });
+    if (updateHash) {
+      const newHash = `#slide-${target}`;
+      if (location.hash !== newHash) history.replaceState(null, '', newHash);
+    }
+    const activeSlide = slides[target - 1];
+    if (activeSlide) {
+      activeSlide.scrollTop = 0;
+      requestAnimationFrame(() => resizeChartsIn(activeSlide));
+    }
+  };
+
+  navPrev?.addEventListener('click', () => go(current - 1));
+  navNext?.addEventListener('click', () => go(current + 1));
+
+  document.querySelectorAll('a[href^="#slide-"]').forEach((a) => {
+    a.addEventListener('click', (e) => {
+      const m = a.getAttribute('href').match(/^#slide-(\d+)$/);
+      if (!m) return;
+      e.preventDefault();
+      go(parseInt(m[1], 10));
+      closeSidebar();
+    });
+  });
+
+  window.addEventListener('keydown', (e) => {
+    if (e.target.matches('input, textarea, select')) return;
+    if (e.key === 'ArrowRight' || e.key === 'PageDown' || e.key === ' ') {
+      e.preventDefault();
+      go(current + 1);
+    } else if (e.key === 'ArrowLeft' || e.key === 'PageUp') {
+      e.preventDefault();
+      go(current - 1);
+    } else if (e.key === 'Home') {
+      e.preventDefault();
+      go(1);
+    } else if (e.key === 'End') {
+      e.preventDefault();
+      go(total);
+    }
+  });
+
+  const deck = document.getElementById('slide-deck');
+  let touchStartX = 0, touchStartY = 0, touchActive = false;
+  deck?.addEventListener('touchstart', (e) => {
+    if (e.touches.length !== 1) return;
+    touchStartX = e.touches[0].clientX;
+    touchStartY = e.touches[0].clientY;
+    touchActive = true;
+  }, { passive: true });
+  deck?.addEventListener('touchend', (e) => {
+    if (!touchActive) return;
+    touchActive = false;
+    const t = e.changedTouches[0];
+    const dx = t.clientX - touchStartX;
+    const dy = t.clientY - touchStartY;
+    if (Math.abs(dx) > 60 && Math.abs(dx) > Math.abs(dy) * 1.5) {
+      if (dx < 0) go(current + 1);
+      else go(current - 1);
+    }
+  }, { passive: true });
+
+  window.addEventListener('hashchange', () => {
+    const n = getSlideFromHash();
+    if (n !== current) go(n, { updateHash: false });
+  });
+
+  menuBtn?.addEventListener('click', () => {
+    sidebar?.classList.add('open');
+    backdrop?.classList.add('open');
+  });
+  backdrop?.addEventListener('click', closeSidebar);
+
+  go(current, { updateHash: false });
+  window.addEventListener('load', () => {
+    requestAnimationFrame(() => {
+      const activeSlide = slides[current - 1];
+      if (activeSlide) resizeChartsIn(activeSlide);
+    });
+  });
+})();
+
 // ====================== SHARED ======================
 const fmtYen = new Intl.NumberFormat('ja-JP');
 const fmtMan = (n) => {
@@ -1369,36 +2097,6 @@ Chart.defaults.animation.duration = 300;
     }, 180);
   });
   update();
-})();
-
-// ====================== SIDEBAR ACTIVE STATE & SMOOTH SCROLL ======================
-(() => {
-  // すべてのアンカーリンク（サイドバー + TOC バー）に対してカスタムスクロールを適用
-  // iframe 環境では素の href="#..." が親ページに飛んでしまうため、preventDefault + scrollIntoView で制御
-  const allAnchors = document.querySelectorAll('a[href^="#"]');
-  allAnchors.forEach(a => {
-    a.addEventListener('click', (e) => {
-      e.preventDefault();
-      const id = a.getAttribute('href').slice(1);
-      const target = document.getElementById(id);
-      if (target) {
-        target.scrollIntoView({ behavior: 'smooth', block: 'start' });
-      }
-    });
-  });
-
-  const links = document.querySelectorAll('.nav-link');
-  const sections = Array.from(links).map(a => document.querySelector(a.getAttribute('href'))).filter(Boolean);
-  function onScroll() {
-    const y = window.scrollY + 120;
-    let active = 0;
-    sections.forEach((sec, i) => {
-      if (sec.offsetTop <= y) active = i;
-    });
-    links.forEach((link, i) => link.classList.toggle('active', i === active));
-  }
-  window.addEventListener('scroll', onScroll, { passive: true });
-  onScroll();
 })();
 </script>
 </body>
