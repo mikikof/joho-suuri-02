@@ -1,0 +1,2621 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>情報数理入門 第3回 — 図形と方程式</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Zen+Kaku+Gothic+New:wght@400;500;700;900&family=DM+Serif+Display&family=JetBrains+Mono:wght@400;500;700&display=swap" rel="stylesheet">
+<script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.1/dist/chart.umd.min.js"></script>
+<style>
+  :root {
+    --bg: #FAFBFC;
+    --surface: #FFFFFF;
+    --surface-2: #F6F7F9;
+    --surface-3: #EFF1F4;
+    --ink: #1F2937;
+    --ink-2: #4B5563;
+    --ink-3: #9CA3AF;
+    --line: #E5E7EB;
+    --line-strong: #D1D5DB;
+    --blue: #2563EB;
+    --blue-dark: #1D4ED8;
+    --blue-deep: #1E3A8A;
+    --blue-bg: #EFF6FF;
+    --blue-bg-2: #DBEAFE;
+    --sky: #93C5FD;
+    --amber: #F59E0B;
+    --rose: #E11D48;
+    --emerald: #059669;
+    --radius-sm: 6px;
+    --radius-md: 10px;
+    --radius-lg: 16px;
+    --shadow-sm: 0 1px 2px rgba(15, 23, 42, 0.04), 0 1px 3px rgba(15, 23, 42, 0.06);
+    --shadow: 0 1px 2px rgba(15, 23, 42, 0.04), 0 4px 12px rgba(15, 23, 42, 0.06);
+    --shadow-lg: 0 4px 6px rgba(15, 23, 42, 0.05), 0 20px 40px rgba(15, 23, 42, 0.08);
+    --font-jp: "Zen Kaku Gothic New", sans-serif;
+    --font-serif: "DM Serif Display", "Zen Kaku Gothic New", serif;
+    --font-mono: "JetBrains Mono", ui-monospace, monospace;
+  }
+
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  html, body { height: 100%; overflow: hidden; }
+  body {
+    font-family: var(--font-jp);
+    background: var(--bg);
+    color: var(--ink);
+    line-height: 1.7;
+    font-feature-settings: "palt";
+    -webkit-font-smoothing: antialiased;
+    font-weight: 400;
+  }
+
+  /* ====================== LAYOUT ====================== */
+  .shell { display: grid; grid-template-columns: 280px 1fr; height: 100vh; overflow: hidden; }
+
+  .sidebar {
+    height: 100vh;
+    background: var(--surface-2);
+    border-right: 1px solid var(--line);
+    padding: 32px 20px;
+    overflow-y: auto;
+  }
+  .sidebar-brand {
+    display: flex; align-items: center; gap: 10px;
+    padding: 6px 10px; margin-bottom: 28px;
+  }
+  .sidebar-brand .mark {
+    width: 28px; height: 28px;
+    background: linear-gradient(135deg, var(--blue) 0%, var(--blue-deep) 100%);
+    border-radius: 7px;
+    display: grid; place-items: center;
+    color: white; font-family: var(--font-serif); font-size: 18px;
+    box-shadow: 0 2px 8px rgba(37, 99, 235, 0.35);
+  }
+  .sidebar-brand .title { font-weight: 700; font-size: 14px; color: var(--ink); }
+  .sidebar-brand .sub { font-size: 11px; color: var(--ink-3); letter-spacing: 0.04em; }
+
+  .nav-group { margin-bottom: 24px; }
+  .nav-group-label {
+    font-size: 11px; color: var(--ink-3);
+    font-weight: 500; letter-spacing: 0.08em;
+    padding: 6px 10px; margin-bottom: 4px; text-transform: uppercase;
+  }
+  .nav-link {
+    display: flex; align-items: center; gap: 10px;
+    padding: 9px 12px; border-radius: var(--radius-sm);
+    color: var(--ink-2); font-size: 15px;
+    text-decoration: none; cursor: pointer;
+    transition: all 0.12s ease;
+    font-weight: 500;
+  }
+  .nav-link:hover { background: var(--surface-3); color: var(--ink); }
+  .nav-link.active { background: var(--blue-bg); color: var(--blue-dark); }
+  .nav-link .icon { width: 18px; height: 18px; display: grid; place-items: center; color: var(--ink-3); flex-shrink: 0; }
+  .nav-link.active .icon { color: var(--blue); }
+  .nav-link .num {
+    font-family: var(--font-mono); font-size: 11px; color: var(--ink-3);
+    background: var(--surface); border: 1px solid var(--line);
+    border-radius: 4px; padding: 1px 5px;
+  }
+  .nav-link.active .num { background: white; border-color: var(--blue-bg-2); color: var(--blue); }
+
+  .main {
+    position: relative;
+    height: 100vh;
+    overflow: hidden;
+  }
+  .slide-deck { position: relative; height: 100%; width: 100%; }
+  .slide {
+    position: absolute; inset: 0;
+    padding: 56px 72px 88px;
+    overflow-y: auto;
+    opacity: 0; visibility: hidden; pointer-events: none;
+    transition: opacity 0.25s ease;
+  }
+  .slide.active { opacity: 1; visibility: visible; pointer-events: auto; }
+  .slide-inner { max-width: 1280px; width: 100%; margin: 0 auto; }
+  .slide-inner .section-sub { max-width: none; font-size: 24px; line-height: 1.85; margin-bottom: 32px; color: var(--ink-2); }
+  .slide-inner .lede { max-width: none; font-size: 26px; line-height: 1.85; }
+  .slide-inner h1 { font-size: 88px; }
+  .slide-inner h2 { font-size: 60px; margin-top: 8px; margin-bottom: 20px; line-height: 1.22; letter-spacing: -0.02em; }
+  .slide-inner h3 { font-size: 26px; }
+  .slide-inner .eyebrow { font-size: 16px; letter-spacing: 0.16em; margin-bottom: 16px; font-weight: 600; }
+  .slide-inner .hr-section { margin: 0 0 32px; }
+  .slide-inner .hr-section .label { font-size: 15px; }
+  .slide-inner .block { padding: 40px; }
+  .slide-inner .control-label { font-size: 18px; }
+  .slide-inner .control-value { font-size: 22px; }
+  .slide-inner .stat { padding: 24px 28px; }
+  .slide-inner .stat-label { font-size: 14px; margin-bottom: 10px; letter-spacing: 0.06em; }
+  .slide-inner .stat-value { font-size: 48px; }
+  .slide-inner .stat-unit { font-size: 18px; }
+  .slide-inner .stat-delta { font-size: 15px; margin-top: 6px; }
+  .slide-inner .callout { padding: 24px 28px; margin: 20px 0; }
+  .slide-inner .callout .body { font-size: 20px; line-height: 1.85; }
+  .slide-inner .equation { font-size: 32px; padding: 28px 32px; }
+  .slide-inner .equation.light { font-size: 30px; }
+  .slide-inner .eq-arrow { font-size: 17px; margin: 8px 0; }
+  .slide-inner .big-answer { padding: 44px 28px; }
+  .slide-inner .big-answer .number { font-size: 104px; }
+  .slide-inner .big-answer .label { font-size: 15px; letter-spacing: 0.14em; }
+  .slide-inner .big-answer .unit { font-size: 30px; }
+  .slide-inner .big-answer .hint { font-size: 17px; margin-top: 14px; }
+  .slide-inner .plan { padding: 24px 28px; }
+  .slide-inner .plan-name { font-size: 22px; margin-bottom: 12px; }
+  .slide-inner .plan-price { font-size: 56px; }
+  .slide-inner .plan-price .yen { font-size: 20px; }
+  .slide-inner .plan-breakdown { font-size: 16px; margin-top: 10px; }
+  .slide-inner .terminal { font-size: 19px; padding: 26px 28px; }
+  .slide-inner .terminal .line { padding: 8px 0; min-height: 32px; }
+  .slide-inner .btn { font-size: 16px; padding: 12px 20px; }
+  .slide-inner .btn-row { gap: 10px; margin: 18px 0; }
+  .slide-inner .principle-card { padding: 28px 32px; margin-bottom: 14px; grid-template-columns: 88px 1fr; gap: 24px; }
+  .slide-inner .principle-card .num { font-size: 64px; }
+  .slide-inner .principle-card h4 { font-size: 24px; margin-bottom: 8px; }
+  .slide-inner .principle-card p { font-size: 18px; line-height: 1.75; }
+  .slide-inner code { font-size: 0.92em; }
+
+  /* 扉系は縦中央寄せ */
+  .slide.gate, .slide.title-cover, .slide.tease, .slide.closing {
+    display: flex; align-items: center; justify-content: center;
+  }
+
+  /* ====================== TITLE COVER ====================== */
+  .title-cover { background: linear-gradient(135deg, #0F172A 0%, #1E3A8A 60%, #1D4ED8 100%); color: white; }
+  .title-cover .cover-meta { font-size: 15px; letter-spacing: 0.18em; text-transform: uppercase; color: #93C5FD; font-weight: 500; margin-bottom: 28px; }
+  .title-cover .cover-title { font-family: var(--font-jp); font-weight: 900; font-size: 34px; line-height: 1.3; color: #DBEAFE; margin-bottom: 8px; }
+  .title-cover .cover-num { font-family: var(--font-serif); font-size: 104px; line-height: 1; font-weight: 400; color: white; margin-bottom: 36px; }
+  .title-cover .cover-sub { font-family: var(--font-jp); font-weight: 900; font-size: 96px; line-height: 1.15; color: white; letter-spacing: -0.02em; margin-bottom: 56px; }
+  .title-cover .cover-author { font-size: 20px; color: #CBD5E1; letter-spacing: 0.08em; }
+
+  /* ====================== PART GATE ====================== */
+  .slide.gate { background: var(--ink); color: white; }
+  .gate-inner { width: 100%; max-width: 1100px; text-align: left; padding: 0 8px; }
+  .gate-part-num { font-family: var(--font-mono); font-size: 16px; letter-spacing: 0.34em; color: #93C5FD; margin-bottom: 28px; font-weight: 500; }
+  .gate-title { font-family: var(--font-jp); font-weight: 900; font-size: 120px; line-height: 1.1; letter-spacing: -0.02em; color: white; margin-bottom: 28px; }
+  .gate-sub { font-size: 24px; color: #CBD5E1; max-width: 46ch; line-height: 1.7; }
+  .gate-accent { color: #60A5FA; }
+
+  /* ====================== TEASE ====================== */
+  .tease { background: linear-gradient(180deg, #F8FAFC 0%, #EFF6FF 100%); }
+  .tease-inner { width: 100%; max-width: 1100px; text-align: center; }
+  .tease-eyebrow { font-size: 15px; letter-spacing: 0.2em; color: var(--blue-dark); text-transform: uppercase; font-weight: 600; margin-bottom: 20px; }
+  .tease-title { font-size: 68px; line-height: 1.2; font-weight: 900; color: var(--ink); margin-bottom: 52px; letter-spacing: -0.02em; }
+  .vs-compare { display: grid; grid-template-columns: 1fr auto 1fr; align-items: stretch; gap: 24px; margin-bottom: 24px; }
+  .vs-card { padding: 36px 28px; border-radius: var(--radius-lg); background: var(--surface); border: 1px solid var(--line); box-shadow: var(--shadow); text-align: left; position: relative; }
+  .vs-card.b { background: linear-gradient(135deg, #1E3A8A 0%, #1D4ED8 100%); color: white; border-color: transparent; }
+  .vs-card .vs-label { font-family: var(--font-serif); font-size: 44px; font-weight: 400; color: var(--blue-dark); margin-bottom: 14px; line-height: 1; }
+  .vs-card.b .vs-label { color: #93C5FD; }
+  .vs-card .vs-plan { font-size: 17px; color: var(--ink-2); margin-bottom: 24px; line-height: 1.6; }
+  .vs-card.b .vs-plan { color: #CBD5E1; }
+  .vs-card .vs-amount { font-family: var(--font-serif); font-size: 64px; line-height: 1.1; color: var(--ink); font-weight: 400; }
+  .vs-card.b .vs-amount { color: white; }
+  .vs-card .vs-amount small { font-size: 20px; color: var(--ink-3); margin-left: 4px; }
+  .vs-card.b .vs-amount small { color: #93C5FD; }
+  .vs-card .vs-note { font-size: 15px; color: var(--ink-3); margin-top: 10px; }
+  .vs-card.b .vs-note { color: #93C5FD; }
+  .vs-divider { display: flex; align-items: center; justify-content: center; font-family: var(--font-serif); font-size: 52px; color: var(--ink-3); font-weight: 400; }
+  .tease-hint { font-size: 17px; color: var(--ink-3); margin-top: 28px; }
+
+  /* ====================== STORY ====================== */
+  .story-block { background: var(--surface); border: 1px solid var(--line); border-radius: var(--radius-lg); padding: 44px 48px; margin: 24px 0; box-shadow: var(--shadow-sm); }
+  .story-label { font-size: 16px; letter-spacing: 0.16em; text-transform: uppercase; color: var(--ink-3); font-weight: 600; margin-bottom: 20px; }
+  .story-text { font-size: 30px; line-height: 1.9; color: var(--ink); }
+  .story-text strong { color: var(--blue-dark); font-weight: 700; }
+  .story-q { font-size: 42px; font-weight: 900; color: var(--ink); margin-top: 36px; line-height: 1.4; }
+  .story-q em { color: var(--blue-dark); font-style: normal; }
+
+  /* ====================== RATE COMPARE ====================== */
+  .rate-compare { display: grid; grid-template-columns: repeat(3, 1fr); gap: 20px; margin-top: 28px; }
+  .rate-card { padding: 36px 28px; border-radius: var(--radius-lg); background: var(--surface); border: 1px solid var(--line); text-align: center; }
+  .rate-card.mid { background: var(--blue-bg); border-color: var(--blue-bg-2); }
+  .rate-card.high { background: var(--ink); color: white; border-color: var(--ink); }
+  .rate-card .rate-label { font-family: var(--font-mono); font-size: 46px; color: var(--blue-dark); font-weight: 700; margin-bottom: 8px; }
+  .rate-card.high .rate-label { color: #93C5FD; }
+  .rate-card .rate-arrow { color: var(--ink-3); font-size: 22px; margin: 12px 0; }
+  .rate-card.high .rate-arrow { color: #64748B; }
+  .rate-card .rate-amount { font-family: var(--font-serif); font-size: 64px; line-height: 1.1; color: var(--ink); font-weight: 400; }
+  .rate-card.mid .rate-amount { color: var(--blue-dark); }
+  .rate-card.high .rate-amount { color: white; }
+  .rate-card .rate-amount small { font-family: var(--font-jp); font-size: 22px; font-weight: 500; color: var(--ink-3); margin-left: 6px; }
+  .rate-card.high .rate-amount small { color: #94A3B8; }
+
+  /* ====================== APPLY GRID (PART 5 応用) ====================== */
+  .apply-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 20px; margin-top: 24px; }
+  .apply-card { padding: 32px 34px; border-radius: var(--radius-lg); background: var(--surface); border: 1px solid var(--line); }
+  .apply-card.dark { background: var(--ink); color: white; border-color: var(--ink); }
+  .apply-card .apply-title { font-size: 24px; font-weight: 700; color: var(--ink); margin-bottom: 14px; }
+  .apply-card.dark .apply-title { color: white; }
+  .apply-card .apply-body { font-size: 18px; color: var(--ink-2); line-height: 1.85; }
+  .apply-card.dark .apply-body { color: #CBD5E1; }
+  .apply-summary { margin-top: 28px; padding: 28px 32px; background: var(--blue-bg); border-left: 5px solid var(--blue); border-radius: var(--radius-md); font-size: 22px; color: var(--ink); line-height: 1.75; }
+
+  /* ====================== PROBLEM VALUES ====================== */
+  .problem-values { display: grid; grid-template-columns: repeat(3, 1fr); gap: 20px; margin: 28px 0; }
+  .problem-values .pv { background: var(--surface-2); border: 1px solid var(--line); border-radius: var(--radius-lg); padding: 32px 24px; text-align: center; }
+  .problem-values .pv-label { font-size: 16px; letter-spacing: 0.08em; color: var(--ink-3); margin-bottom: 12px; font-weight: 500; }
+  .problem-values .pv-value { font-family: var(--font-serif); font-size: 52px; line-height: 1.1; color: var(--ink); }
+  .problem-values .pv-value small { font-family: var(--font-jp); font-size: 22px; color: var(--ink-3); margin-left: 6px; }
+
+  /* ====================== EQ TRANSFORM ====================== */
+  .eq-transform { display: grid; grid-template-columns: 1fr; gap: 16px; margin: 32px 0; }
+  .eq-step { padding: 28px 32px; background: var(--surface-2); border: 1px solid var(--line); border-radius: var(--radius-md); font-family: var(--font-mono); font-size: 32px; text-align: center; color: var(--ink); }
+  .eq-step.final { background: var(--ink); color: white; border-color: var(--ink); font-size: 38px; }
+  .eq-step-label { font-size: 16px; color: var(--ink-3); text-align: center; font-family: var(--font-jp); }
+
+  /* ====================== EXCEL HANDS-ON BOX ====================== */
+  .excel-box { margin-top: 28px; padding: 28px 32px; background: #ECFDF5; border: 1px solid #A7F3D0; border-left: 6px solid #059669; border-radius: var(--radius-lg); }
+  .excel-box .excel-head { display: flex; align-items: center; gap: 10px; font-size: 16px; font-weight: 700; color: #047857; letter-spacing: 0.1em; text-transform: uppercase; margin-bottom: 16px; }
+  .excel-box .excel-head::before { content: "⊞"; font-size: 22px; color: #059669; }
+  .excel-box .excel-title { font-size: 24px; font-weight: 700; color: var(--ink); margin-bottom: 16px; }
+  .excel-steps { display: grid; gap: 16px; }
+  .excel-step { display: grid; grid-template-columns: 36px 1fr; gap: 14px; align-items: start; }
+  .excel-step .sn { width: 32px; height: 32px; background: #059669; color: white; border-radius: 50%; display: grid; place-items: center; font-family: var(--font-mono); font-size: 15px; font-weight: 700; }
+  .excel-step .desc { font-size: 18px; color: var(--ink); line-height: 1.75; }
+  .excel-step .desc code { font-family: var(--font-mono); font-size: 16px; background: #0F172A; color: #6EE7B7; padding: 3px 10px; border-radius: 4px; font-weight: 500; }
+  .excel-box .excel-note { margin-top: 18px; padding: 16px 18px; background: white; border: 1px dashed #A7F3D0; border-radius: var(--radius-sm); font-size: 17px; color: #047857; line-height: 1.7; }
+
+  /* ====================== PRACTICE SLIDE ====================== */
+  .practice-slide { background: #FFFBEB; }
+  .practice-head { display: flex; align-items: center; gap: 12px; margin-bottom: 20px; }
+  .practice-head .ribbon { font-size: 13px; letter-spacing: 0.18em; font-weight: 700; color: #B45309; background: #FEF3C7; padding: 6px 14px; border-radius: 100px; text-transform: uppercase; }
+  .practice-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 16px; margin-top: 20px; }
+  .practice-card { padding: 22px 24px; background: white; border: 1px solid #FDE68A; border-left: 4px solid var(--amber); border-radius: var(--radius-md); }
+  .practice-card .p-num { font-family: var(--font-mono); font-size: 13px; font-weight: 700; color: #B45309; letter-spacing: 0.12em; margin-bottom: 8px; }
+  .practice-card .p-part { font-size: 11px; color: var(--ink-3); font-weight: 500; margin-bottom: 6px; letter-spacing: 0.08em; }
+  .practice-card .p-q { font-size: 16px; color: var(--ink); line-height: 1.7; }
+  .practice-card .p-q strong { color: #B45309; }
+  .practice-card .p-hint { margin-top: 10px; font-size: 13px; color: var(--ink-2); padding: 8px 10px; background: var(--surface-2); border-radius: var(--radius-sm); }
+
+  /* ====================== CHALLENGE SLIDE ====================== */
+  .challenge-slide { background: linear-gradient(135deg, #1E1B4B 0%, #4C1D95 60%, #6D28D9 100%); color: white; }
+  .challenge-slide .slide-inner { color: white; }
+  .challenge-slide h2 { color: white !important; }
+  .challenge-eyebrow { display: inline-block; font-size: 13px; letter-spacing: 0.22em; font-weight: 700; color: #C4B5FD; background: rgba(124, 58, 237, 0.3); padding: 6px 14px; border-radius: 100px; text-transform: uppercase; margin-bottom: 20px; border: 1px solid rgba(196, 181, 253, 0.3); }
+  .challenge-lead { font-size: 19px; color: #DDD6FE; line-height: 1.85; margin-bottom: 28px; }
+  .challenge-box { padding: 28px 32px; background: rgba(255, 255, 255, 0.06); border: 1px solid rgba(196, 181, 253, 0.22); border-radius: var(--radius-lg); backdrop-filter: blur(6px); }
+  .challenge-q-label { font-size: 12px; letter-spacing: 0.2em; font-weight: 700; color: #C4B5FD; margin-bottom: 12px; text-transform: uppercase; }
+  .challenge-q { font-size: 22px; line-height: 1.75; color: white; font-weight: 500; }
+  .challenge-q strong { color: #FCD34D; }
+  .challenge-points { display: grid; grid-template-columns: repeat(3, 1fr); gap: 14px; margin-top: 24px; }
+  .challenge-point { padding: 18px 20px; background: rgba(255, 255, 255, 0.08); border: 1px solid rgba(196, 181, 253, 0.2); border-radius: var(--radius-md); }
+  .challenge-point .cp-num { font-family: var(--font-serif); font-size: 28px; color: #FCD34D; line-height: 1; margin-bottom: 8px; }
+  .challenge-point .cp-label { font-size: 12px; font-weight: 600; color: #C4B5FD; letter-spacing: 0.1em; text-transform: uppercase; margin-bottom: 6px; }
+  .challenge-point .cp-body { font-size: 14px; line-height: 1.7; color: #E9E4FF; }
+  .challenge-hint { margin-top: 20px; padding: 14px 18px; background: rgba(253, 224, 71, 0.08); border-left: 3px solid #FCD34D; border-radius: var(--radius-sm); font-size: 14px; color: #FEF3C7; }
+
+  /* ====================== SLIDE NAVIGATION ====================== */
+  .slide-nav { position: fixed; bottom: 20px; right: 24px; display: flex; align-items: center; gap: 10px; background: rgba(255, 255, 255, 0.94); backdrop-filter: blur(8px); -webkit-backdrop-filter: blur(8px); border: 1px solid var(--line); border-radius: 100px; padding: 6px 10px; box-shadow: var(--shadow); z-index: 40; font-family: var(--font-mono); font-size: 12px; }
+  .slide-nav button { width: 32px; height: 32px; display: grid; place-items: center; border: none; background: transparent; color: var(--ink-2); cursor: pointer; border-radius: 50%; font-size: 18px; line-height: 1; transition: all 0.12s; }
+  .slide-nav button:hover:not(:disabled) { background: var(--blue-bg); color: var(--blue-dark); }
+  .slide-nav button:disabled { opacity: 0.3; cursor: not-allowed; }
+  .slide-counter { min-width: 54px; text-align: center; color: var(--ink-2); font-weight: 500; letter-spacing: 0.04em; }
+  .slide-counter .sep { color: var(--ink-3); margin: 0 2px; }
+
+  /* ====================== MOBILE MENU ====================== */
+  .menu-btn { display: none; position: fixed; top: 14px; left: 14px; width: 40px; height: 40px; background: var(--surface); border: 1px solid var(--line); border-radius: var(--radius-sm); box-shadow: var(--shadow-sm); cursor: pointer; z-index: 50; align-items: center; justify-content: center; font-size: 18px; color: var(--ink); }
+  .sidebar-backdrop { display: none; position: fixed; inset: 0; background: rgba(15, 23, 42, 0.35); z-index: 45; }
+  .sidebar-backdrop.open { display: block; }
+  .nav-link .sub-num { margin-left: auto; font-family: var(--font-mono); font-size: 10px; color: var(--ink-3); opacity: 0.8; }
+  .nav-link.active .sub-num { color: var(--blue); }
+
+  /* ====================== TYPOGRAPHY ====================== */
+  .eyebrow {
+    font-size: 12px;
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+    color: var(--ink-3);
+    font-weight: 500;
+    margin-bottom: 12px;
+  }
+  h1 {
+    font-family: var(--font-jp); font-weight: 900;
+    font-size: 56px; line-height: 1.15; letter-spacing: -0.02em;
+    margin-bottom: 16px; color: var(--ink);
+  }
+  h2 {
+    font-family: var(--font-jp); font-weight: 900;
+    font-size: 36px; line-height: 1.25; letter-spacing: -0.015em;
+    margin-top: 64px; margin-bottom: 8px;
+  }
+  h3 {
+    font-family: var(--font-jp); font-weight: 700;
+    font-size: 18px; line-height: 1.4;
+    margin-bottom: 10px;
+  }
+  .section-sub {
+    color: var(--ink-2); font-size: 16px; max-width: 65ch;
+    margin-bottom: 32px;
+  }
+  .lede {
+    font-size: 19px; color: var(--ink-2); max-width: 60ch;
+    margin-bottom: 36px; line-height: 1.75;
+  }
+  p { color: var(--ink-2); }
+
+  /* ====================== HERO ====================== */
+  .hero { padding-top: 40px; padding-bottom: 40px; position: relative; }
+  .hero-badge {
+    display: inline-flex; align-items: center; gap: 8px;
+    padding: 6px 12px; margin-bottom: 24px;
+    background: var(--surface); border: 1px solid var(--line);
+    border-radius: 100px; font-size: 12px; color: var(--ink-2);
+    box-shadow: var(--shadow-sm);
+  }
+  .hero-badge .dot {
+    width: 6px; height: 6px; border-radius: 50%;
+    background: var(--blue);
+    box-shadow: 0 0 0 3px var(--blue-bg-2);
+  }
+  .hero h1 .accent {
+    background: linear-gradient(90deg, var(--blue) 0%, var(--blue-deep) 100%);
+    -webkit-background-clip: text; background-clip: text; color: transparent;
+  }
+  .hero-meta {
+    display: flex; gap: 16px; margin-top: 40px;
+    padding-top: 24px; border-top: 1px solid var(--line);
+    color: var(--ink-3); font-size: 13px;
+    flex-wrap: wrap;
+  }
+  .hero-meta span { display: flex; align-items: center; gap: 6px; }
+
+  .tocbar {
+    display: grid; grid-template-columns: repeat(5, 1fr); gap: 1px;
+    background: var(--line); border-radius: var(--radius-md);
+    overflow: hidden; margin-top: 48px; border: 1px solid var(--line);
+  }
+  .toc-item {
+    background: var(--surface); padding: 24px 22px;
+    text-decoration: none; color: var(--ink);
+    transition: all 0.15s; cursor: pointer;
+  }
+  .toc-item:hover { background: var(--blue-bg); }
+  .toc-item .toc-num {
+    font-family: var(--font-mono); font-size: 13px; color: var(--ink-3);
+    margin-bottom: 8px; font-weight: 600; letter-spacing: 0.06em;
+  }
+  .toc-item .toc-name { font-size: 20px; font-weight: 700; margin-bottom: 6px; }
+  .toc-item .toc-hint { font-size: 14px; color: var(--ink-3); margin-top: 4px; line-height: 1.5; }
+
+  /* ====================== BLOCKS ====================== */
+  .block {
+    background: var(--surface); border: 1px solid var(--line);
+    border-radius: var(--radius-lg); padding: 32px;
+    margin-bottom: 24px; box-shadow: var(--shadow-sm);
+  }
+  .block.tight { padding: 20px 24px; }
+  .block.accent { border-color: var(--blue-bg-2); background: var(--blue-bg); }
+  .block.dark {
+    background: var(--ink); color: #E5E7EB; border-color: var(--ink);
+  }
+  .block.dark h3 { color: white; }
+
+  .callout {
+    display: flex; gap: 14px;
+    padding: 16px 18px; margin: 16px 0;
+    background: var(--blue-bg); border-radius: var(--radius-md);
+    border-left: 3px solid var(--blue);
+  }
+  .callout.amber { background: #FFFBEB; border-left-color: var(--amber); }
+  .callout .ico {
+    width: 20px; height: 20px; flex-shrink: 0;
+    color: var(--blue); margin-top: 3px;
+  }
+  .callout.amber .ico { color: var(--amber); }
+  .callout .body { font-size: 14px; color: var(--ink-2); }
+  .callout strong { color: var(--ink); font-weight: 700; }
+
+  /* ====================== CONTROLS (sliders, etc.) ====================== */
+  .controls { display: grid; gap: 20px; margin-bottom: 24px; }
+  .controls.grid-3 { grid-template-columns: repeat(3, 1fr); }
+  .controls.grid-2 { grid-template-columns: repeat(2, 1fr); }
+
+  .control-row {
+    display: flex; flex-direction: column; gap: 8px;
+  }
+  .control-label {
+    display: flex; align-items: baseline; justify-content: space-between;
+    font-size: 13px; color: var(--ink-2); font-weight: 500;
+  }
+  .control-value {
+    font-family: var(--font-mono); font-size: 15px; color: var(--blue-dark);
+    font-weight: 700;
+  }
+
+  input[type="range"] {
+    -webkit-appearance: none; appearance: none;
+    width: 100%; height: 4px;
+    background: var(--line); border-radius: 100px;
+    outline: none; cursor: pointer;
+  }
+  input[type="range"]::-webkit-slider-thumb {
+    -webkit-appearance: none; appearance: none;
+    width: 18px; height: 18px; border-radius: 50%;
+    background: white; border: 2px solid var(--blue);
+    box-shadow: 0 2px 8px rgba(37, 99, 235, 0.35);
+    cursor: grab; transition: transform 0.1s;
+  }
+  input[type="range"]::-webkit-slider-thumb:hover { transform: scale(1.15); }
+  input[type="range"]::-webkit-slider-thumb:active { cursor: grabbing; transform: scale(1.2); }
+  input[type="range"]::-moz-range-thumb {
+    width: 18px; height: 18px; border-radius: 50%;
+    background: white; border: 2px solid var(--blue);
+    box-shadow: 0 2px 8px rgba(37, 99, 235, 0.35); cursor: grab;
+  }
+
+  /* ====================== STATS ====================== */
+  .stat-row { display: grid; grid-template-columns: repeat(3, 1fr); gap: 16px; margin-bottom: 24px; }
+  .stat {
+    background: var(--surface-2); border: 1px solid var(--line);
+    border-radius: var(--radius-md); padding: 16px;
+  }
+  .stat.primary { background: var(--ink); color: white; border-color: var(--ink); }
+  .stat.accent  { background: var(--blue-bg); border-color: var(--blue-bg-2); }
+
+  .stat-label { font-size: 11px; letter-spacing: 0.08em; text-transform: uppercase; color: var(--ink-3); margin-bottom: 6px; font-weight: 500; }
+  .stat.primary .stat-label { color: rgba(255,255,255,0.6); }
+  .stat-value {
+    font-family: var(--font-serif); font-size: 32px;
+    line-height: 1.1; color: var(--ink); font-weight: 400;
+    transition: color 0.2s;
+  }
+  .stat.primary .stat-value { color: white; }
+  .stat.accent .stat-value { color: var(--blue-dark); }
+  .stat-unit { font-size: 14px; color: var(--ink-3); margin-left: 4px; font-family: var(--font-jp); font-weight: 500; }
+  .stat.primary .stat-unit { color: rgba(255,255,255,0.5); }
+
+  .stat-delta { font-size: 12px; color: var(--ink-3); margin-top: 4px; font-family: var(--font-mono); }
+
+  .big-answer {
+    padding: 36px 24px;
+    background: linear-gradient(135deg, var(--blue-dark) 0%, var(--blue-deep) 100%);
+    color: white; border-radius: var(--radius-md);
+    text-align: center; position: relative; overflow: hidden;
+  }
+  .big-answer::before {
+    content: ""; position: absolute; top: -40%; right: -10%; width: 60%; height: 180%;
+    background: radial-gradient(circle, rgba(255,255,255,0.08) 0%, transparent 60%);
+    pointer-events: none;
+  }
+  .big-answer .label {
+    font-size: 12px; letter-spacing: 0.12em; text-transform: uppercase;
+    opacity: 0.7; margin-bottom: 8px;
+  }
+  .big-answer .number {
+    font-family: var(--font-serif); font-size: 72px; line-height: 1;
+    font-weight: 400; letter-spacing: -0.02em;
+  }
+  .big-answer .unit {
+    font-family: var(--font-jp); font-size: 22px; font-weight: 500;
+    margin-left: 4px;
+  }
+  .big-answer .hint { font-size: 13px; opacity: 0.7; margin-top: 10px; }
+
+  /* ====================== CHART ====================== */
+  .chart-wrap {
+    position: relative; padding: 16px 8px 0;
+    background: white; border-radius: var(--radius-md);
+    border: 1px solid var(--line);
+  }
+  .chart-wrap canvas { display: block; }
+
+  /* ====================== EQUATION ====================== */
+  .equation {
+    font-family: var(--font-mono); font-size: 22px;
+    padding: 20px 24px; margin: 16px 0;
+    background: var(--ink); color: white; border-radius: var(--radius-md);
+    text-align: center; font-weight: 500;
+    letter-spacing: 0.01em;
+  }
+  .equation.light {
+    background: var(--surface-2); color: var(--ink); border: 1px solid var(--line);
+  }
+  .equation .var { color: var(--sky); }
+  .equation .op { color: #A5B4FC; }
+  .equation.light .var { color: var(--blue-dark); font-weight: 700; }
+  .equation.light .op { color: var(--ink-3); }
+  .eq-arrow { text-align: center; color: var(--ink-3); font-size: 13px; margin: 4px 0; }
+
+  /* ====================== PLAN COMPARE ====================== */
+  .plan-row { display: grid; grid-template-columns: 1fr 1fr; gap: 14px; margin: 18px 0; }
+  .plan {
+    border: 2px solid var(--line); border-radius: var(--radius-md);
+    padding: 18px; transition: all 0.2s;
+    background: var(--surface);
+  }
+  .plan.winner {
+    border-color: var(--blue); background: var(--blue-bg);
+    box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.1);
+  }
+  .plan-name {
+    display: flex; align-items: center; justify-content: space-between;
+    font-weight: 700; font-size: 16px; margin-bottom: 10px;
+  }
+  .plan-badge {
+    font-size: 10px; letter-spacing: 0.1em; text-transform: uppercase;
+    padding: 3px 8px; background: var(--blue); color: white;
+    border-radius: 100px; opacity: 0;
+    transition: opacity 0.2s;
+  }
+  .plan.winner .plan-badge { opacity: 1; }
+  .plan-price {
+    font-family: var(--font-serif); font-size: 40px;
+    font-weight: 400; color: var(--ink); line-height: 1;
+  }
+  .plan-price .yen { font-family: var(--font-jp); font-size: 16px; font-weight: 500; color: var(--ink-2); margin-left: 2px; }
+  .plan.winner .plan-price { color: var(--blue-dark); }
+  .plan-breakdown { font-size: 12px; color: var(--ink-3); margin-top: 8px; font-family: var(--font-mono); }
+
+  /* ====================== FP DEMO ====================== */
+  .terminal {
+    font-family: var(--font-mono); font-size: 14px;
+    background: #0F172A; color: #E2E8F0;
+    border-radius: var(--radius-md); padding: 20px 22px;
+    box-shadow: inset 0 0 0 1px rgba(255, 255, 255, 0.05);
+    overflow-x: auto;
+  }
+  .terminal .prompt { color: #64748B; }
+  .terminal .line { display: flex; padding: 4px 0; white-space: nowrap; min-height: 24px; align-items: baseline; }
+  .terminal .line .expr { color: var(--sky); font-weight: 500; }
+  .terminal .line .arrow { color: #64748B; margin: 0 10px; }
+  .terminal .line .result { color: white; font-weight: 500; }
+  .terminal .line .result.warn { color: #FDE68A; }
+
+  .btn-row { display: flex; gap: 8px; flex-wrap: wrap; margin: 14px 0; }
+  .btn {
+    font-family: var(--font-mono); font-size: 13px;
+    padding: 8px 14px; background: var(--surface); color: var(--ink);
+    border: 1px solid var(--line-strong); border-radius: var(--radius-sm);
+    cursor: pointer; transition: all 0.12s;
+  }
+  .btn:hover { background: var(--blue-bg); border-color: var(--blue-bg-2); color: var(--blue-dark); }
+  .btn:active { transform: translateY(1px); }
+
+  /* ====================== DIVIDER / FOOTER ====================== */
+  .hr-section {
+    display: flex; align-items: center; gap: 14px;
+    margin: 80px 0 36px; color: var(--ink-3);
+  }
+  .hr-section::before, .hr-section::after {
+    content: ""; flex: 1; height: 1px; background: var(--line);
+  }
+  .hr-section .label {
+    font-family: var(--font-mono); font-size: 11px; letter-spacing: 0.12em;
+  }
+
+  footer {
+    margin-top: 80px; padding-top: 32px;
+    border-top: 1px solid var(--line); color: var(--ink-3);
+    font-size: 13px; display: flex; justify-content: space-between;
+    flex-wrap: wrap; gap: 12px;
+  }
+
+  /* ====================== PRINCIPLES CARD ====================== */
+  .principle-card {
+    display: grid; grid-template-columns: 60px 1fr; gap: 20px;
+    padding: 20px; border: 1px solid var(--line);
+    border-radius: var(--radius-md); background: var(--surface);
+    align-items: start; margin-bottom: 10px;
+  }
+  .principle-card .num {
+    font-family: var(--font-serif); font-size: 44px;
+    color: var(--blue-bg-2); line-height: 1; font-weight: 400;
+  }
+  .principle-card .content h4 {
+    font-size: 16px; font-weight: 700; margin-bottom: 4px;
+  }
+  .principle-card .content p { font-size: 14px; color: var(--ink-2); }
+
+  /* ====================== RECO GRID (Netflix / Spotify) ====================== */
+  .reco-shell {
+    background: linear-gradient(180deg, #0F172A 0%, #1E293B 100%);
+    border-radius: var(--radius-lg);
+    padding: 28px 32px;
+    color: white;
+    box-shadow: var(--shadow-lg);
+  }
+  .reco-shell .reco-head {
+    display: flex; align-items: center; justify-content: space-between;
+    gap: 14px; margin-bottom: 18px; flex-wrap: wrap;
+  }
+  .reco-shell .reco-title { font-size: 18px; font-weight: 700; color: white; letter-spacing: 0.02em; }
+  .reco-shell .reco-sub { font-size: 13px; color: #94A3B8; margin-top: 2px; }
+  .reco-controls { display: grid; grid-template-columns: 1fr 1fr; gap: 18px; padding: 18px 20px; background: rgba(255,255,255,0.05); border-radius: var(--radius-md); margin-bottom: 22px; }
+  .reco-controls .control-row { gap: 6px; }
+  .reco-controls .control-label { color: #CBD5E1; font-size: 13px; font-weight: 500; }
+  .reco-controls .control-value { color: #FCD34D; font-size: 14px; }
+  .reco-controls input[type="range"] { background: #334155; }
+  .reco-controls input[type="range"]::-webkit-slider-thumb { background: #FCD34D; border-color: #F59E0B; }
+  .reco-controls input[type="range"]::-moz-range-thumb { background: #FCD34D; border-color: #F59E0B; }
+  .reco-grid {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 14px;
+  }
+  .reco-card {
+    background: #1F2937;
+    border-radius: var(--radius-md);
+    overflow: hidden;
+    border: 1px solid rgba(255,255,255,0.06);
+    transition: transform 0.45s cubic-bezier(.2,.8,.2,1), box-shadow 0.3s, border-color 0.3s, opacity 0.3s;
+    position: relative;
+    display: flex; flex-direction: column;
+  }
+  .reco-card .thumb {
+    aspect-ratio: 16 / 9;
+    display: grid; place-items: center;
+    font-size: 38px;
+    color: white;
+    font-family: var(--font-serif);
+    position: relative;
+    overflow: hidden;
+  }
+  .reco-card .thumb::after {
+    content: ""; position: absolute; inset: 0;
+    background: radial-gradient(circle at 30% 20%, rgba(255,255,255,0.18), transparent 60%);
+    pointer-events: none;
+  }
+  .reco-card .meta { padding: 10px 12px 12px; }
+  .reco-card .ttl { font-size: 13px; font-weight: 700; color: white; line-height: 1.35; margin-bottom: 2px; letter-spacing: 0.01em; }
+  .reco-card .artist { font-size: 11px; color: #94A3B8; }
+  .reco-card .match-bar {
+    height: 4px; background: rgba(255,255,255,0.1); border-radius: 100px; overflow: hidden;
+    margin-top: 8px;
+  }
+  .reco-card .match-fill {
+    height: 100%; background: linear-gradient(90deg, #FCD34D, #F59E0B); border-radius: 100px;
+    transition: width 0.3s ease;
+  }
+  .reco-card .match-num {
+    font-family: var(--font-mono); font-size: 11px; color: #FCD34D;
+    font-weight: 700; margin-top: 4px; letter-spacing: 0.04em;
+  }
+  .reco-card.top-1 { border-color: #FCD34D; box-shadow: 0 0 0 2px #FCD34D, 0 8px 24px rgba(252, 211, 77, 0.30); }
+  .reco-card.top-2 { border-color: rgba(252, 211, 77, 0.7); }
+  .reco-card.top-3 { border-color: rgba(252, 211, 77, 0.4); }
+  .reco-card .badge {
+    position: absolute; top: 8px; right: 8px;
+    padding: 3px 8px; border-radius: 100px;
+    font-family: var(--font-mono); font-size: 10px;
+    font-weight: 700; letter-spacing: 0.06em;
+    background: #FCD34D; color: #1F2937;
+    opacity: 0; transform: translateY(-4px);
+    transition: all 0.3s;
+  }
+  .reco-card.top-1 .badge,
+  .reco-card.top-2 .badge,
+  .reco-card.top-3 .badge { opacity: 1; transform: translateY(0); }
+
+  /* ====================== FACE GRID ====================== */
+  .face-shell {
+    background: linear-gradient(180deg, #0B1220 0%, #1A1F2E 100%);
+    border-radius: var(--radius-lg);
+    padding: 28px 32px;
+    color: white;
+    box-shadow: var(--shadow-lg);
+  }
+  .face-layout { display: grid; grid-template-columns: 320px 1fr; gap: 28px; align-items: start; }
+  .face-target {
+    background: rgba(255,255,255,0.04);
+    border: 1px solid rgba(255,255,255,0.08);
+    border-radius: var(--radius-md);
+    padding: 22px;
+    display: grid; gap: 14px;
+  }
+  .face-target h4 {
+    font-size: 12px; letter-spacing: 0.12em; color: #94A3B8;
+    text-transform: uppercase; font-weight: 600; margin-bottom: 4px;
+  }
+  .face-canvas {
+    aspect-ratio: 1;
+    background: #0B1220;
+    border-radius: var(--radius-md);
+    border: 1px solid rgba(255,255,255,0.08);
+    display: grid; place-items: center;
+  }
+  .face-canvas svg { width: 80%; height: 80%; }
+  .face-status {
+    padding: 14px 18px;
+    border-radius: var(--radius-md);
+    font-size: 14px;
+    font-weight: 600;
+    text-align: center;
+    transition: all 0.3s;
+  }
+  .face-status.ok {
+    background: rgba(16, 185, 129, 0.15);
+    color: #6EE7B7;
+    border: 1px solid rgba(16, 185, 129, 0.4);
+  }
+  .face-status.ng {
+    background: rgba(225, 29, 72, 0.15);
+    color: #FCA5A5;
+    border: 1px solid rgba(225, 29, 72, 0.4);
+  }
+  .face-status .who { font-size: 18px; margin-top: 4px; }
+
+  .face-controls { display: grid; gap: 12px; }
+  .face-controls .control-label { color: #CBD5E1; font-size: 12px; }
+  .face-controls .control-value { color: #FCD34D; font-size: 13px; }
+  .face-controls input[type="range"] { background: #334155; }
+  .face-controls input[type="range"]::-webkit-slider-thumb { background: #FCD34D; border-color: #F59E0B; }
+  .face-controls input[type="range"]::-moz-range-thumb { background: #FCD34D; border-color: #F59E0B; }
+
+  .face-database h4 {
+    font-size: 12px; letter-spacing: 0.12em; color: #94A3B8;
+    text-transform: uppercase; font-weight: 600; margin-bottom: 12px;
+  }
+  .face-grid {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 12px;
+  }
+  .face-card {
+    background: #1F2937;
+    border: 1px solid rgba(255,255,255,0.08);
+    border-radius: var(--radius-md);
+    padding: 12px 10px 10px;
+    text-align: center;
+    transition: all 0.45s cubic-bezier(.2,.8,.2,1);
+    position: relative;
+  }
+  .face-card svg { width: 100%; height: auto; aspect-ratio: 1; }
+  .face-card .name {
+    font-size: 11px; color: #CBD5E1; margin-top: 6px;
+    font-weight: 600; letter-spacing: 0.04em;
+  }
+  .face-card .dist {
+    font-family: var(--font-mono); font-size: 10px; color: #6B7280;
+    margin-top: 2px;
+  }
+  .face-card.match-1 {
+    background: rgba(16, 185, 129, 0.12);
+    border-color: #10B981;
+    box-shadow: 0 0 0 2px #10B981, 0 8px 24px rgba(16, 185, 129, 0.25);
+    transform: translateY(-3px);
+  }
+  .face-card.match-1 .name { color: #6EE7B7; }
+  .face-card.match-1 .dist { color: #6EE7B7; }
+  .face-card.match-2 { border-color: rgba(16, 185, 129, 0.5); }
+  .face-card.match-3 { border-color: rgba(16, 185, 129, 0.25); }
+
+  /* ====================== ANIMATIONS ====================== */
+  @keyframes fadeUp {
+    from { opacity: 0; transform: translateY(12px); }
+    to   { opacity: 1; transform: translateY(0); }
+  }
+  .reveal { animation: fadeUp 0.6s ease-out both; }
+
+  .number-shake { animation: nudge 0.18s; }
+  @keyframes nudge {
+    0%   { transform: scale(1); }
+    50%  { transform: scale(1.04); }
+    100% { transform: scale(1); }
+  }
+
+  /* ====================== MOBILE ====================== */
+  @media (max-width: 900px) {
+    .shell { grid-template-columns: 1fr; }
+    .sidebar { position: fixed; top: 0; left: 0; width: 280px; max-width: 80vw; transform: translateX(-100%); transition: transform 0.2s ease; z-index: 50; box-shadow: var(--shadow-lg); }
+    .sidebar.open { transform: translateX(0); }
+    .menu-btn { display: flex; }
+    .slide { padding: 64px 20px 90px; }
+    .slide-nav { bottom: 14px; right: 14px; }
+    .slide-inner h1 { font-size: 40px; }
+    .slide-inner h2 { font-size: 30px; margin-top: 8px; }
+    .slide-inner .section-sub { font-size: 16px; }
+    .slide-inner .stat-value { font-size: 30px; }
+    .slide-inner .equation { font-size: 20px; padding: 16px 18px; }
+    .slide-inner .equation.light { font-size: 18px; }
+    .slide-inner .big-answer .number { font-size: 56px; }
+    .slide-inner .plan-price { font-size: 36px; }
+    .slide-inner .terminal { font-size: 13px; padding: 16px; }
+    .slide-inner .callout .body { font-size: 14px; }
+    .controls.grid-3, .controls.grid-2 { grid-template-columns: 1fr; gap: 14px; }
+    .stat-row { grid-template-columns: 1fr; gap: 10px; }
+    .tocbar { grid-template-columns: repeat(2, 1fr); }
+    .plan-row { grid-template-columns: 1fr; }
+    .split-answer { grid-template-columns: 1fr !important; }
+    .gate-title { font-size: 60px; }
+    .gate-sub { font-size: 18px; }
+    .tease-title { font-size: 40px; }
+    .title-cover .cover-sub { font-size: 48px; }
+    .title-cover .cover-num { font-size: 64px; }
+    .title-cover .cover-title { font-size: 24px; }
+    .vs-compare { grid-template-columns: 1fr; }
+    .vs-divider { padding: 8px 0; font-size: 28px; }
+    .vs-card .vs-label { font-size: 32px; }
+    .vs-card .vs-amount { font-size: 44px; }
+    .rate-compare { grid-template-columns: 1fr; }
+    .rate-card .rate-label { font-size: 32px; }
+    .rate-card .rate-amount { font-size: 40px; }
+    .apply-grid { grid-template-columns: 1fr; }
+    .problem-values { grid-template-columns: 1fr; }
+    .problem-values .pv-value { font-size: 30px; }
+    .story-block { padding: 24px; }
+    .story-text { font-size: 18px; }
+    .story-q { font-size: 24px; }
+    .eq-step { font-size: 18px; }
+    .eq-step.final { font-size: 20px; }
+    .practice-grid { grid-template-columns: 1fr; }
+    .challenge-points { grid-template-columns: 1fr; }
+    .challenge-q { font-size: 17px; }
+    .challenge-lead { font-size: 15px; }
+    .excel-step .desc { font-size: 14px; }
+    .reco-controls { grid-template-columns: 1fr; gap: 12px; padding: 14px; }
+    .reco-grid { grid-template-columns: repeat(2, 1fr); }
+    .face-layout { grid-template-columns: 1fr; gap: 18px; }
+    .face-grid { grid-template-columns: repeat(3, 1fr); }
+  }
+</style>
+</head>
+<body>
+<button class="menu-btn" id="menu-btn" aria-label="メニューを開く">≡</button>
+<div class="sidebar-backdrop" id="sidebar-backdrop"></div>
+<div class="shell">
+
+  <!-- ============================ SIDEBAR ============================ -->
+  <aside class="sidebar" id="sidebar">
+    <div class="sidebar-brand">
+      <div class="mark">⌖</div>
+      <div>
+        <div class="title">情報数理入門</div>
+        <div class="sub">第 3 回 ｜ LECTURE 03</div>
+      </div>
+    </div>
+
+    <div class="nav-group">
+      <div class="nav-group-label">イントロ</div>
+      <a class="nav-link" href="#slide-1" data-slide="1"><span class="icon">◇</span>表紙<span class="sub-num">1</span></a>
+      <a class="nav-link" href="#slide-2" data-slide="2"><span class="icon">⌂</span>今日の全体像<span class="sub-num">2</span></a>
+      <a class="nav-link" href="#slide-3" data-slide="3"><span class="icon">?</span>近い／遠いは、決められる？<span class="sub-num">3</span></a>
+    </div>
+
+    <div class="nav-group">
+      <div class="nav-group-label">PART 1 ｜ 座標</div>
+      <a class="nav-link" href="#slide-4" data-slide="4" data-slide-range="4-8"><span class="icon">1</span>位置を 2 つの数で<span class="sub-num">4–8</span></a>
+    </div>
+
+    <div class="nav-group">
+      <div class="nav-group-label">PART 2 ｜ 距離</div>
+      <a class="nav-link" href="#slide-9" data-slide="9" data-slide-range="9-12"><span class="icon">2</span>2 点の距離は計算できる<span class="sub-num">9–12</span></a>
+    </div>
+
+    <div class="nav-group">
+      <div class="nav-group-label">PART 3 ｜ 円</div>
+      <a class="nav-link" href="#slide-13" data-slide="13" data-slide-range="13-15"><span class="icon">3</span>等距離の点を集めると<span class="sub-num">13–15</span></a>
+    </div>
+
+    <div class="nav-group">
+      <div class="nav-group-label">PART 4 ｜ 領域</div>
+      <a class="nav-link" href="#slide-16" data-slide="16" data-slide-range="16-18"><span class="icon">4</span>不等号で内／外を分ける<span class="sub-num">16–18</span></a>
+    </div>
+
+    <div class="nav-group">
+      <div class="nav-group-label">PART 5 ｜ 似ている度</div>
+      <a class="nav-link" href="#slide-19" data-slide="19" data-slide-range="19-22"><span class="icon">5</span>距離は「似ている度」<span class="sub-num">19–22</span></a>
+    </div>
+
+    <div class="nav-group">
+      <div class="nav-group-label">まとめ</div>
+      <a class="nav-link" href="#slide-23" data-slide="23"><span class="icon">◆</span>三つの統一原理<span class="sub-num">23</span></a>
+    </div>
+  </aside>
+
+  <!-- ============================ MAIN ============================ -->
+  <main class="main">
+    <div class="slide-deck" id="slide-deck">
+
+    <!-- ============================ SLIDE 1 : COVER ============================ -->
+    <section class="slide title-cover" id="slide-1" data-title="表紙">
+      <div class="slide-inner" style="text-align: center;">
+        <div class="cover-meta">平成国際大学 情報デザイン学部 ／ Lecture 03</div>
+        <div class="cover-title">情報数理入門</div>
+        <div class="cover-num">第 3 回</div>
+        <div class="cover-sub">図形と<br>方程式。</div>
+        <div class="cover-author">小船 幹生</div>
+      </div>
+    </section>
+
+    <!-- ============================ SLIDE 2 : OVERVIEW ============================ -->
+    <section class="slide" id="slide-2" data-title="今日の全体像">
+      <div class="slide-inner">
+        <div class="eyebrow">Overview ｜ 今日の全体像</div>
+        <h2>身の回りの「形」を、<br>式で書く。</h2>
+        <p class="section-sub">
+          位置 → 距離 → 円 → 領域 → 似ている度。スライダーを動かしながら、式とグラフが「同じものの裏表」だと体感する。
+        </p>
+        <div class="tocbar" id="overview" style="margin-top: 24px;">
+          <a class="toc-item" href="#slide-4" data-slide="4">
+            <div class="toc-num">01 ／ PART 1</div>
+            <div class="toc-name">座標</div>
+            <div class="toc-hint">位置を 2 つの数で表す</div>
+          </a>
+          <a class="toc-item" href="#slide-9" data-slide="9">
+            <div class="toc-num">02 ／ PART 2</div>
+            <div class="toc-name">距離</div>
+            <div class="toc-hint">2 点が決まれば距離も決まる</div>
+          </a>
+          <a class="toc-item" href="#slide-13" data-slide="13">
+            <div class="toc-num">03 ／ PART 3</div>
+            <div class="toc-name">円</div>
+            <div class="toc-hint">等距離の点を集めると…</div>
+          </a>
+          <a class="toc-item" href="#slide-16" data-slide="16">
+            <div class="toc-num">04 ／ PART 4</div>
+            <div class="toc-name">領域</div>
+            <div class="toc-hint">不等号で「内・外」を分ける</div>
+          </a>
+          <a class="toc-item" href="#slide-19" data-slide="19">
+            <div class="toc-num">05 ／ PART 5</div>
+            <div class="toc-name">似ている度</div>
+            <div class="toc-hint">距離は「近さ」を測る道具</div>
+          </a>
+        </div>
+      </div>
+    </section>
+
+    <!-- ============================ SLIDE 3 : TEASER ============================ -->
+    <section class="slide tease" id="slide-3" data-title="近い／遠いは、決められる？">
+      <div class="tease-inner">
+        <div class="tease-eyebrow">今日の問いから始める</div>
+        <div class="tease-title">「近い」って、<br>どう決める？</div>
+        <div class="vs-compare">
+          <div class="vs-card">
+            <div class="vs-label">問 1</div>
+            <div class="vs-plan">家の近所で</div>
+            <div class="vs-amount">ATM<small></small></div>
+            <div class="vs-note">どこが「徒歩 5 分以内」？</div>
+          </div>
+          <div class="vs-divider">＆</div>
+          <div class="vs-card b">
+            <div class="vs-label">問 2</div>
+            <div class="vs-plan">投資先で</div>
+            <div class="vs-amount">似た株<small></small></div>
+            <div class="vs-note">どれが自分の好みに「近い」？</div>
+          </div>
+        </div>
+        <div class="tease-hint">— どちらも「近さ」を数で決めれば答えが出る。今日のキーワードは <strong>距離</strong>。</div>
+      </div>
+    </section>
+
+    <!-- ============================ SLIDE 4 : PART 1 GATE ============================ -->
+    <section class="slide gate" id="slide-4" data-title="PART 1 ｜ 扉">
+      <div class="gate-inner">
+        <div class="gate-part-num">P A R T  &nbsp;1</div>
+        <h1 class="gate-title">位置は、<br><span class="gate-accent">2 つの数</span>で書ける。</h1>
+        <p class="gate-sub">
+          身の回りの「位置」も、お金の世界の「立ち位置」も、<strong style="color: white;">同じ仕組み（座標）</strong>で書ける。
+        </p>
+      </div>
+    </section>
+
+    <!-- ============================ SLIDE 5 : PART 1-1 STORY ============================ -->
+    <section class="slide" id="slide-5" data-title="PART 1-1 ｜ 身の回りの座標">
+      <div class="slide-inner">
+        <div class="eyebrow">Story 1-1 ｜ 身の回りで、位置を伝える</div>
+        <h2>「窓側から 3 列目、<br>前から 2 番目」。</h2>
+        <div class="story-block">
+          <div class="story-label">Scenario</div>
+          <div class="story-text">
+            待ち合わせ、座席表、宅配の住所、ゲームの当たり判定 ——<br>
+            私たちは普段、位置を <strong>2 つの数の組</strong>で伝えている。
+          </div>
+          <div class="story-q">—— この発想を、数学の言葉で書くと <em>(x, y)</em>。</div>
+        </div>
+
+        <div class="rate-compare" style="margin-top: 24px;">
+          <div class="rate-card">
+            <div class="rate-label" style="font-size: 22px;">教室の座席</div>
+            <div class="rate-arrow">↓</div>
+            <div class="rate-amount" style="font-size: 26px;">(列, 番目)</div>
+          </div>
+          <div class="rate-card mid">
+            <div class="rate-label" style="font-size: 22px;">街の地図</div>
+            <div class="rate-arrow">↓</div>
+            <div class="rate-amount" style="font-size: 26px;">(東に何 m, 北に何 m)</div>
+          </div>
+          <div class="rate-card high">
+            <div class="rate-label" style="font-size: 22px;">スマホ画面</div>
+            <div class="rate-arrow">↓</div>
+            <div class="rate-amount" style="font-size: 26px;">(横 px, 縦 px)</div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ============================ SLIDE 6 : PART 1-1 INTERACTION ============================ -->
+    <section class="slide" id="slide-6" data-title="PART 1-1 ｜ 座標を打つ">
+      <div class="slide-inner">
+        <div class="eyebrow">Interactive ｜ 街にお店を 1 軒、置いてみる</div>
+        <h2>2 つのスライダーで、<br>点が動く。</h2>
+        <p class="section-sub">
+          原点（駅）から見た「東に <code style="font-family: var(--font-mono); background: var(--surface-2); padding: 2px 6px; border-radius: 4px;">x</code> m、北に <code style="font-family: var(--font-mono); background: var(--surface-2); padding: 2px 6px; border-radius: 4px;">y</code> m」。それだけで街のどこにでも点が打てる。
+        </p>
+
+        <div class="block">
+          <div class="controls grid-2">
+            <div class="control-row">
+              <div class="control-label">
+                <span>x ： 駅から東に（m）</span>
+                <span class="control-value" id="c1-x-val">300 m</span>
+              </div>
+              <input type="range" id="c1-x" min="-500" max="500" value="300" step="10">
+            </div>
+            <div class="control-row">
+              <div class="control-label">
+                <span>y ： 駅から北に（m）</span>
+                <span class="control-value" id="c1-y-val">200 m</span>
+              </div>
+              <input type="range" id="c1-y" min="-500" max="500" value="200" step="10">
+            </div>
+          </div>
+
+          <div class="equation light">
+            お店の位置 ＝ <span class="var">(</span><span class="var" id="c1-eq-x">300</span><span class="op">,</span> <span class="var" id="c1-eq-y">200</span><span class="var">)</span>
+          </div>
+
+          <div class="chart-wrap" style="padding-top: 20px;">
+            <canvas id="chart1" height="320"></canvas>
+          </div>
+
+          <div class="callout" style="margin-top: 16px;">
+            <div class="ico">◎</div>
+            <div class="body">
+              <strong>x の符号</strong>はマイナスにすると西、<strong>y の符号</strong>はマイナスにすると南。1 つの平面に「東西南北」のすべての位置が表せる。
+            </div>
+          </div>
+        </div>
+
+        <div class="excel-box">
+          <div class="excel-head">スプレッドシートで再現してみる</div>
+          <div class="excel-title">タブ <code style="font-family: var(--font-mono); background: var(--surface-2); padding: 2px 6px; border-radius: 4px;">1_座標</code> ／ XY 散布図に点を打つ</div>
+          <div class="excel-steps">
+            <div class="excel-step"><div class="sn">1</div><div class="desc">A 列に <code>x</code>、B 列に <code>y</code> の見出し。A2 に <code>300</code>、B2 に <code>200</code>。</div></div>
+            <div class="excel-step"><div class="sn">2</div><div class="desc">A2:B2 を選択 → 挿入 → グラフ → <strong>散布図</strong> → 平面に点が 1 つ現れる。</div></div>
+            <div class="excel-step"><div class="sn">3</div><div class="desc">A 列・B 列を増やして 3〜5 軒のお店を追加 → 街の地図が見えてくる。</div></div>
+          </div>
+          <div class="excel-note">
+            <strong>実験：</strong> グラフをダブルクリック → [カスタマイズ] → [横軸] と [縦軸] の最小・最大を <strong>−500〜500</strong> に固定すると、点を動かしても比較がぶれない。
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ============================ SLIDE 7 : PART 1-2 STORY ============================ -->
+    <section class="slide" id="slide-7" data-title="PART 1-2 ｜ お金の世界の座標">
+      <div class="slide-inner">
+        <div class="eyebrow">Story 1-2 ｜ 同じ発想は、お金の世界でも使える</div>
+        <h2>投資先を、<br>2 つの数で並べる。</h2>
+        <div class="story-block">
+          <div class="story-label">Scenario</div>
+          <div class="story-text">
+            投資先を選ぶときに知りたいのは「<strong>どれくらい増えそうか</strong>」と「<strong>どれくらい上下に振れるか</strong>」の 2 つ。<br>
+            この 2 つを軸にすれば、街のお店と同じように、銘柄を <strong>1 枚の平面</strong>に並べられる。
+          </div>
+          <div class="story-q">—— 横軸に <em>リスク</em>（振れの大きさ）、縦軸に <em>リターン</em>（期待される儲け）。</div>
+        </div>
+
+        <div class="rate-compare" style="margin-top: 24px;">
+          <div class="rate-card">
+            <div class="rate-label" style="font-size: 22px;">国債</div>
+            <div class="rate-arrow">低リスク・低リターン</div>
+            <div class="rate-amount" style="font-size: 26px;">(1, 0.5)</div>
+          </div>
+          <div class="rate-card mid">
+            <div class="rate-label" style="font-size: 22px;">日本株</div>
+            <div class="rate-arrow">中リスク・中リターン</div>
+            <div class="rate-amount" style="font-size: 26px;">(15, 6)</div>
+          </div>
+          <div class="rate-card high">
+            <div class="rate-label" style="font-size: 22px;">暗号資産</div>
+            <div class="rate-arrow">高リスク・高リターン</div>
+            <div class="rate-amount" style="font-size: 26px;">(70, 25)</div>
+          </div>
+        </div>
+
+        <div class="callout" style="margin-top: 24px;">
+          <div class="ico">◎</div>
+          <div class="body">
+            街の地図と同じく、<strong>(リスク, リターン) という 2 つの数</strong>で投資先の「立ち位置」が決まる。次のスライドで実際に並べてみよう。
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ============================ SLIDE 8 : PART 1-2 INTERACTION ============================ -->
+    <section class="slide" id="slide-8" data-title="PART 1-2 ｜ リスク・リターン散布図">
+      <div class="slide-inner">
+        <div class="eyebrow">Interactive ｜ 4 つの投資先を平面に並べてみる</div>
+        <h2>銘柄が、<br>「位置」として見える。</h2>
+        <p class="section-sub">
+          自分の許容リスク・目標リターンも 1 つの点。スライダーを動かして、自分の点が「どの銘柄に近いか」を眺めてみる。
+        </p>
+
+        <div class="block">
+          <div class="controls grid-2">
+            <div class="control-row">
+              <div class="control-label">
+                <span>あなたの許容リスク</span>
+                <span class="control-value" id="c1b-x-val">15</span>
+              </div>
+              <input type="range" id="c1b-x" min="0" max="80" value="15" step="1">
+            </div>
+            <div class="control-row">
+              <div class="control-label">
+                <span>あなたの目標リターン</span>
+                <span class="control-value" id="c1b-y-val">6 %</span>
+              </div>
+              <input type="range" id="c1b-y" min="0" max="30" value="6" step="0.5">
+            </div>
+          </div>
+
+          <div class="equation light">
+            あなたの位置 ＝ <span class="var">(</span><span class="var" id="c1b-eq-x">15</span><span class="op">,</span> <span class="var" id="c1b-eq-y">6</span><span class="var">)</span>
+          </div>
+
+          <label style="display: inline-flex; align-items: center; gap: 8px; margin-top: 4px; padding: 8px 14px; background: var(--surface-2); border: 1px solid var(--line); border-radius: var(--radius-sm); font-size: 14px; color: var(--ink-2); cursor: pointer; user-select: none;">
+            <input type="checkbox" id="c1b-region" style="width: 16px; height: 16px; accent-color: var(--rose);">
+            自分の周りに「許容範囲」を表示する（リスク ±10 ／ リターン ±3%）
+          </label>
+
+          <div class="chart-wrap" style="padding-top: 20px;">
+            <canvas id="chart1b" height="320"></canvas>
+          </div>
+
+          <div class="callout" style="margin-top: 16px;">
+            <div class="ico">◎</div>
+            <div class="body">
+              街の地図でやったことと、同じ。<strong>軸の意味</strong>が「東西南北」から「リスク・リターン」に変わっただけ。次の PART で「<strong>近さ</strong>」をきちんと数で測る。
+            </div>
+          </div>
+        </div>
+
+        <div class="excel-box">
+          <div class="excel-head">スプレッドシートで再現してみる</div>
+          <div class="excel-title">タブ <code style="font-family: var(--font-mono); background: var(--surface-2); padding: 2px 6px; border-radius: 4px;">2_リスクリターン</code> ／ 銘柄リストを散布図で</div>
+          <div class="excel-steps">
+            <div class="excel-step"><div class="sn">1</div><div class="desc">A 列に銘柄名、B 列に <code>リスク</code>、C 列に <code>リターン</code>。例：国債 (1, 0.5) ／ 日本株 (15, 6) ／ 新興国株 (35, 12) ／ 暗号資産 (70, 25)。</div></div>
+            <div class="excel-step"><div class="sn">2</div><div class="desc">B 列・C 列を選択 → 挿入 → グラフ → <strong>散布図</strong>。4 つの銘柄が平面に並ぶ。</div></div>
+            <div class="excel-step"><div class="sn">3</div><div class="desc">最下行に「自分」(15, 6) を追加 → グラフをダブルクリック → [設定] → <strong>「系列を追加」</strong>で自分の点を別系列に。色は [カスタマイズ] → [系列] で変更。</div></div>
+          </div>
+          <div class="excel-note">
+            <strong>気づき：</strong> リスク・リターンは右上に行くほど「ハイリスク・ハイリターン」。<strong>軸の取り方が、判断の枠組みを作る</strong>。
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ============================ SLIDE 9 : PART 2 GATE ============================ -->
+    <section class="slide gate" id="slide-9" data-title="PART 2 ｜ 扉">
+      <div class="gate-inner">
+        <div class="gate-part-num">P A R T  &nbsp;2</div>
+        <h1 class="gate-title">2 点が決まれば、<br><span class="gate-accent">距離</span>が決まる。</h1>
+        <p class="gate-sub">
+          紀元前 6 世紀のピタゴラスが見つけた式が、今も <strong style="color: white;">あらゆる「近さ」</strong>の計算に使われている。
+        </p>
+      </div>
+    </section>
+
+    <!-- ============================ SLIDE 10 : PART 2 PROBLEM ============================ -->
+    <section class="slide" id="slide-10" data-title="PART 2 ｜ お題">
+      <div class="slide-inner">
+        <div class="eyebrow">Problem ｜ ATM、どっちが近い？</div>
+        <h2>家からの<br>「直線距離」を出したい。</h2>
+        <div class="problem-values">
+          <div class="pv">
+            <div class="pv-label">あなたの家</div>
+            <div class="pv-value">(0, 0)</div>
+          </div>
+          <div class="pv">
+            <div class="pv-label">コンビニ A の ATM</div>
+            <div class="pv-value">(3, 4)</div>
+          </div>
+          <div class="pv">
+            <div class="pv-label">銀行 B の ATM</div>
+            <div class="pv-value">(6, 2)</div>
+          </div>
+        </div>
+        <p class="section-sub" style="margin-top: 24px; font-size: 22px;">
+          単位は「<strong>100 m</strong>」。両方とも東に少し、北に少し。<strong>どっちが家から近い</strong>？
+        </p>
+        <div class="callout" style="margin-top: 16px;">
+          <div class="ico">◎</div>
+          <div class="body">
+            x の差と y の差は引き算すれば出る。でも、それだけだと <strong>斜めの距離</strong>は分からない。ここで紀元前 6 世紀の式が必要になる。
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ============================ SLIDE 11 : PART 2 EQ TRANSFORM ============================ -->
+    <section class="slide" id="slide-11" data-title="PART 2 ｜ 三平方の定理">
+      <div class="slide-inner">
+        <div class="eyebrow">Translate ｜ 直角三角形の斜辺を求める式</div>
+        <h2>横の差・縦の差から、<br>斜めの距離。</h2>
+        <p class="section-sub">
+          2 点 A、B を結ぶ線は、必ず <strong>横の差 dx と縦の差 dy で作る直角三角形の斜辺</strong>になる。
+        </p>
+        <div class="eq-transform">
+          <div class="eq-step-label">日本語で書くと</div>
+          <div class="eq-step">（横の差）² ＋ （縦の差）² ＝ （斜めの距離）²</div>
+          <div class="eq-step-label">記号で書くと</div>
+          <div class="eq-step">dx² ＋ dy² ＝ d²</div>
+          <div class="eq-step-label">d について解くと（両辺のルート）</div>
+          <div class="eq-step final">d ＝ √( dx² ＋ dy² )</div>
+        </div>
+        <div class="callout" style="margin-top: 20px;">
+          <div class="ico">◎</div>
+          <div class="body">
+            ATM（3, 4）と家（0, 0）なら、dx = 3、dy = 4。<strong>d = √(9 + 16) = √25 = 5</strong>。100 m 単位なので、<strong>500 m</strong>。
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ============================ SLIDE 12 : PART 2 INTERACTION ============================ -->
+    <section class="slide" id="slide-12" data-title="PART 2 ｜ 距離を動かす">
+      <div class="slide-inner">
+        <div class="eyebrow">Interactive ｜ 2 点を動かして距離を眺める</div>
+        <h2>点 B を動かすと、<br>直角三角形が形を変える。</h2>
+
+        <div class="block">
+          <div class="controls grid-2">
+            <div class="control-row">
+              <div class="control-label">
+                <span>点 B の x 座標</span>
+                <span class="control-value" id="c2-x-val">3</span>
+              </div>
+              <input type="range" id="c2-x" min="-8" max="8" value="3" step="1">
+            </div>
+            <div class="control-row">
+              <div class="control-label">
+                <span>点 B の y 座標</span>
+                <span class="control-value" id="c2-y-val">4</span>
+              </div>
+              <input type="range" id="c2-y" min="-8" max="8" value="4" step="1">
+            </div>
+          </div>
+
+          <div class="equation light">
+            d ＝ √( <span class="var" id="c2-eq-dx">3</span>² ＋ <span class="var" id="c2-eq-dy">4</span>² )  ＝  √( <span class="var" id="c2-eq-dx2">9</span> ＋ <span class="var" id="c2-eq-dy2">16</span> )  ＝  √<span class="var" id="c2-eq-sum">25</span>
+          </div>
+
+          <div class="split-answer" style="display: grid; grid-template-columns: 1.2fr 1fr; gap: 20px; margin-top: 24px; align-items: center;">
+            <div class="chart-wrap" style="padding: 12px 8px 0;">
+              <canvas id="chart2" height="320"></canvas>
+            </div>
+            <div class="big-answer">
+              <div class="label">家から B までの距離</div>
+              <div class="number" id="c2-answer">5.00<span class="unit"></span></div>
+              <div class="hint" id="c2-hint">（距離 × 100 m = 500 m）</div>
+            </div>
+          </div>
+        </div>
+
+        <div class="excel-box">
+          <div class="excel-head">スプレッドシートで再現してみる</div>
+          <div class="excel-title">タブ <code style="font-family: var(--font-mono); background: var(--surface-2); padding: 2px 6px; border-radius: 4px;">3_距離</code> ／ SQRT 関数で 2 点間距離</div>
+          <div class="excel-steps">
+            <div class="excel-step"><div class="sn">1</div><div class="desc">点 A の座標を A2:B2 に、点 B の座標を A3:B3 に入力。例：A(0,0)、B(3,4)。</div></div>
+            <div class="excel-step"><div class="sn">2</div><div class="desc">D2 に <code>=A3-A2</code> （dx）、E2 に <code>=B3-B2</code> （dy）。</div></div>
+            <div class="excel-step"><div class="sn">3</div><div class="desc">F2 に <code>=SQRT(D2^2+E2^2)</code> → 距離が 1 セルで出る。</div></div>
+          </div>
+          <div class="excel-note">
+            <strong>応用：</strong> 複数のお店の座標を並べ、家との距離を全部計算 → <strong>MIN 関数</strong>で最も近いお店が出せる。
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ============================ SLIDE 13 : PART 3 GATE ============================ -->
+    <section class="slide gate" id="slide-13" data-title="PART 3 ｜ 扉">
+      <div class="gate-inner">
+        <div class="gate-part-num">P A R T  &nbsp;3</div>
+        <h1 class="gate-title">等距離の点を、<br><span class="gate-accent">集めると円</span>。</h1>
+        <p class="gate-sub">
+          「方程式を満たす点を、<strong style="color: white;">無数に集めたもの</strong>」。それが図形の正体。
+        </p>
+      </div>
+    </section>
+
+    <!-- ============================ SLIDE 14 : PART 3 STORY ============================ -->
+    <section class="slide" id="slide-14" data-title="PART 3 ｜ 円の方程式">
+      <div class="slide-inner">
+        <div class="eyebrow">Story ｜ Wi-Fi の電波範囲、ATM の徒歩 5 分圏</div>
+        <h2>「中心から、<br>同じだけ離れた点」。</h2>
+        <div class="story-block">
+          <div class="story-label">Scenario</div>
+          <div class="story-text">
+            Wi-Fi ルーターの電波が届く範囲、店舗の配達可能エリア、避難所からの徒歩 5 分圏 ——<br>
+            すべて「<strong>中心からの距離が一定</strong>」という言い方で表せる。
+          </div>
+          <div class="story-q">—— その「一定」を、<em>方程式</em>で書くと？</div>
+        </div>
+
+        <div class="eq-transform" style="margin-top: 32px;">
+          <div class="eq-step-label">日本語で書くと</div>
+          <div class="eq-step">中心 (a, b) から 点 (x, y) までの距離 ＝ 半径 r</div>
+          <div class="eq-step-label">三平方の定理を当てはめると</div>
+          <div class="eq-step">√( (x−a)² ＋ (y−b)² ) ＝ r</div>
+          <div class="eq-step-label">両辺を 2 乗してきれいにすると</div>
+          <div class="eq-step final">(x − a)² ＋ (y − b)² ＝ r²</div>
+        </div>
+
+        <div class="callout" style="margin-top: 20px;">
+          <div class="ico">◎</div>
+          <div class="body">
+            これが <strong>円の方程式</strong>。「(x − a)² + (y − b)² = r²」を満たす点 (x, y) を <strong>無数に集めたもの</strong>が、半径 r の円。
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ============================ SLIDE 15 : PART 3 INTERACTION ============================ -->
+    <section class="slide" id="slide-15" data-title="PART 3 ｜ 円を動かす">
+      <div class="slide-inner">
+        <div class="eyebrow">Interactive ｜ 中心と半径を動かしてみる</div>
+        <h2>方程式が、<br>形になる瞬間。</h2>
+
+        <div class="block">
+          <div class="controls grid-3">
+            <div class="control-row">
+              <div class="control-label">
+                <span>中心の x ： a</span>
+                <span class="control-value" id="c3-a-val">0</span>
+              </div>
+              <input type="range" id="c3-a" min="-5" max="5" value="0" step="1">
+            </div>
+            <div class="control-row">
+              <div class="control-label">
+                <span>中心の y ： b</span>
+                <span class="control-value" id="c3-b-val">0</span>
+              </div>
+              <input type="range" id="c3-b" min="-5" max="5" value="0" step="1">
+            </div>
+            <div class="control-row">
+              <div class="control-label">
+                <span>半径 ： r</span>
+                <span class="control-value" id="c3-r-val">5</span>
+              </div>
+              <input type="range" id="c3-r" min="1" max="9" value="5" step="1">
+            </div>
+          </div>
+
+          <div class="equation">
+            (<span class="var">x</span> <span class="op">−</span> <span class="var" id="c3-eq-a">0</span>)² <span class="op">+</span> (<span class="var">y</span> <span class="op">−</span> <span class="var" id="c3-eq-b">0</span>)² <span class="op">=</span> <span class="var" id="c3-eq-r2">25</span>
+          </div>
+
+          <div class="chart-wrap" style="padding-top: 20px; max-width: 520px; margin: 0 auto;">
+            <canvas id="chart3"></canvas>
+          </div>
+        </div>
+
+        <div class="excel-box">
+          <div class="excel-head">スプレッドシートで再現してみる</div>
+          <div class="excel-title">タブ <code style="font-family: var(--font-mono); background: var(--surface-2); padding: 2px 6px; border-radius: 4px;">4_円</code> ／ 上半分と下半分に分けて描く</div>
+          <div class="excel-steps">
+            <div class="excel-step"><div class="sn">1</div><div class="desc">A 列に x を <code>−5</code>〜<code>5</code> まで <code>0.1</code> 刻みで並べる（101 行）。</div></div>
+            <div class="excel-step"><div class="sn">2</div><div class="desc">B 列に <code>=SQRT(25-A2^2)</code>（上半分）、C 列に <code>=-SQRT(25-A2^2)</code>（下半分）。</div></div>
+            <div class="excel-step"><div class="sn">3</div><div class="desc">A:C を選択 → 挿入 → グラフ → 「散布図」→ グラフをダブルクリックして [カスタマイズ] → [系列] → 各系列で <strong>「データポイントを線で結ぶ」</strong> をオン。<strong>軸の最小最大を ±10 に揃える</strong>と楕円に見えにくい。</div></div>
+          </div>
+          <div class="excel-note">
+            <strong>仕組み：</strong> 「方程式を満たす点を集める」とは、x を細かく刻んで対応する y を 1 つずつ求めること。コンピュータが得意な作業。
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ============================ SLIDE 16 : PART 4 GATE ============================ -->
+    <section class="slide gate" id="slide-16" data-title="PART 4 ｜ 扉">
+      <div class="gate-inner">
+        <div class="gate-part-num">P A R T  &nbsp;4</div>
+        <h1 class="gate-title">不等号で、<br><span class="gate-accent">「内・外」</span>を分ける。</h1>
+        <p class="gate-sub">
+          配達可能エリア、ジオフェンス通知、検索半径 ——<br>すべて <strong style="color: white;">円の方程式の不等号バージョン</strong>。
+        </p>
+      </div>
+    </section>
+
+    <!-- ============================ SLIDE 17 : PART 4 INTERACTION ============================ -->
+    <section class="slide" id="slide-17" data-title="PART 4 ｜ 内・外・上の判定">
+      <div class="slide-inner">
+        <div class="eyebrow">Interactive ｜ 点を動かして、内・外・上を判定</div>
+        <h2>等号を不等号に変えると、<br>「領域」になる。</h2>
+        <p class="section-sub">
+          家から半径 <strong>5</strong>（500 m）の徒歩 5 分圏。点 P をスライダーで動かすと、判定が変わる。
+        </p>
+
+        <div class="block">
+          <div class="controls grid-2">
+            <div class="control-row">
+              <div class="control-label">
+                <span>点 P の x 座標</span>
+                <span class="control-value" id="c4-x-val">3</span>
+              </div>
+              <input type="range" id="c4-x" min="-9" max="9" value="3" step="1">
+            </div>
+            <div class="control-row">
+              <div class="control-label">
+                <span>点 P の y 座標</span>
+                <span class="control-value" id="c4-y-val">2</span>
+              </div>
+              <input type="range" id="c4-y" min="-9" max="9" value="2" step="1">
+            </div>
+          </div>
+
+          <div class="equation light">
+            <span class="var" id="c4-eq-x">3</span>² ＋ <span class="var" id="c4-eq-y">2</span>² ＝ <span class="var" id="c4-eq-sum">13</span>
+            <span style="color: var(--ink-3);">　　vs　　</span>
+            r² ＝ 25
+          </div>
+
+          <div class="split-answer" style="display: grid; grid-template-columns: 1.2fr 1fr; gap: 20px; margin-top: 16px; align-items: stretch;">
+            <div class="chart-wrap" style="padding-top: 16px;">
+              <canvas id="chart4" height="320"></canvas>
+            </div>
+            <div style="display: grid; gap: 12px;">
+              <div class="stat accent" style="padding: 18px;">
+                <div class="stat-label">家から P までの距離</div>
+                <div class="stat-value" id="c4-dist">3.61<span class="stat-unit"></span></div>
+              </div>
+              <div class="stat primary" style="padding: 18px;">
+                <div class="stat-label">判定</div>
+                <div class="stat-value" id="c4-judge" style="font-size: 32px;">内側</div>
+              </div>
+              <div id="c4-feasible-box" class="callout" style="margin: 0;">
+                <div class="ico">◎</div>
+                <div class="body"><strong id="c4-feasible-msg">この場所は徒歩 5 分圏内。</strong></div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="excel-box">
+          <div class="excel-head">スプレッドシートで再現してみる</div>
+          <div class="excel-title">タブ <code style="font-family: var(--font-mono); background: var(--surface-2); padding: 2px 6px; border-radius: 4px;">5_領域</code> ／ IF 関数で内・外・上を判定</div>
+          <div class="excel-steps">
+            <div class="excel-step"><div class="sn">1</div><div class="desc">A 列にお店の x、B 列に y を並べる。C 列に <code>=A2^2+B2^2</code>（家からの距離の 2 乗）。</div></div>
+            <div class="excel-step"><div class="sn">2</div><div class="desc">D 列に <code>=IF(C2&lt;25,"内",IF(C2=25,"上","外"))</code>。半径 5 の円との位置関係が一発判定。</div></div>
+            <div class="excel-step"><div class="sn">3</div><div class="desc">メニュー [データ] → <strong>[フィルタを作成]</strong> → D 列の▼で「内」のみチェック → 徒歩 5 分圏のお店リストが完成。</div></div>
+          </div>
+          <div class="excel-note">
+            <strong>仕組み：</strong> 距離を比べるだけなら <strong>2 乗のまま</strong>でも順序は変わらない（SQRT を取らなくて OK）。計算が速く、誤差も入らない。
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ============================ SLIDE 18 : PART 4 APPLY ============================ -->
+    <section class="slide" id="slide-18" data-title="PART 4 ｜ 領域の応用">
+      <div class="slide-inner">
+        <div class="eyebrow">Apply ｜ 「内・外を分ける」発想は、お金・サービスの世界に</div>
+        <h2>不等号 1 つで、<br>サービスの線引きを書く。</h2>
+        <div class="apply-grid">
+          <div class="apply-card">
+            <div class="apply-title">◎ &nbsp; 配達可能エリア</div>
+            <div class="apply-body">
+              店舗 (a, b) を中心に半径 r km。注文が入ったら、住所の座標を取って <strong>(x−a)² + (y−b)² ≤ r²</strong> なら受付、それ以外は断る。
+            </div>
+          </div>
+          <div class="apply-card dark">
+            <div class="apply-title">◎ &nbsp; 銀行 ATM 検索</div>
+            <div class="apply-body">
+              現在地から半径 1 km の ATM を一覧表示。サーバーは全 ATM の座標を持ち、<strong>距離の 2 乗</strong>で 1 km 以内かを並べ替える。
+            </div>
+          </div>
+          <div class="apply-card">
+            <div class="apply-title">◎ &nbsp; ジオフェンス通知</div>
+            <div class="apply-body">
+              「家に近づいたら通知」。スマホは GPS 座標を <strong>常に円の方程式に入れて判定</strong>している。
+            </div>
+          </div>
+          <div class="apply-card dark">
+            <div class="apply-title">◎ &nbsp; ゲームの当たり判定</div>
+            <div class="apply-body">
+              キャラクターと敵弾の距離が一定以下なら被弾。<strong>ピタゴラスの式</strong>が毎フレーム動いている。
+            </div>
+          </div>
+        </div>
+        <div class="apply-summary">
+          身の回りの「<strong>内・外を分ける</strong>」サービスのほとんどは、円の方程式を不等号にしただけ。
+        </div>
+      </div>
+    </section>
+
+    <!-- ============================ SLIDE 19 : PART 5 GATE ============================ -->
+    <section class="slide gate" id="slide-19" data-title="PART 5 ｜ 扉">
+      <div class="gate-inner">
+        <div class="gate-part-num">P A R T  &nbsp;5</div>
+        <h1 class="gate-title">距離は、<br><span class="gate-accent">「似ている度」</span>。</h1>
+        <p class="gate-sub">
+          AI のおすすめも、銘柄選びも、根っこは <strong style="color: white;">「点と点の距離」</strong>を測るだけ。
+        </p>
+      </div>
+    </section>
+
+    <!-- ============================ SLIDE 20 : PART 5 MOVIE ============================ -->
+    <section class="slide" id="slide-20" data-title="PART 5 ｜ 映画のおすすめ">
+      <div class="slide-inner">
+        <div class="eyebrow">Interactive ｜ あなたの好みに最も近い映画を見つける</div>
+        <h2>近い ＝ 似ている。<br>遠い ＝ 違う。</h2>
+        <p class="section-sub">
+          映画を「<strong>アクション度</strong>」と「<strong>ロマンス度</strong>」の 2 軸で表す。自分の好みをスライダーで動かすと、最も近い 1 本が変わる。
+        </p>
+
+        <div class="block">
+          <div class="controls grid-2">
+            <div class="control-row">
+              <div class="control-label">
+                <span>あなたが今夜見たい：アクション度</span>
+                <span class="control-value" id="c5-x-val">5</span>
+              </div>
+              <input type="range" id="c5-x" min="0" max="10" value="5" step="0.5">
+            </div>
+            <div class="control-row">
+              <div class="control-label">
+                <span>あなたが今夜見たい：ロマンス度</span>
+                <span class="control-value" id="c5-y-val">5</span>
+              </div>
+              <input type="range" id="c5-y" min="0" max="10" value="5" step="0.5">
+            </div>
+          </div>
+
+          <div class="split-answer" style="display: grid; grid-template-columns: 1.2fr 1fr; gap: 20px; margin-top: 16px; align-items: stretch;">
+            <div class="chart-wrap" style="padding-top: 16px;">
+              <canvas id="chart5" height="340"></canvas>
+            </div>
+            <div style="display: grid; gap: 12px;">
+              <div class="stat accent" style="padding: 18px;">
+                <div class="stat-label">最も近い映画</div>
+                <div class="stat-value" id="c5-best-name" style="font-size: 26px;">インセプション</div>
+              </div>
+              <div class="stat primary" style="padding: 18px;">
+                <div class="stat-label">あなたとの距離</div>
+                <div class="stat-value" id="c5-best-dist">0.00<span class="stat-unit"></span></div>
+              </div>
+              <div id="c5-msg-box" class="callout" style="margin: 0;">
+                <div class="ico">◎</div>
+                <div class="body"><strong id="c5-msg">「インセプション」が、今夜のあなたに最も近い。</strong></div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="excel-box">
+          <div class="excel-head">スプレッドシートで再現してみる</div>
+          <div class="excel-title">タブ <code style="font-family: var(--font-mono); background: var(--surface-2); padding: 2px 6px; border-radius: 4px;">6_類似度</code> ／ 全映画との距離を一括計算</div>
+          <div class="excel-steps">
+            <div class="excel-step"><div class="sn">1</div><div class="desc">A 列に映画名、B 列にアクション度、C 列にロマンス度。F1, F2 に「自分」の好み。</div></div>
+            <div class="excel-step"><div class="sn">2</div><div class="desc">D 列に <code>=SQRT((B2-$F$1)^2+(C2-$F$2)^2)</code> → 各映画との距離が並ぶ。</div></div>
+            <div class="excel-step"><div class="sn">3</div><div class="desc">E1 に <code>=MIN(D2:D6)</code>、E2 に <code>=INDEX(A2:A6,MATCH(E1,D2:D6,0))</code> → 最も近い映画名が出る。</div></div>
+          </div>
+          <div class="excel-note">
+            <strong>本質：</strong> 軸を変えれば、同じ式で何でもおすすめできる。次のスライドで Netflix 風のリッチな並び替えを体験。
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ============================ SLIDE 21 : PART 5 RECO (Netflix / Spotify) ============================ -->
+    <section class="slide" id="slide-21" data-title="PART 5 ｜ 音楽のおすすめ">
+      <div class="slide-inner">
+        <div class="eyebrow">Simulation ｜ Spotify / Netflix がやっていること</div>
+        <h2>気分を 2 つ動かすだけで、<br>12 曲の並びが変わる。</h2>
+        <p class="section-sub">
+          各曲を「<strong>テンポ</strong>」と「<strong>明るさ</strong>」の点として表す。あなたの気分の点との<strong>距離</strong>でマッチ度（％）を算出 → リアルタイムで並び替え。
+        </p>
+
+        <div class="reco-shell">
+          <div class="reco-head">
+            <div>
+              <div class="reco-title">▶ &nbsp; いまの気分プレイリスト</div>
+              <div class="reco-sub">スライダーを動かすと、上位 3 曲がオレンジに光る</div>
+            </div>
+            <div style="font-family: var(--font-mono); font-size: 11px; color: #94A3B8; letter-spacing: 0.08em;">POWERED BY 距離の式</div>
+          </div>
+
+          <div class="reco-controls">
+            <div class="control-row">
+              <div class="control-label">
+                <span>テンポ（BPM）</span>
+                <span class="control-value" id="c6-tempo-val">120 BPM</span>
+              </div>
+              <input type="range" id="c6-tempo" min="60" max="180" value="120" step="2">
+            </div>
+            <div class="control-row">
+              <div class="control-label">
+                <span>明るさ（暗い ← → 明るい）</span>
+                <span class="control-value" id="c6-mood-val">5</span>
+              </div>
+              <input type="range" id="c6-mood" min="0" max="10" value="5" step="0.5">
+            </div>
+          </div>
+
+          <div class="reco-grid" id="c6-grid">
+            <!-- カードは JS で生成 -->
+          </div>
+        </div>
+
+        <div class="callout" style="margin-top: 20px;">
+          <div class="ico">◎</div>
+          <div class="body">
+            実物の Spotify は <strong>数十〜数百の特徴量</strong>（声の質感、楽器構成、歌詞のトピック…）を使うが、
+            <strong>距離 = √(差の二乗の和)</strong> という今日の式が、軸の本数を増やしてもそのまま動く。
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ============================ SLIDE 22 : PART 5 FACE AUTH ============================ -->
+    <section class="slide" id="slide-22" data-title="PART 5 ｜ 顔認証">
+      <div class="slide-inner">
+        <div class="eyebrow">Simulation ｜ 顔認証も「数の組」と「距離」</div>
+        <h2>顔も、特徴の数値で<br>書き表せる。</h2>
+        <p class="section-sub">
+          スライダーで「認証したい顔の特徴」を作る。データベースの 8 人と<strong>距離</strong>を比較し、最も近い顔が緑色に光る。距離がしきい値より小さければ「<strong>本人</strong>」と判定。
+        </p>
+
+        <div class="face-shell">
+          <div class="face-layout">
+            <div class="face-target">
+              <div>
+                <h4>カメラに映った顔</h4>
+                <div class="face-canvas" id="c7-canvas"></div>
+              </div>
+              <div class="face-controls">
+                <div class="control-row">
+                  <div class="control-label">
+                    <span>顔の幅</span>
+                    <span class="control-value" id="c7-w-val">50</span>
+                  </div>
+                  <input type="range" id="c7-w" min="35" max="65" value="50" step="1">
+                </div>
+                <div class="control-row">
+                  <div class="control-label">
+                    <span>目の間隔</span>
+                    <span class="control-value" id="c7-eg-val">22</span>
+                  </div>
+                  <input type="range" id="c7-eg" min="14" max="30" value="22" step="1">
+                </div>
+                <div class="control-row">
+                  <div class="control-label">
+                    <span>鼻の長さ</span>
+                    <span class="control-value" id="c7-nl-val">14</span>
+                  </div>
+                  <input type="range" id="c7-nl" min="8" max="20" value="14" step="1">
+                </div>
+                <div class="control-row">
+                  <div class="control-label">
+                    <span>口の幅</span>
+                    <span class="control-value" id="c7-mw-val">20</span>
+                  </div>
+                  <input type="range" id="c7-mw" min="12" max="28" value="20" step="1">
+                </div>
+              </div>
+              <div class="face-status ok" id="c7-status">
+                <div>認証 OK</div>
+                <div class="who" id="c7-who">— Sato さん</div>
+              </div>
+            </div>
+
+            <div class="face-database">
+              <h4>登録済み 8 人 ／ 距離が近い順に並ぶ</h4>
+              <div class="face-grid" id="c7-grid">
+                <!-- カードは JS で生成 -->
+              </div>
+              <div style="margin-top: 18px; font-family: var(--font-mono); font-size: 11px; color: #6B7280;">
+                ＊ 実物の顔認証は <strong style="color: #CBD5E1;">128 個の特徴量</strong>（128 次元）。今日のは 4 次元の簡易版。距離の式は <strong style="color: #CBD5E1;">d = √(Σ (差)²)</strong> で同じ。
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ============================ SLIDE 23 : SUMMARY ============================ -->
+    <section class="slide" id="slide-23" data-title="三つの統一原理">
+      <div class="slide-inner">
+        <div class="hr-section"><span class="label">SUMMARY ／ UNIFIED PRINCIPLES</span></div>
+        <div class="eyebrow">本日のまとめ</div>
+        <h2>三つの、統一原理。</h2>
+        <p class="section-sub">
+          今日扱った 5 つのテーマは、次の 3 つの原理に集約できる。
+        </p>
+
+        <div class="principle-card">
+          <div class="num">01</div>
+          <div class="content">
+            <h4>位置は 2 つの数の組で書ける（座標）</h4>
+            <p>地図でも、お金の世界でも、軸を 2 本決めれば「立ち位置」が点として描ける。</p>
+          </div>
+        </div>
+        <div class="principle-card">
+          <div class="num">02</div>
+          <div class="content">
+            <h4>方程式を満たす点を集めると、図形になる</h4>
+            <p>(x − a)² + (y − b)² = r² → 円。式は「点を生成する装置」、図形は「式の解の集合」。</p>
+          </div>
+        </div>
+        <div class="principle-card">
+          <div class="num">03</div>
+          <div class="content">
+            <h4>距離は「近さ」を測る万能の道具</h4>
+            <p>三平方の定理から出る 1 つの式が、ATM 検索・Spotify・顔認証まで支えている。軸を増やせばどこにでも届く。</p>
+          </div>
+        </div>
+
+        <footer style="margin-top: 60px; padding-top: 24px; border-top: 1px solid var(--line); color: var(--ink-3); font-size: 13px; text-align: center;">
+          情報数理入門 第 3 回 ／ 小船 幹生 ／ 平成国際大学 情報デザイン学部
+        </footer>
+      </div>
+    </section>
+
+    </div><!-- /.slide-deck -->
+  </main>
+</div>
+
+<!-- ============================ SLIDE NAV ============================ -->
+<nav class="slide-nav" id="slide-nav" aria-label="スライドナビゲーション">
+  <button id="nav-prev" aria-label="前のスライド">‹</button>
+  <div class="slide-counter"><span id="nav-current">1</span><span class="sep">/</span><span id="nav-total">23</span></div>
+  <button id="nav-next" aria-label="次のスライド">›</button>
+</nav>
+
+<script>
+// ====================== SLIDE DECK ======================
+(() => {
+  const slides = Array.from(document.querySelectorAll('.slide'));
+  const total = slides.length;
+  const navPrev = document.getElementById('nav-prev');
+  const navNext = document.getElementById('nav-next');
+  const navCur = document.getElementById('nav-current');
+  const navTotal = document.getElementById('nav-total');
+  const sidebar = document.getElementById('sidebar');
+  const backdrop = document.getElementById('sidebar-backdrop');
+  const menuBtn = document.getElementById('menu-btn');
+  const navLinks = Array.from(document.querySelectorAll('.nav-link[data-slide]'));
+  if (navTotal) navTotal.textContent = total;
+
+  const getSlideFromHash = () => {
+    const m = (location.hash || '').match(/^#slide-(\d+)$/);
+    if (m) {
+      const n = parseInt(m[1], 10);
+      if (n >= 1 && n <= total) return n;
+    }
+    return 1;
+  };
+
+  let current = getSlideFromHash();
+
+  const resizeChartsIn = (slide) => {
+    if (!window.Chart) return;
+    slide.querySelectorAll('canvas').forEach((c) => {
+      const chart = Chart.getChart(c);
+      if (chart) chart.resize();
+    });
+  };
+
+  const closeSidebar = () => {
+    sidebar?.classList.remove('open');
+    backdrop?.classList.remove('open');
+  };
+
+  const go = (n, { updateHash = true } = {}) => {
+    const target = Math.min(Math.max(1, n), total);
+    slides.forEach((el, i) => el.classList.toggle('active', (i + 1) === target));
+    current = target;
+    if (navCur) navCur.textContent = target;
+    if (navPrev) navPrev.disabled = target === 1;
+    if (navNext) navNext.disabled = target === total;
+    navLinks.forEach((a) => {
+      const slideNum = parseInt(a.dataset.slide, 10);
+      const range = a.dataset.slideRange;
+      let active = slideNum === target;
+      if (range) {
+        const [lo, hi] = range.split('-').map((s) => parseInt(s, 10));
+        active = target >= lo && target <= hi;
+      }
+      a.classList.toggle('active', active);
+    });
+    if (updateHash) {
+      const newHash = `#slide-${target}`;
+      if (location.hash !== newHash) history.replaceState(null, '', newHash);
+    }
+    const activeSlide = slides[target - 1];
+    if (activeSlide) {
+      activeSlide.scrollTop = 0;
+      requestAnimationFrame(() => resizeChartsIn(activeSlide));
+    }
+  };
+
+  navPrev?.addEventListener('click', () => go(current - 1));
+  navNext?.addEventListener('click', () => go(current + 1));
+
+  document.querySelectorAll('a[href^="#slide-"]').forEach((a) => {
+    a.addEventListener('click', (e) => {
+      const m = a.getAttribute('href').match(/^#slide-(\d+)$/);
+      if (!m) return;
+      e.preventDefault();
+      go(parseInt(m[1], 10));
+      closeSidebar();
+    });
+  });
+
+  window.addEventListener('keydown', (e) => {
+    if (e.target.matches('input, textarea, select')) return;
+    if (e.key === 'ArrowRight' || e.key === 'PageDown' || e.key === ' ') {
+      e.preventDefault();
+      go(current + 1);
+    } else if (e.key === 'ArrowLeft' || e.key === 'PageUp') {
+      e.preventDefault();
+      go(current - 1);
+    } else if (e.key === 'Home') {
+      e.preventDefault();
+      go(1);
+    } else if (e.key === 'End') {
+      e.preventDefault();
+      go(total);
+    }
+  });
+
+  const deck = document.getElementById('slide-deck');
+  let touchStartX = 0, touchStartY = 0, touchActive = false;
+  deck?.addEventListener('touchstart', (e) => {
+    if (e.touches.length !== 1) return;
+    touchStartX = e.touches[0].clientX;
+    touchStartY = e.touches[0].clientY;
+    touchActive = true;
+  }, { passive: true });
+  deck?.addEventListener('touchend', (e) => {
+    if (!touchActive) return;
+    touchActive = false;
+    const t = e.changedTouches[0];
+    const dx = t.clientX - touchStartX;
+    const dy = t.clientY - touchStartY;
+    if (Math.abs(dx) > 60 && Math.abs(dx) > Math.abs(dy) * 1.5) {
+      if (dx < 0) go(current + 1);
+      else go(current - 1);
+    }
+  }, { passive: true });
+
+  window.addEventListener('hashchange', () => {
+    const n = getSlideFromHash();
+    if (n !== current) go(n, { updateHash: false });
+  });
+
+  menuBtn?.addEventListener('click', () => {
+    sidebar?.classList.add('open');
+    backdrop?.classList.add('open');
+  });
+  backdrop?.addEventListener('click', closeSidebar);
+
+  go(current, { updateHash: false });
+  window.addEventListener('load', () => {
+    requestAnimationFrame(() => {
+      const activeSlide = slides[current - 1];
+      if (activeSlide) resizeChartsIn(activeSlide);
+    });
+  });
+})();
+
+// ====================== SHARED ======================
+const fmtYen = new Intl.NumberFormat('ja-JP');
+const fmtMan = (n) => {
+  const m = n / 10000;
+  if (Math.abs(m) >= 10000) return (m / 10000).toFixed(2).replace(/\.?0+$/, '') + ' 億';
+  if (Math.abs(m) >= 1)     return m.toFixed(m >= 100 ? 0 : 1).replace(/\.0$/, '') + ' 万';
+  return fmtYen.format(Math.round(n));
+};
+
+const chartFonts = {
+  family: '"JetBrains Mono", "Zen Kaku Gothic New", sans-serif',
+  size: 11,
+};
+Chart.defaults.font.family = chartFonts.family;
+Chart.defaults.font.size = chartFonts.size;
+Chart.defaults.color = '#6B7280';
+Chart.defaults.borderColor = '#E5E7EB';
+Chart.defaults.animation.duration = 300;
+
+// ====================== PART 1-1: Coordinate (お店の位置) ======================
+(() => {
+  const x = document.getElementById('c1-x');
+  const y = document.getElementById('c1-y');
+  const xV = document.getElementById('c1-x-val');
+  const yV = document.getElementById('c1-y-val');
+  const eqX = document.getElementById('c1-eq-x');
+  const eqY = document.getElementById('c1-eq-y');
+
+  const ctx = document.getElementById('chart1').getContext('2d');
+  const chart = new Chart(ctx, {
+    type: 'scatter',
+    data: {
+      datasets: [
+        { label: '駅 (原点)', data: [{x: 0, y: 0}], pointBackgroundColor: '#1F2937', pointBorderColor: 'white', pointBorderWidth: 2, pointRadius: 8, pointHoverRadius: 10 },
+        { label: 'お店', data: [{x: 300, y: 200}], pointBackgroundColor: '#1D4ED8', pointBorderColor: 'white', pointBorderWidth: 2, pointRadius: 12, pointHoverRadius: 14 },
+      ]
+    },
+    options: {
+      responsive: true, maintainAspectRatio: false,
+      plugins: {
+        legend: { display: true, position: 'top', labels: { boxWidth: 14, padding: 12, usePointStyle: true } },
+        tooltip: {
+          backgroundColor: '#1F2937', titleColor: 'white', bodyColor: '#E5E7EB', padding: 10, cornerRadius: 6,
+          callbacks: { label: c => `${c.dataset.label} : (${c.parsed.x}, ${c.parsed.y})` }
+        }
+      },
+      scales: {
+        y: { min: -500, max: 500, grid: { color: (c) => c.tick.value === 0 ? '#1F2937' : '#F3F4F6' }, title: { display: true, text: 'y ： 北方向 (m)' } },
+        x: { min: -500, max: 500, type: 'linear', grid: { color: (c) => c.tick.value === 0 ? '#1F2937' : '#F3F4F6' }, title: { display: true, text: 'x ： 東方向 (m)' } },
+      }
+    }
+  });
+
+  function update() {
+    const X = +x.value, Y = +y.value;
+    xV.textContent = X + ' m';
+    yV.textContent = Y + ' m';
+    eqX.textContent = X;
+    eqY.textContent = Y;
+    chart.data.datasets[1].data = [{x: X, y: Y}];
+    chart.update();
+  }
+  [x, y].forEach(el => el.addEventListener('input', update));
+  update();
+})();
+
+// ====================== PART 1-2: Risk-Return Scatter ======================
+(() => {
+  const x = document.getElementById('c1b-x');
+  const y = document.getElementById('c1b-y');
+  const xV = document.getElementById('c1b-x-val');
+  const yV = document.getElementById('c1b-y-val');
+  const eqX = document.getElementById('c1b-eq-x');
+  const eqY = document.getElementById('c1b-eq-y');
+  const regionToggle = document.getElementById('c1b-region');
+
+  const stocks = [
+    { name: '国債',       x: 1,  y: 0.5 },
+    { name: '日本株',     x: 15, y: 6 },
+    { name: '新興国株',   x: 35, y: 12 },
+    { name: '暗号資産',   x: 70, y: 25 },
+  ];
+
+  const REGION_DX = 10;
+  const REGION_DY = 3;
+
+  const labelPlugin = {
+    id: 'c1bLabels',
+    afterDatasetsDraw(chart) {
+      const c = chart.ctx;
+      c.save();
+      c.font = '600 12px "Zen Kaku Gothic New", sans-serif';
+      c.fillStyle = '#1F2937';
+      c.textAlign = 'left';
+      stocks.forEach(s => {
+        const px = chart.scales.x.getPixelForValue(s.x);
+        const py = chart.scales.y.getPixelForValue(s.y);
+        c.fillText(s.name, px + 12, py + 4);
+      });
+      c.restore();
+    }
+  };
+
+  const regionPlugin = {
+    id: 'c1bRegion',
+    beforeDatasetsDraw(chart) {
+      if (!regionToggle.checked) return;
+      const me = { x: +x.value, y: +y.value };
+      const c = chart.ctx;
+      const left = chart.scales.x.getPixelForValue(me.x - REGION_DX);
+      const right = chart.scales.x.getPixelForValue(me.x + REGION_DX);
+      const top = chart.scales.y.getPixelForValue(me.y + REGION_DY);
+      const bottom = chart.scales.y.getPixelForValue(me.y - REGION_DY);
+      const area = chart.chartArea;
+      const x0 = Math.max(left, area.left);
+      const x1 = Math.min(right, area.right);
+      const y0 = Math.max(top, area.top);
+      const y1 = Math.min(bottom, area.bottom);
+      c.save();
+      c.fillStyle = 'rgba(225, 29, 72, 0.10)';
+      c.fillRect(x0, y0, x1 - x0, y1 - y0);
+      c.strokeStyle = 'rgba(225, 29, 72, 0.45)';
+      c.lineWidth = 1.5;
+      c.setLineDash([6, 4]);
+      c.strokeRect(x0, y0, x1 - x0, y1 - y0);
+      c.setLineDash([]);
+      // 軸ラベル風の数値
+      c.fillStyle = '#9F1239';
+      c.font = '600 11px "JetBrains Mono", monospace';
+      c.textAlign = 'center';
+      c.fillText(`リスク ±${REGION_DX}`, (x0 + x1) / 2, y1 + 14);
+      c.save(); c.translate(x0 - 8, (y0 + y1) / 2); c.rotate(-Math.PI / 2);
+      c.fillText(`リターン ±${REGION_DY}%`, 0, 0); c.restore();
+      c.restore();
+    }
+  };
+
+  const ctx = document.getElementById('chart1b').getContext('2d');
+  const chart = new Chart(ctx, {
+    type: 'scatter',
+    data: {
+      datasets: [
+        { label: '銘柄', data: stocks.map(s => ({x: s.x, y: s.y})), pointBackgroundColor: '#1D4ED8', pointBorderColor: 'white', pointBorderWidth: 2, pointRadius: 10, pointHoverRadius: 12 },
+        { label: 'あなた', data: [{x: 15, y: 6}], pointBackgroundColor: '#E11D48', pointBorderColor: 'white', pointBorderWidth: 2, pointRadius: 12, pointStyle: 'rectRot', pointHoverRadius: 14 },
+      ]
+    },
+    options: {
+      responsive: true, maintainAspectRatio: false,
+      plugins: {
+        legend: { display: true, position: 'top', labels: { boxWidth: 14, padding: 12, usePointStyle: true } },
+        tooltip: {
+          backgroundColor: '#1F2937', titleColor: 'white', bodyColor: '#E5E7EB', padding: 10, cornerRadius: 6,
+          callbacks: { label: c => `${c.dataset.label} : リスク ${c.parsed.x}, リターン ${c.parsed.y}%` }
+        }
+      },
+      scales: {
+        y: { min: -2, max: 32, grid: { color: '#F3F4F6' }, title: { display: true, text: 'リターン (%)' } },
+        x: { min: 0, max: 80, type: 'linear', grid: { color: '#F3F4F6' }, title: { display: true, text: 'リスク（変動の大きさ）' } },
+      }
+    },
+    plugins: [regionPlugin, labelPlugin]
+  });
+
+  function update() {
+    const X = +x.value, Y = +y.value;
+    xV.textContent = X;
+    yV.textContent = Y + ' %';
+    eqX.textContent = X;
+    eqY.textContent = Y;
+    chart.data.datasets[1].data = [{x: X, y: Y}];
+    chart.update();
+  }
+  [x, y].forEach(el => el.addEventListener('input', update));
+  regionToggle.addEventListener('change', update);
+  update();
+})();
+
+// ====================== PART 2: Distance (三平方の定理) ======================
+(() => {
+  const x = document.getElementById('c2-x');
+  const y = document.getElementById('c2-y');
+  const xV = document.getElementById('c2-x-val');
+  const yV = document.getElementById('c2-y-val');
+  const eqDx = document.getElementById('c2-eq-dx');
+  const eqDy = document.getElementById('c2-eq-dy');
+  const eqDx2 = document.getElementById('c2-eq-dx2');
+  const eqDy2 = document.getElementById('c2-eq-dy2');
+  const eqSum = document.getElementById('c2-eq-sum');
+  const ans = document.getElementById('c2-answer');
+  const hint = document.getElementById('c2-hint');
+
+  const trianglePlugin = {
+    id: 'c2Triangle',
+    afterDatasetsDraw(chart) {
+      const X = +x.value, Y = +y.value;
+      const c = chart.ctx;
+      const x0 = chart.scales.x.getPixelForValue(0);
+      const y0 = chart.scales.y.getPixelForValue(0);
+      const xB = chart.scales.x.getPixelForValue(X);
+      const yB = chart.scales.y.getPixelForValue(Y);
+      // 直角三角形の脚（dx, dy）
+      c.save();
+      c.strokeStyle = '#9CA3AF';
+      c.lineWidth = 1.5;
+      c.setLineDash([5, 4]);
+      c.beginPath(); c.moveTo(x0, y0); c.lineTo(xB, y0); c.stroke();   // 横
+      c.beginPath(); c.moveTo(xB, y0); c.lineTo(xB, yB); c.stroke();   // 縦
+      c.setLineDash([]);
+      // 斜辺
+      c.strokeStyle = '#1D4ED8';
+      c.lineWidth = 3;
+      c.beginPath(); c.moveTo(x0, y0); c.lineTo(xB, yB); c.stroke();
+      // dx ラベル
+      c.font = '700 12px "JetBrains Mono", monospace';
+      c.fillStyle = '#4B5563';
+      c.textAlign = 'center';
+      c.fillText(`dx = ${X}`, (x0 + xB) / 2, y0 + 16);
+      c.save(); c.translate(xB + 14, (y0 + yB) / 2); c.fillText(`dy = ${Y}`, 0, 0); c.restore();
+      c.restore();
+    }
+  };
+
+  const ctx = document.getElementById('chart2').getContext('2d');
+  const chart = new Chart(ctx, {
+    type: 'scatter',
+    data: {
+      datasets: [
+        { label: '点 A (家)', data: [{x: 0, y: 0}], pointBackgroundColor: '#1F2937', pointBorderColor: 'white', pointBorderWidth: 2, pointRadius: 8 },
+        { label: '点 B', data: [{x: 3, y: 4}], pointBackgroundColor: '#1D4ED8', pointBorderColor: 'white', pointBorderWidth: 2, pointRadius: 10 },
+      ]
+    },
+    options: {
+      responsive: true, maintainAspectRatio: false,
+      plugins: {
+        legend: { display: true, position: 'top', labels: { boxWidth: 14, padding: 12, usePointStyle: true } },
+        tooltip: { backgroundColor: '#1F2937', titleColor: 'white', bodyColor: '#E5E7EB', padding: 10, cornerRadius: 6 }
+      },
+      scales: {
+        y: { min: -8, max: 8, grid: { color: (c) => c.tick.value === 0 ? '#1F2937' : '#F3F4F6' }, title: { display: true, text: 'y' } },
+        x: { min: -8, max: 8, type: 'linear', grid: { color: (c) => c.tick.value === 0 ? '#1F2937' : '#F3F4F6' }, title: { display: true, text: 'x' } },
+      }
+    },
+    plugins: [trianglePlugin]
+  });
+
+  function update() {
+    const X = +x.value, Y = +y.value;
+    xV.textContent = X;
+    yV.textContent = Y;
+    eqDx.textContent = X;
+    eqDy.textContent = Y;
+    eqDx2.textContent = X * X;
+    eqDy2.textContent = Y * Y;
+    eqSum.textContent = X * X + Y * Y;
+    chart.data.datasets[1].data = [{x: X, y: Y}];
+    chart.update();
+    const d = Math.sqrt(X * X + Y * Y);
+    ans.innerHTML = d.toFixed(2);
+    hint.textContent = `（距離 × 100 m = ${(d * 100).toFixed(0)} m）`;
+    ans.classList.remove('number-shake'); void ans.offsetWidth; ans.classList.add('number-shake');
+  }
+  [x, y].forEach(el => el.addEventListener('input', update));
+  update();
+})();
+
+// ====================== PART 3: Circle ======================
+(() => {
+  const a = document.getElementById('c3-a');
+  const b = document.getElementById('c3-b');
+  const r = document.getElementById('c3-r');
+  const aV = document.getElementById('c3-a-val');
+  const bV = document.getElementById('c3-b-val');
+  const rV = document.getElementById('c3-r-val');
+  const eqA = document.getElementById('c3-eq-a');
+  const eqB = document.getElementById('c3-eq-b');
+  const eqR2 = document.getElementById('c3-eq-r2');
+
+  const ctx = document.getElementById('chart3').getContext('2d');
+  const chart = new Chart(ctx, {
+    type: 'scatter',
+    data: {
+      datasets: [
+        { label: '円', data: [], borderColor: '#1D4ED8', backgroundColor: 'rgba(29, 78, 216, 0.10)', borderWidth: 3, pointRadius: 0, showLine: true, fill: true, tension: 0, order: 2 },
+        { label: '中心', data: [{x: 0, y: 0}], pointBackgroundColor: '#1F2937', pointBorderColor: 'white', pointBorderWidth: 2, pointRadius: 8, showLine: false, order: 1 },
+      ]
+    },
+    options: {
+      responsive: true,
+      maintainAspectRatio: true,
+      aspectRatio: 1,
+      plugins: {
+        legend: { display: true, position: 'top', labels: { boxWidth: 14, padding: 12, usePointStyle: true } },
+        tooltip: { backgroundColor: '#1F2937', titleColor: 'white', bodyColor: '#E5E7EB', padding: 10, cornerRadius: 6,
+          callbacks: { label: c => `(${c.parsed.x.toFixed(2)}, ${c.parsed.y.toFixed(2)})` } }
+      },
+      scales: {
+        y: { min: -10, max: 10, grid: { color: (c) => c.tick.value === 0 ? '#1F2937' : '#F3F4F6' }, title: { display: true, text: 'y' } },
+        x: { min: -10, max: 10, type: 'linear', grid: { color: (c) => c.tick.value === 0 ? '#1F2937' : '#F3F4F6' }, title: { display: true, text: 'x' } },
+      }
+    }
+  });
+
+  function update() {
+    const A = +a.value, B = +b.value, R = +r.value;
+    aV.textContent = A;
+    bV.textContent = B;
+    rV.textContent = R;
+    eqA.textContent = A;
+    eqB.textContent = B;
+    eqR2.textContent = R * R;
+
+    // 円周を一周分の閉じた点列で生成（始点 = 終点）
+    const N = 96;
+    const ring = [];
+    for (let i = 0; i <= N; i++) {
+      const t = (i / N) * 2 * Math.PI;
+      ring.push({ x: A + R * Math.cos(t), y: B + R * Math.sin(t) });
+    }
+    chart.data.datasets[0].data = ring;
+    chart.data.datasets[1].data = [{x: A, y: B}];
+    chart.update();
+  }
+  [a, b, r].forEach(el => el.addEventListener('input', update));
+  update();
+})();
+
+// ====================== PART 4: Region (内・外・上の判定) ======================
+(() => {
+  const x = document.getElementById('c4-x');
+  const y = document.getElementById('c4-y');
+  const xV = document.getElementById('c4-x-val');
+  const yV = document.getElementById('c4-y-val');
+  const eqX = document.getElementById('c4-eq-x');
+  const eqY = document.getElementById('c4-eq-y');
+  const eqSum = document.getElementById('c4-eq-sum');
+  const distEl = document.getElementById('c4-dist');
+  const judgeEl = document.getElementById('c4-judge');
+  const msg = document.getElementById('c4-feasible-msg');
+  const msgBox = document.getElementById('c4-feasible-box');
+
+  const R = 5;
+
+  const ctx = document.getElementById('chart4').getContext('2d');
+  const chart = new Chart(ctx, {
+    type: 'scatter',
+    data: {
+      datasets: [
+        { label: '家 (中心)', data: [{x: 0, y: 0}], pointBackgroundColor: '#1F2937', pointBorderColor: 'white', pointBorderWidth: 2, pointRadius: 7, showLine: false },
+        { label: '徒歩 5 分圏', data: [], borderColor: '#1D4ED8', backgroundColor: 'rgba(29, 78, 216, 0.10)', borderWidth: 2.5, pointRadius: 0, showLine: true, fill: true, tension: 0 },
+        { label: '点 P', data: [{x: 3, y: 2}], pointBackgroundColor: '#059669', pointBorderColor: 'white', pointBorderWidth: 2, pointRadius: 12, showLine: false },
+      ]
+    },
+    options: {
+      responsive: true, maintainAspectRatio: false,
+      plugins: {
+        legend: { display: true, position: 'top', labels: { boxWidth: 14, padding: 12, usePointStyle: true } },
+        tooltip: { backgroundColor: '#1F2937', titleColor: 'white', bodyColor: '#E5E7EB', padding: 10, cornerRadius: 6,
+          callbacks: { label: c => `${c.dataset.label} : (${c.parsed.x.toFixed(2)}, ${c.parsed.y.toFixed(2)})` } }
+      },
+      scales: {
+        y: { min: -10, max: 10, grid: { color: (c) => c.tick.value === 0 ? '#1F2937' : '#F3F4F6' }, title: { display: true, text: 'y' } },
+        x: { min: -10, max: 10, type: 'linear', grid: { color: (c) => c.tick.value === 0 ? '#1F2937' : '#F3F4F6' }, title: { display: true, text: 'x' } },
+      }
+    }
+  });
+
+  // 円のデータを 1 度だけ生成
+  (() => {
+    const N = 64;
+    const ring = [];
+    for (let i = 0; i <= N; i++) {
+      const a = (i / N) * 2 * Math.PI;
+      ring.push({ x: R * Math.cos(a), y: R * Math.sin(a) });
+    }
+    chart.data.datasets[1].data = ring;
+  })();
+
+  function update() {
+    const X = +x.value, Y = +y.value;
+    xV.textContent = X;
+    yV.textContent = Y;
+    eqX.textContent = X;
+    eqY.textContent = Y;
+    eqSum.textContent = X * X + Y * Y;
+    chart.data.datasets[2].data = [{x: X, y: Y}];
+    chart.update();
+
+    const sum = X * X + Y * Y;
+    const d = Math.sqrt(sum);
+    distEl.innerHTML = d.toFixed(2);
+
+    if (sum < R * R) {
+      judgeEl.textContent = '内側';
+      judgeEl.style.color = 'white';
+      msgBox.style.background = '#ECFDF5';
+      msgBox.style.borderLeftColor = '#059669';
+      msg.textContent = `${(d * 100).toFixed(0)} m ＜ 500 m。徒歩 5 分圏内 — 配達 OK。`;
+    } else if (Math.abs(sum - R * R) < 0.5) {
+      judgeEl.textContent = '境界';
+      judgeEl.style.color = '#FCD34D';
+      msgBox.style.background = '#FFFBEB';
+      msgBox.style.borderLeftColor = '#F59E0B';
+      msg.textContent = `${(d * 100).toFixed(0)} m ≒ 500 m。ちょうど境界線上。`;
+    } else {
+      judgeEl.textContent = '外側';
+      judgeEl.style.color = '#FCA5A5';
+      msgBox.style.background = '#FEF2F2';
+      msgBox.style.borderLeftColor = '#DC2626';
+      msg.textContent = `${(d * 100).toFixed(0)} m ＞ 500 m。範囲外 — 配達不可。`;
+    }
+    distEl.classList.remove('number-shake'); void distEl.offsetWidth; distEl.classList.add('number-shake');
+  }
+  [x, y].forEach(el => el.addEventListener('input', update));
+  update();
+})();
+
+// ====================== PART 5: Movie Recommend ======================
+(() => {
+  const x = document.getElementById('c5-x');
+  const y = document.getElementById('c5-y');
+  const xV = document.getElementById('c5-x-val');
+  const yV = document.getElementById('c5-y-val');
+  const bestNameEl = document.getElementById('c5-best-name');
+  const bestDistEl = document.getElementById('c5-best-dist');
+  const msg = document.getElementById('c5-msg');
+  const msgBox = document.getElementById('c5-msg-box');
+
+  const movies = [
+    { name: 'マッドマックス',     x: 9, y: 1 },
+    { name: 'アイアンマン',       x: 8, y: 4 },
+    { name: 'インセプション',     x: 6, y: 3 },
+    { name: 'タイタニック',       x: 3, y: 8 },
+    { name: 'ラ・ラ・ランド',     x: 2, y: 9 },
+  ];
+
+  let bestIdx = 2;
+  const labelPlugin = {
+    id: 'c5Labels',
+    afterDatasetsDraw(chart) {
+      const c = chart.ctx;
+      c.save();
+      c.font = '600 12px "Zen Kaku Gothic New", sans-serif';
+      c.fillStyle = '#1F2937';
+      c.textAlign = 'left';
+      movies.forEach(s => {
+        const px = chart.scales.x.getPixelForValue(s.x);
+        const py = chart.scales.y.getPixelForValue(s.y);
+        c.fillText(s.name, px + 12, py + 4);
+      });
+      const me = { x: +x.value, y: +y.value };
+      const best = movies[bestIdx];
+      const x1 = chart.scales.x.getPixelForValue(me.x);
+      const y1 = chart.scales.y.getPixelForValue(me.y);
+      const x2 = chart.scales.x.getPixelForValue(best.x);
+      const y2 = chart.scales.y.getPixelForValue(best.y);
+      c.strokeStyle = '#E11D48';
+      c.lineWidth = 2;
+      c.setLineDash([6, 4]);
+      c.beginPath(); c.moveTo(x1, y1); c.lineTo(x2, y2); c.stroke();
+      c.setLineDash([]);
+      c.restore();
+    }
+  };
+
+  const ctx = document.getElementById('chart5').getContext('2d');
+  const chart = new Chart(ctx, {
+    type: 'scatter',
+    data: {
+      datasets: [
+        { label: '映画', data: movies.map(s => ({x: s.x, y: s.y})), pointBackgroundColor: movies.map(() => '#1D4ED8'), pointBorderColor: 'white', pointBorderWidth: 2, pointRadius: 10, pointHoverRadius: 12 },
+        { label: 'あなた', data: [{x: 5, y: 5}], pointBackgroundColor: '#E11D48', pointBorderColor: 'white', pointBorderWidth: 2, pointRadius: 12, pointStyle: 'rectRot', pointHoverRadius: 14 },
+      ]
+    },
+    options: {
+      responsive: true, maintainAspectRatio: false,
+      plugins: {
+        legend: { display: true, position: 'top', labels: { boxWidth: 14, padding: 12, usePointStyle: true } },
+        tooltip: {
+          backgroundColor: '#1F2937', titleColor: 'white', bodyColor: '#E5E7EB', padding: 10, cornerRadius: 6,
+          callbacks: { label: c => `${c.dataset.label} : アクション ${c.parsed.x}, ロマンス ${c.parsed.y}` }
+        }
+      },
+      scales: {
+        y: { min: 0, max: 10, grid: { color: '#F3F4F6' }, title: { display: true, text: 'ロマンス度' } },
+        x: { min: 0, max: 10, type: 'linear', grid: { color: '#F3F4F6' }, title: { display: true, text: 'アクション度' } },
+      }
+    },
+    plugins: [labelPlugin]
+  });
+
+  function update() {
+    const X = +x.value, Y = +y.value;
+    xV.textContent = X;
+    yV.textContent = Y;
+
+    let minD = Infinity;
+    bestIdx = 0;
+    movies.forEach((s, i) => {
+      const dx = s.x - X, dy = s.y - Y;
+      const d = Math.sqrt(dx * dx + dy * dy);
+      if (d < minD) { minD = d; bestIdx = i; }
+    });
+    chart.data.datasets[0].pointBackgroundColor = movies.map((_, i) => i === bestIdx ? '#F59E0B' : '#1D4ED8');
+    chart.data.datasets[0].pointRadius = movies.map((_, i) => i === bestIdx ? 14 : 10);
+    chart.data.datasets[1].data = [{x: X, y: Y}];
+    chart.update();
+
+    bestNameEl.textContent = movies[bestIdx].name;
+    bestDistEl.innerHTML = minD.toFixed(2);
+    msgBox.style.background = 'var(--blue-bg)';
+    msgBox.style.borderLeftColor = 'var(--blue)';
+    msg.innerHTML = `「<strong>${movies[bestIdx].name}</strong>」が、今夜のあなたに最も近い（距離 ${minD.toFixed(2)}）。`;
+
+    bestNameEl.classList.remove('number-shake'); void bestNameEl.offsetWidth; bestNameEl.classList.add('number-shake');
+    bestDistEl.classList.remove('number-shake'); void bestDistEl.offsetWidth; bestDistEl.classList.add('number-shake');
+  }
+  [x, y].forEach(el => el.addEventListener('input', update));
+  update();
+})();
+
+// ====================== PART 5b: Netflix / Spotify recommend grid ======================
+(() => {
+  const tempo = document.getElementById('c6-tempo');
+  const mood = document.getElementById('c6-mood');
+  const tempoV = document.getElementById('c6-tempo-val');
+  const moodV = document.getElementById('c6-mood-val');
+  const grid = document.getElementById('c6-grid');
+
+  // 12 曲（テンポ 60-180 / 明るさ 0-10）
+  const tracks = [
+    { id: 0,  title: 'Lo-Fi Sunset',     artist: 'Beats Cafe',      tempo: 70,  mood: 4, color: '#F97316', emoji: '🌅' },
+    { id: 1,  title: 'Friday Night',     artist: 'Nova Lights',     tempo: 128, mood: 9, color: '#EC4899', emoji: '🪩' },
+    { id: 2,  title: 'Morning Coffee',   artist: 'Akari',           tempo: 95,  mood: 7, color: '#FBBF24', emoji: '☕' },
+    { id: 3,  title: 'Storm',            artist: 'Dark Tide',       tempo: 145, mood: 2, color: '#1E40AF', emoji: '⚡' },
+    { id: 4,  title: 'Bossa Lovers',     artist: 'Cafe Tokyo',      tempo: 100, mood: 6, color: '#84CC16', emoji: '🎷' },
+    { id: 5,  title: 'Rainy Jazz',       artist: 'Trio Blue',       tempo: 80,  mood: 5, color: '#0EA5E9', emoji: '🌧' },
+    { id: 6,  title: 'EDM Heat',         artist: 'DJ Wave',         tempo: 140, mood: 8, color: '#A855F7', emoji: '🔥' },
+    { id: 7,  title: 'Slow Sunday',      artist: 'Acoustic Note',   tempo: 65,  mood: 6, color: '#F59E0B', emoji: '🛋' },
+    { id: 8,  title: 'Anime Anthem',     artist: 'Sonic Sky',       tempo: 160, mood: 9, color: '#EF4444', emoji: '⭐' },
+    { id: 9,  title: 'Indie Walk',       artist: 'Pearl Step',      tempo: 110, mood: 7, color: '#22C55E', emoji: '🚶' },
+    { id: 10, title: 'Workout Pump',     artist: 'Power Beat',      tempo: 170, mood: 8, color: '#DC2626', emoji: '💪' },
+    { id: 11, title: 'Late Night',       artist: 'Drift',           tempo: 75,  mood: 3, color: '#475569', emoji: '🌙' },
+  ];
+
+  // 距離正規化用：軸スケールを揃える
+  const normalize = (t) => ({
+    tempo: (t.tempo - 60) / 120,  // 0〜1
+    mood: t.mood / 10,
+  });
+  const normTracks = tracks.map(t => ({ ...t, n: normalize(t) }));
+
+  // カードを 1 度だけ DOM に作る
+  const cardEls = tracks.map(t => {
+    const el = document.createElement('div');
+    el.className = 'reco-card';
+    el.dataset.id = t.id;
+    el.innerHTML = `
+      <div class="thumb" style="background: linear-gradient(135deg, ${t.color}, ${t.color}99);">${t.emoji}</div>
+      <div class="meta">
+        <div class="ttl">${t.title}</div>
+        <div class="artist">${t.artist}</div>
+        <div class="match-bar"><div class="match-fill" style="width: 0%;"></div></div>
+        <div class="match-num">— %</div>
+      </div>
+      <div class="badge"></div>
+    `;
+    grid.appendChild(el);
+    return el;
+  });
+
+  function update() {
+    const T = +tempo.value;
+    const M = +mood.value;
+    tempoV.textContent = T + ' BPM';
+    moodV.textContent = M;
+    const me = { tempo: (T - 60) / 120, mood: M / 10 };
+
+    const distances = normTracks.map(t => {
+      const dt = t.n.tempo - me.tempo;
+      const dm = t.n.mood - me.mood;
+      return { id: t.id, d: Math.sqrt(dt * dt + dm * dm) };
+    });
+
+    // ソート（距離が近い順）
+    distances.sort((a, b) => a.d - b.d);
+    const maxD = Math.sqrt(2);  // 正規化空間での最大距離
+
+    distances.forEach((entry, rank) => {
+      const el = cardEls[entry.id];
+      const matchPct = Math.max(0, Math.round((1 - entry.d / maxD) * 100));
+      el.querySelector('.match-fill').style.width = matchPct + '%';
+      el.querySelector('.match-num').textContent = matchPct + ' %';
+      el.classList.remove('top-1', 'top-2', 'top-3');
+      if (rank === 0) { el.classList.add('top-1'); el.querySelector('.badge').textContent = 'おすすめ #1'; }
+      else if (rank === 1) { el.classList.add('top-2'); el.querySelector('.badge').textContent = '#2'; }
+      else if (rank === 2) { el.classList.add('top-3'); el.querySelector('.badge').textContent = '#3'; }
+      // 並び替え（CSS order）
+      el.style.order = rank;
+    });
+  }
+  [tempo, mood].forEach(el => el.addEventListener('input', update));
+  update();
+})();
+
+// ====================== PART 5c: Face Authentication ======================
+(() => {
+  const faceW = document.getElementById('c7-w');
+  const eyeGap = document.getElementById('c7-eg');
+  const noseLen = document.getElementById('c7-nl');
+  const mouthW = document.getElementById('c7-mw');
+  const wV = document.getElementById('c7-w-val');
+  const egV = document.getElementById('c7-eg-val');
+  const nlV = document.getElementById('c7-nl-val');
+  const mwV = document.getElementById('c7-mw-val');
+  const canvas = document.getElementById('c7-canvas');
+  const grid = document.getElementById('c7-grid');
+  const status = document.getElementById('c7-status');
+  const who = document.getElementById('c7-who');
+
+  // 登録済み 8 人（特徴量）
+  const people = [
+    { name: 'Sato',     w: 50, eg: 22, nl: 14, mw: 20 },
+    { name: 'Tanaka',   w: 56, eg: 26, nl: 17, mw: 23 },
+    { name: 'Suzuki',   w: 42, eg: 18, nl: 11, mw: 17 },
+    { name: 'Kobayashi',w: 60, eg: 24, nl: 19, mw: 25 },
+    { name: 'Yamada',   w: 46, eg: 20, nl: 13, mw: 19 },
+    { name: 'Itoh',     w: 52, eg: 28, nl: 15, mw: 22 },
+    { name: 'Nakamura', w: 44, eg: 16, nl: 12, mw: 16 },
+    { name: 'Takahashi',w: 58, eg: 22, nl: 18, mw: 24 },
+  ];
+
+  const THRESHOLD = 5.5;  // 認証しきい値
+
+  // SVG 顔生成（svgサイズ: 100×120 viewport）
+  function renderFace(p, opts = {}) {
+    const stroke = opts.stroke || '#E5E7EB';
+    const accent = opts.accent || '#FCD34D';
+    // 顔: 楕円（幅は p.w/100 で制御）
+    const fw = p.w * 0.85;
+    const fh = 70;
+    const eyeY = 50;
+    const eyeR = 4;
+    const nseY = eyeY + p.nl * 1.2;
+    const mthY = nseY + 14;
+    return `
+      <svg viewBox="0 0 100 120" xmlns="http://www.w3.org/2000/svg">
+        <ellipse cx="50" cy="60" rx="${fw / 2}" ry="${fh / 2}" fill="none" stroke="${stroke}" stroke-width="2.2"/>
+        <circle cx="${50 - p.eg / 2}" cy="${eyeY}" r="${eyeR}" fill="${stroke}"/>
+        <circle cx="${50 + p.eg / 2}" cy="${eyeY}" r="${eyeR}" fill="${stroke}"/>
+        <line x1="50" y1="${eyeY + 4}" x2="50" y2="${nseY}" stroke="${stroke}" stroke-width="1.6" stroke-linecap="round"/>
+        <path d="M ${50 - p.mw / 2} ${mthY} Q 50 ${mthY + 5} ${50 + p.mw / 2} ${mthY}" fill="none" stroke="${accent}" stroke-width="2.2" stroke-linecap="round"/>
+      </svg>
+    `;
+  }
+
+  // 登録顔のカードを 1 度だけ生成
+  const cardEls = people.map(p => {
+    const el = document.createElement('div');
+    el.className = 'face-card';
+    el.dataset.name = p.name;
+    el.innerHTML = `
+      ${renderFace(p, { stroke: '#94A3B8', accent: '#94A3B8' })}
+      <div class="name">${p.name}</div>
+      <div class="dist">d = —</div>
+    `;
+    grid.appendChild(el);
+    return el;
+  });
+
+  function update() {
+    const target = { w: +faceW.value, eg: +eyeGap.value, nl: +noseLen.value, mw: +mouthW.value };
+    wV.textContent = target.w;
+    egV.textContent = target.eg;
+    nlV.textContent = target.nl;
+    mwV.textContent = target.mw;
+
+    // ターゲット顔を描画
+    canvas.innerHTML = renderFace(target, { stroke: '#FCD34D', accent: '#FCD34D' });
+
+    // 全員との距離（4次元ユークリッド）
+    const distances = people.map((p, i) => {
+      const dw = p.w - target.w;
+      const dg = p.eg - target.eg;
+      const dl = p.nl - target.nl;
+      const dm = p.mw - target.mw;
+      return { idx: i, name: p.name, d: Math.sqrt(dw * dw + dg * dg + dl * dl + dm * dm) };
+    });
+    distances.sort((a, b) => a.d - b.d);
+
+    distances.forEach((entry, rank) => {
+      const el = cardEls[entry.idx];
+      el.classList.remove('match-1', 'match-2', 'match-3');
+      if (rank === 0) el.classList.add('match-1');
+      else if (rank === 1) el.classList.add('match-2');
+      else if (rank === 2) el.classList.add('match-3');
+      el.querySelector('.dist').textContent = `d = ${entry.d.toFixed(2)}`;
+      el.style.order = rank;
+    });
+
+    const best = distances[0];
+    if (best.d < THRESHOLD) {
+      status.classList.remove('ng');
+      status.classList.add('ok');
+      status.firstElementChild.textContent = '✓ 認証 OK';
+      who.textContent = `— ${best.name} さん（距離 ${best.d.toFixed(2)}）`;
+    } else {
+      status.classList.remove('ok');
+      status.classList.add('ng');
+      status.firstElementChild.textContent = '✗ 認証 NG';
+      who.textContent = `— 該当なし（最近傍: ${best.name}, 距離 ${best.d.toFixed(2)}）`;
+    }
+  }
+  [faceW, eyeGap, noseLen, mouthW].forEach(el => el.addEventListener('input', update));
+  update();
+})();
+</script>
+</body>
+</html>
