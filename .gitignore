@@ -8,3 +8,7 @@
 *_backup_*.xlsx
 *_backup_*.xls
 *_backup_*.pdf
+
+# Python 仮想環境（pptx/xlsx 生成用、new-lecture skill が使用）
+.venv/
+__pycache__/
