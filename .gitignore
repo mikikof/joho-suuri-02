@@ -4,6 +4,9 @@
 # Claude Code のローカル設定（個人環境設定は除外）
 .claude/settings.local.json
 
+# Claude Code の会話ログ（ローカル保存・公開しない）
+.claude/session-logs/
+
 # Excel 等の日付付きバックアップファイル（履歴は Git で管理するため除外）
 *_backup_*.xlsx
 *_backup_*.xls
