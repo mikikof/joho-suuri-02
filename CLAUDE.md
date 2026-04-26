@@ -22,7 +22,7 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 
 ## 新しい回を作る時のルール — 必ず守る
 
-**この順番・段階で進める。同時並行や順序入れ替えは禁止。** 詳細は `.claude/skills/new-lecture/SKILL.md` を参照。
+**この順番・段階で進める。同時並行や順序入れ替えは禁止。** 詳細は `.claude/skills/new-lecture/SKILL.md` / `TEMPLATE_GUIDE.md` / `EXCEL_GUIDE.md` を参照。
 
 1. **HTML (`lecNN/index.html`) を最初に作る** — テーマと参考資料 (web/画像/URL) を取り込み、`lec02/index.html` をコピーしてベースにする。これが講義の本体・真実の源 (source of truth)
 2. **ユーザー確認** — HTML が完成したら必ず停止し、ユーザーに「OK か / 修正点があるか」を聞く。承認なしに次へ進まない
@@ -35,6 +35,25 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 - 既存 PDF / 画像 / pptx → Read
 - 教科書・シラバス指定 → ユーザーに確認
 
+## スライド構成の方針 (lec03 で確立)
+
+- **「身近な現象 → 数式 → 金融への展開 → AI/データサイエンスへの締め」** が骨格。各 PART で「身の回りのもの」を入口に置き、「同じ式は金融でも使える」へ繋ぎ、最後の PART で「同じ式は AI でも動いている」で締める
+- **メインの PART を 1-1 / 1-2 に分割するパターンが効く** — 1-1 で身の回りの現象（地図、教室、Wi-Fi 等）で概念を導入、1-2 でその発想を金融題材（リスクリターン散布図等）に転用する。1 つの式の射程が広いことを体感させる
+- **最後の PART は AI / データサイエンスのリッチなインタラクティブで締める** — 距離 → 似ている度 のような形で、Spotify 風カードグリッド、SVG 顔認証など 2-3 スライド分のリッチ実装。座標にこだわりすぎず、シミュレーションとしての面白さを優先する
+- **NEXT スライド（次回予告）は作らない** — SUMMARY で締める。次回の内容を縛るとフローが固くなるので不要
+
+## Google スプレッドシート前提の表記方針
+
+ターゲット環境は Google スプレッドシート（Excel ではない）。HTML の Excel-box 内・Excel 演習シートの操作手順は Sheets の UI 用語で書く。
+
+- **メニュー [挿入] → [グラフ]** （Sheets はデフォルトで縦棒グラフ — 散布図に変更する手順を明示）
+- **散布図はデータ範囲を「数値列だけ」で選ぶ**。名前列を含めると X 軸が文字列カテゴリになって座標が再現できない
+- **散布図に線を引く** = グラフをダブルクリック → [カスタマイズ] → [系列] → 「データポイントを線で結ぶ」にチェック（Excel の「散布図（直線あり）」の置き換え）
+- **軸の最小最大を固定** = ダブルクリック → [カスタマイズ] → [横軸/縦軸] → 最小値・最大値
+- **別の系列を追加** = ダブルクリック → [設定] タブ → 「系列を追加」（Excel の「右クリック → データの選択」の置き換え）
+- **ドラッグの起点** = セル右下の **フィルハンドル**（青い四角）
+- **フィルター** = メニュー [データ] → [フィルタを作成]
+
 ## ビルドと実行
 
 ビルド工程・依存関係マネージャ・テストランナーは無い。`index.html`（目次）または `lecNN/index.html`（各回）をブラウザで直接開けば動作する（macOS なら `open index.html`）。Chart.js は CDN（`cdn.jsdelivr.net/npm/chart.js@4.4.1`）から読み込み、Google Fonts も同様に外部読み込み。オフラインで開いた場合はグラフとフォントが効かない点に注意。
@@ -45,7 +64,7 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 
 **レイアウト:** `.shell` グリッドが `aside.sidebar`（左固定ナビ）と `main.main`（本編）の2カラム構成を作る。サイドバーのアンカーリンクは `#part1`〜`#part5` 等のセクション ID にスクロール。`#overview` の `.tocbar` も同じアンカー集合を指す。
 
-**セクション構成:** PART 1 複利 / ASIDE 0.1+0.2 浮動小数点 / PART 2 1次方程式 / PART 3 1次不等式 / PART 4 連立方程式 / PART 5 指数爆発 / SUMMARY / NEXT。各 PART は「身近なお題（バイト代・料金プラン等）→ スライダー → 数式表示 → グラフ → 解釈テキスト」の同じ流れを踏む。
+**セクション構成:** lec02 は「PART 1 複利 / ASIDE 0.1+0.2 浮動小数点 / PART 2 1次方程式 / PART 3 1次不等式 / PART 4 連立方程式 / PART 5 指数爆発 / SUMMARY / NEXT」。lec03 以降は **NEXT を廃止**し、最終 PART を「AI / データサイエンスのリッチなインタラクティブ」に充てている。各 PART は「身近なお題 → スライダー → 数式表示 → グラフ → 解釈テキスト」の同じ流れを踏む。
 
 **スクリプト構成:** ページ末尾の単一 `<script>` 内に、各 PART ごと独立した IIFE（`(() => { ... })();`）を並べる。グローバルに置くのは `fmtYen` / `fmtMan`（金額フォーマッタ）と Chart.js のデフォルト設定のみ。各 IIFE は自分の DOM ID を `getElementById` で掴み、`input` イベントで `update()` を呼ぶ ＋ 初期化時に一度 `update()` を呼んで描画する、というパターン。
 
@@ -53,4 +72,8 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 
 **スタイリング:** `<style>` 冒頭の `:root` に CSS 変数（カラーパレット `--blue/--ink/--surface*` 等、`--radius-*`、`--shadow-*`、`--font-jp/serif/mono`）を集約。新しい色や半径を導入する前に既存変数で表現できないか確認する。クラス命名は `.block` `.controls` `.control-row` `.stat` `.stat-row` 等の汎用パーツが PART 間で共有されているため、見た目を変える時は全 PART への波及を意識する。
 
-**Chart.js の使い方:** すべて `type: 'line'`、`responsive: true, maintainAspectRatio: false`（高さは親 div の CSS で決める）、ツールチップは濃灰背景（`#1F2937`）、Y 軸 ticks は `'¥' + fmtYen.format(v)`。PART 3 / PART 4 はカスタムプラグイン（`currentMarker`、`intersectionPlugin`）でグラフ上に補助線・交点マーカーを直接描画している。
+**Chart.js の使い方:** 折れ線は `type: 'line'`、座標プロット系は `type: 'scatter'`、`responsive: true`。高さは原則 `maintainAspectRatio: false` + 親 div の CSS で決めるが、**円・領域など縦横比が崩れると意味が変わるグラフは `maintainAspectRatio: true, aspectRatio: 1`** で canvas を正方形に固定する（lec03 PART 3 / PART 4）。ツールチップは濃灰背景（`#1F2937`）、Y 軸 ticks は金額なら `'¥' + fmtYen.format(v)`。PART 3 / PART 4 はカスタムプラグイン（`currentMarker`、`intersectionPlugin`、`labelPlugin`、`regionPlugin` 等）でグラフ上に補助線・交点マーカー・領域・ラベルを直接描画している。
+
+**円を描くときの注意（lec03 で確立）:** scatter の dataset を 2 つ（上半・下半）に分けて `fill: '+1'` でつなぐと、x の連続性が崩れて塗りつぶしが暴れる。**1 周分の閉じた点列**（`{x: A + R*cos(t), y: B + R*sin(t)}` を `t` を 0 → 2π で N+1 点）を 1 dataset に入れて `showLine: true, fill: true` で描く。
+
+**チェックボックスでの「領域モード」パターン（lec03 PART 1-2）:** スライダーで動かす自分の点に対し、「許容範囲」（軸並行の薄い長方形 / 円）をオプションで重ねるチェックボックス UI が、座標 → 領域 の橋渡しに有効。カスタムプラグインで `beforeDatasetsDraw` 時に半透明矩形を描画。

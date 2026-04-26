@@ -149,11 +149,13 @@ PART N に属する DOM 要素はすべて `cN-*` プレフィックス:
 
 ```js
 new Chart(ctx, {
-  type: 'line',
+  type: 'line',                  // 折れ線
+  // type: 'scatter',            // 座標プロット（lec03 の PART 1, 2, 4, 5）
   data: { /* ... */ },
   options: {
     responsive: true,
-    maintainAspectRatio: false,  // 高さは親 div の CSS で
+    maintainAspectRatio: false,  // 高さは親 div の CSS で（折れ線・棒・通常の散布図）
+    // maintainAspectRatio: true, aspectRatio: 1,  // 円・領域は正方形（後述）
     plugins: {
       tooltip: {
         backgroundColor: '#1F2937',
@@ -172,9 +174,74 @@ new Chart(ctx, {
 });
 ```
 
-PART 3 / 4 のように補助線・交点マーカーを描きたい時は **カスタムプラグイン** を定義 (`currentMarker`, `intersectionPlugin` を参考)。
+PART 3 / 4 のように補助線・交点マーカーを描きたい時は **カスタムプラグイン** を定義 (`currentMarker`, `intersectionPlugin`, `labelPlugin`, `regionPlugin` 等を参考)。
+
+### 円・領域は aspectRatio: 1 で正方形に固定
+
+円や領域判定など、**縦横比が崩れると意味が変わる**グラフは canvas を正方形に固定する:
+
+```js
+options: {
+  responsive: true,
+  maintainAspectRatio: true,
+  aspectRatio: 1,
+  scales: {
+    x: { min: -10, max: 10 },
+    y: { min: -10, max: 10 },  // x と y の数値範囲も等しく
+  }
+}
+```
+
+加えて HTML 側の `.chart-wrap` を `max-width: 520px; margin: 0 auto;` 等で幅を絞ると、画面が広いときも楕円化しない。
+
+### 円を描くときは「閉じた点列」で 1 dataset
+
+scatter の dataset を 2 つ（上半・下半）に分けて `fill: '+1'` でつなぐと、塗りつぶしが暴れる（lec03 で発覚）。**円周を 1 周分の閉じた点列**として 1 dataset に入れて描く:
+
+```js
+const ring = [];
+for (let i = 0; i <= N; i++) {
+  const t = (i / N) * 2 * Math.PI;
+  ring.push({ x: A + R * Math.cos(t), y: B + R * Math.sin(t) });
+}
+// dataset: { data: ring, showLine: true, fill: true, ... }
+```
+
+### 領域モード（チェックボックスでオン/オフ）
+
+スライダーで動かす自分の点に「許容範囲」を重ねるオプションが、座標 → 領域 の橋渡しに有効（lec03 PART 1-2）。実装は `beforeDatasetsDraw` のカスタムプラグインで半透明矩形/円を描画:
+
+```js
+const regionPlugin = {
+  id: 'cNRegion',
+  beforeDatasetsDraw(chart) {
+    if (!regionToggle.checked) return;
+    // 自分の点 (X, Y) を中心に ±DX, ±DY の長方形を半透明で塗る
+    const left = chart.scales.x.getPixelForValue(X - DX);
+    const right = chart.scales.x.getPixelForValue(X + DX);
+    const top = chart.scales.y.getPixelForValue(Y + DY);
+    const bottom = chart.scales.y.getPixelForValue(Y - DY);
+    chart.ctx.fillStyle = 'rgba(225, 29, 72, 0.10)';
+    chart.ctx.fillRect(left, top, right - left, bottom - top);
+  }
+};
+```
 
 ---
+
+## HTML 内の Excel-box は Google スプレッドシート前提で書く
+
+各 PART の `<div class="excel-box">` は「**スプレッドシートで再現してみる**」と表示し、Google スプレッドシートの UI 用語で書く（Excel ではない）:
+
+| ✗ Excel 寄り | ✓ Sheets 寄り |
+|---|---|
+| 散布図（直線あり） | 散布図 → ダブルクリック → [カスタマイズ] → [系列] → 「データポイントを線で結ぶ」にチェック |
+| グラフ右クリック → データの選択 → 系列追加 | グラフをダブルクリック → [設定] → 「系列を追加」 |
+| グラフの軸の最小最大を固定 | ダブルクリック → [カスタマイズ] → [横軸/縦軸] → 最小値・最大値 |
+| セル右下の■をドラッグ | セル右下の **フィルハンドル**（青い四角）をドラッグ |
+| フィルター | メニュー [データ] → [フィルタを作成] |
+
+**散布図で「座標」を再現するときは、選択範囲を数値列だけ**にする（名前列を含めると X 軸が文字列カテゴリになって座標として機能しない）。
 
 ## 共通汎用クラス (PART 間で共有)
 
@@ -188,7 +255,9 @@ PART 3 / 4 のように補助線・交点マーカーを描きたい時は **カ
 
 ---
 
-## 第2回 (lec02) の PART 構成 — 参考
+## 過去の回の構成 — 参考
+
+### lec02 (24 スライド)
 
 ```
 PART 1   複利            お題: 100万円を r% で n 年運用
@@ -201,4 +270,51 @@ SUMMARY  まとめ
 NEXT     次回予告
 ```
 
-新しい回も「**身近なお題 → 抽象化 → グラフで体感 → 解釈**」のループを 4〜5 回繰り返す構造に揃えること。
+### lec03 (23 スライド) — 推奨パターン
+
+```
+イントロ 3 枚    表紙 / 全体像 / ティーザー
+PART 1-1         身近な現象（地図のお店）で「座標」を導入
+PART 1-2         同じ発想で金融題材（リスクリターン散布図）
+PART 2           概念の主軸（距離 = 三平方の定理）
+PART 3           発展（円 = 等距離の点）
+PART 4           発展（領域 = 不等号で内・外）
+PART 5 GATE      AI/データサイエンスへの締め PART の扉
+PART 5-A         シンプル例（映画レコメンド散布図）
+PART 5-B         リッチ例 1（Spotify 風カードグリッド + リアルタイム並び替え）
+PART 5-C         リッチ例 2（SVG パラメトリック顔の認証シミュレーション）
+SUMMARY          3 つの統一原理で締め
+                 ＊ NEXT は廃止
+```
+
+### 新しい回を作るときの骨格
+
+- **「身近な現象 → 数式 → 金融への展開 → AI/データサイエンスへの締め」** が骨格
+- **メインの PART を 1-1 / 1-2 に分割**（身近 → 金融）するパターンが効く
+- **最後の PART は AI で締める** — 距離 / 確率 / 関数など概念の汎用性を、リッチなインタラクティブ（カードグリッド、SVG パラメトリック描画）2-3 枚で示す
+- 各 PART は「**身近なお題 → 抽象化 → グラフで体感 → 解釈**」のループ
+- **NEXT スライドは作らない**。SUMMARY で締める
+
+## リッチなインタラクティブのパターン (lec03 で確立)
+
+最後の PART で「AI/DS への接続」を見せるとき、座標散布図だけでは弱いので、以下のパターンを使い分け。
+
+### カードグリッド + リアルタイム並び替え (Spotify 風)
+
+- N 個のアイテム（曲、映画、商品）を CSS Grid で並べる
+- 各アイテムに複数の特徴量を持たせ、ユーザーの 2-3 軸スライダーから距離を計算
+- 距離が近い順に CSS の `order` で並び替え
+- 上位 3 件にバッジ・縁取り・グロー
+- ダーク背景 + ゴールド系アクセントで「メディアアプリらしさ」を出す
+
+### SVG パラメトリック描画 (顔認証風)
+
+- 4-5 個のスライダーで特徴量を直接動かす
+- スライダー値に応じて SVG（楕円、円、パス）を再描画
+- 登録済み N 人と多次元距離を計算 → 上位 3 件をハイライト
+- しきい値で「認証 OK / NG」を判定する UI を添える
+
+### 共通設計
+
+- 通常の Chart.js グラフ（散布図）と並べて使うことで、「同じ式でも見せ方が変わると印象が変わる」を体感させる
+- 「**実物の◯◯（Spotify, 顔認証）は数十〜数百次元を使うが、距離の式は今日と同じ**」という締めの一文を必ず入れる
