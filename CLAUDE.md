@@ -4,15 +4,29 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 
 ## プロジェクト概要
 
-平成国際大学 情報デザイン学部「情報数理入門 第2回」の講義スライド。方程式・不等式・連立方程式・指数関数を、スライダー操作 + Chart.js のグラフでインタラクティブに見せる、単一ページの教材。本文・UI 文言はすべて日本語。
+平成国際大学 情報デザイン学部「情報数理入門」の講義スライド集（monorepo）。各回は方程式・不等式・連立方程式・指数関数などを、スライダー操作 + Chart.js のグラフでインタラクティブに見せる、単一ページの教材。本文・UI 文言はすべて日本語。
+
+## ディレクトリ構成
+
+```
+/                     ルート目次ページ（各回へのリンク）
+  index.html
+  lec02/              第2回 — 式で世界を動かす
+    index.html
+    情報数理入門_第2回.pdf
+    情報数理入門_第2回.xlsx
+  lecNN/              （今後の回。同じ構造で追加）
+```
+
+各回は完全に独立した `lecNN/index.html` 1 枚で完結する（共通モジュールは持たない）。新しい回を作る時は既存の `lec02/index.html` をコピーして開始するのが最短。ルートの `index.html` は単なる目次なので、回を追加したら `.lec-list` にカードを 1 つ足す。
 
 ## ビルドと実行
 
-ビルド工程・依存関係マネージャ・テストランナーは無い。`index.html` をブラウザで直接開けば動作する（macOS なら `open index.html`）。Chart.js は CDN（`cdn.jsdelivr.net/npm/chart.js@4.4.1`）から読み込み、Google Fonts も同様に外部読み込み。オフラインで開いた場合はグラフとフォントが効かない点に注意。
+ビルド工程・依存関係マネージャ・テストランナーは無い。`index.html`（目次）または `lecNN/index.html`（各回）をブラウザで直接開けば動作する（macOS なら `open index.html`）。Chart.js は CDN（`cdn.jsdelivr.net/npm/chart.js@4.4.1`）から読み込み、Google Fonts も同様に外部読み込み。オフラインで開いた場合はグラフとフォントが効かない点に注意。
 
-## アーキテクチャ
+## アーキテクチャ（各回の `lecNN/index.html`）
 
-ファイルは `index.html` 1 枚に HTML / CSS / JS をすべて埋め込む構成。`README.md` は1行のタイトルのみ。
+ファイルは `lecNN/index.html` 1 枚に HTML / CSS / JS をすべて埋め込む構成。
 
 **レイアウト:** `.shell` グリッドが `aside.sidebar`（左固定ナビ）と `main.main`（本編）の2カラム構成を作る。サイドバーのアンカーリンクは `#part1`〜`#part5` 等のセクション ID にスクロール。`#overview` の `.tocbar` も同じアンカー集合を指す。
 
