@@ -11,6 +11,7 @@ description: 「情報数理入門」の新しい回 (lecNN) を段階的に作�
 - **`lec-review-slide`** — 冒頭 slide-2「これまでの振り返り」 の生成
 - **`lec-voice-audit`** — HTML 完成後の voice 自己審査 (AI 臭・大主語+抽象動詞・二重修飾の検出)
 - **`lec-content-check`** — HTML 完成後の内容正確性チェック (数値・概念・SUMMARY パラメータ漏れ)
+- **`miki-guide`** — **みきコン ガイドツアーを標準搭載**(全回必須)。進行役 NPC が台本で資料を案内し、解説中の object をスポットライト。canonical = lec06、engine ブロックを貼って TOUR を著述
 - (補助) `examplus` — インタラクティブな事例追加
 - (補助) `brushup` / `visual` — リッチデザインへのブラッシュアップ
 
@@ -101,8 +102,9 @@ description: 「情報数理入門」の新しい回 (lecNN) を段階的に作�
 3. **`lec-review-slide` skill を呼び出して slide-2「これまでの振り返り」 を構築** — 前回までに学んだ 3 種類のグラフ/概念をカード化
 4. **`lec-voice-audit` skill を呼び出して voice 自己審査** — AI 臭・大主語+抽象動詞・スローガン調・二重修飾を検出 → 検出があれば修正
 5. **`lec-content-check` skill を呼び出して内容正確性チェック** — 数値・概念・SUMMARY パラメータ漏れを検出 → 検出があれば修正
-6. ブラウザで `lec0N/index.html` を開いて動作確認するようユーザーに案内
-7. **ここで一度停止** — 「HTML はこれで OK か / 修正点はあるか」をユーザーに聞く
+6. **`miki-guide` skill を呼び出して みきコン ガイドツアーを搭載** — `miki-guide/engine/miki-guide.block.html` を `</body>` 直前に貼り、`TOUR` 配列をその回の内容に著述。**headless Chrome 実機検証**(`miki-guide/SKILL.md` §5)まで通す。みきコンの台詞も voice ルールに従う
+7. ブラウザで `lec0N/index.html` を開いて動作確認するようユーザーに案内
+8. **ここで一度停止** — 「HTML はこれで OK か / 修正点はあるか」をユーザーに聞く
 
 **承認が出るまで Phase 2 には進まない**。修正があれば反映してから再度確認。
 
@@ -117,6 +119,8 @@ description: 「情報数理入門」の新しい回 (lecNN) を段階的に作�
     ↓ (検出があれば修正)
 [lec-content-check] ← 全 HTML の内容チェック
     ↓ (検出があれば修正)
+[miki-guide]        ← みきコン ガイドツアー搭載(engine 貼付 + TOUR 著述 + 実機検証)
+    ↓
 [ユーザーに HTML 確認を依頼]
 ```
 
@@ -211,3 +215,4 @@ description: 「情報数理入門」の新しい回 (lecNN) を段階的に作�
 - `../lec-review-slide/SKILL.md` — 冒頭振り返りスライド生成 (Phase 1 内で呼び出す)
 - `../lec-voice-audit/SKILL.md` — voice 自己審査 (Phase 1 完了直後に必ず呼び出す)
 - `../lec-content-check/SKILL.md` — 内容正確性チェック (Phase 1 完了直後に必ず呼び出す)
+- `../miki-guide/SKILL.md` — みきコン ガイドツアー標準搭載 (Phase 1 内・content-check の後に必ず呼び出す。engine drop-in + TOUR 著述 + 実機検証)

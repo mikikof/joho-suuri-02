@@ -52,8 +52,18 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 | `lec-review-slide` | 冒頭 slide-2「これまでの振り返り」 を生成 | Phase 1 HTML 構築中 |
 | `lec-voice-audit` | voice 自己審査 (AI 臭の検出) | Phase 1 完了直後・ユーザー確認の前 |
 | `lec-content-check` | 内容正確性チェック (数値・概念) | Phase 1 完了直後・ユーザー確認の前 |
+| **`miki-guide`** | **みきコン ガイドツアー標準搭載**(進行役 NPC + スポットライト案内)。canonical=lec06、engine ブロック貼付 + TOUR 著述 + 実機検証 | **Phase 1・content-check の後に必ず**(全回必須) |
 | `examplus` | インタラクティブな事例追加 | 必要に応じて |
 | `brushup` / `visual` | リッチデザイン / ビジュアル一点突破 | 必要に応じて |
+
+## みきコン ガイドツアー (lec06 で確立・全回標準搭載)
+
+各回の web スライドには **進行役 NPC「みきコン」のガイドツアー**を標準で載せる。みきコンが台本(`TOUR`)に沿って資料を案内し、解説中の object を**スポットライト+リング**で照らす。**canonical 実装 = `lec06/index.html`**、drop-in = `.claude/skills/miki-guide/engine/miki-guide.block.html`。
+
+- **実装方式**: engine ブロックを `</body>` 直前に貼り、**`TOUR` 配列だけ**をその回の内容へ差し替える(デッキ非依存。`.slide.active` の class 変化を MutationObserver で監視するため `lecNN-slide-change` のイベント名に依存しない)。CSS/markup/コントローラは不可触。
+- **機能**: 要所 2〜3 object/枚(~50 step)/ 進行=▶・Space・クリック / 戻る=◀ もどる・Backspace / **2クリックでページ移動**(予告→移動) / 操作部品ステップは「動かしてみて」待機+操作部品と出力を union スポット / **P キーで強調文字を波打ち** / アバター(口=ε)ドラッグで移動・タップで折りたたみ/展開。
+- **必須**: 搭載後に **headless Chrome 実機検証**(`miki-guide/SKILL.md` §5)。みきコンの台詞も voice ルール(下記)に従う。
+- 詳細仕様・ステップ schema・ハマりどころは **`.claude/skills/miki-guide/SKILL.md`** を参照。
 
 ## スライド構成の方針 (lec03 で確立 + lec05 で拡張)
 

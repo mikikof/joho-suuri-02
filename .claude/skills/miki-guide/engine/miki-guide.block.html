@@ -1,0 +1,636 @@
+<!-- =================================================================== -->
+<!-- みきコン ガイドツアー エンジン (drop-in block)  ※ canonical = lec06   -->
+<!-- 使い方: この丸ごとを各回の index.html の </body> 直前に貼る。           -->
+<!--   1) `const TOUR = [ ... ];` 配列だけを その回の内容に差し替える。       -->
+<!--   2) デザイントークン（--action/--anchor/--gold 等）は lec05 テンプレ共通なので通常そのまま。 -->
+<!--   3) JS の編集は TOUR のみ。コントローラ／スタイル／markup は触らない。     -->
+<!-- 依存(デッキ契約): .slide-deck 内に id=slide-N data-title の .slide があり、 -->
+<!--   遷移時に .slide へ .active が付け替わること（lec05 テンプレ標準）。       -->
+<!--   ＝ lecNN-slide-change イベント名には依存しない（MutationObserver で .active を監視）。 -->
+<!-- =================================================================== -->
+
+<!-- ============================================================= -->
+<!-- みきコン ガイド（説明アドバイザー + スポットライト・ツアー）   -->
+<!-- 既存デッキ非侵襲: location.hash で遷移し .slide.active の class 変化を MutationObserver で観測（デッキ非依存） -->
+<!-- ============================================================= -->
+<style>
+  /* スポットライト: 周囲を薄暗く（box-shadow 9999px）+ 対象に光るリング(::after) */
+  #tour-spot { position: fixed; left: 0; top: 0; width: 0; height: 0; z-index: 140;
+    border-radius: 12px; pointer-events: none; opacity: 0;
+    box-shadow: 0 0 0 9999px rgba(18, 46, 85, 0.52);
+    transition: left .34s cubic-bezier(.4,0,.2,1), top .34s cubic-bezier(.4,0,.2,1),
+                width .34s cubic-bezier(.4,0,.2,1), height .34s cubic-bezier(.4,0,.2,1),
+                opacity .28s ease; }
+  #tour-spot.on { opacity: 1; }
+  #tour-spot::after { content: ""; position: absolute; inset: -4px; border-radius: 15px;
+    border: 3px solid var(--action, #4A78C8);
+    box-shadow: 0 0 0 2px rgba(255,255,255,.85), 0 0 18px 4px rgba(74,120,200,.55); }
+  #tour-spot.on::after { animation: spotPulse 1.9s ease-in-out infinite; }
+  @keyframes spotPulse {
+    0%,100% { box-shadow: 0 0 0 2px rgba(255,255,255,.85), 0 0 14px 3px rgba(74,120,200,.45); }
+    50%     { box-shadow: 0 0 0 2px rgba(255,255,255,.9), 0 0 26px 8px rgba(212,168,82,.55); border-color: var(--gold, #D4A852); }
+  }
+
+
+  /* みきコン ウィンドウ */
+  #mikibar { position: fixed; left: 50%; bottom: 22px; transform: translateX(-50%);
+    width: min(560px, 92vw); min-width: 300px; max-width: 96vw; min-height: 140px; max-height: 76vh;
+    display: flex; flex-direction: column; background: var(--bg-card, #fff);
+    border: 2.5px solid var(--anchor, #122E55); border-radius: 16px 7px 16px 7px/7px 16px 7px 16px;
+    box-shadow: 0 10px 34px rgba(18,46,85,.26); z-index: 150; overflow: visible;
+    font-family: var(--font-jp, sans-serif); touch-action: none; }
+  #mikibar[hidden] { display: none; }
+  #mikibar.dragging { box-shadow: 0 16px 44px rgba(18,46,85,.32); }
+  #mikibar .mb-titlebar { display: flex; align-items: center; gap: 8px; padding: 7px 9px 7px 13px;
+    background: linear-gradient(180deg, var(--anchor-mid, #2A4A78) 0%, var(--anchor, #122E55) 100%);
+    border-radius: 13px 4px 0 0/4px 13px 0 0; color: #fff; cursor: grab; flex: 0 0 auto; }
+  #mikibar.dragging .mb-titlebar { cursor: grabbing; }
+  #mikibar .mb-grip { font-family: monospace; font-size: 13px; color: rgba(255,255,255,.5); }
+  #mikibar .mb-name { flex: 1; font-size: 12.5px; font-weight: 700; color: #fff; display: flex; align-items: center; gap: 9px; letter-spacing: .03em; }
+  #mikibar .mb-tag { background: var(--gold, #D4A852); color: #4a3608; border-radius: 5px 4px 6px 4px/4px 6px 4px 5px;
+    padding: 1px 9px; font-size: 10.5px; font-weight: 700; letter-spacing: .02em; }
+  #mikibar .mb-tag:empty { display: none; }
+  #mikibar .mb-titlebar button { border: 1.5px solid rgba(255,255,255,.45); background: rgba(255,255,255,.13);
+    color: #fff; cursor: pointer; font-family: var(--font-jp, sans-serif); line-height: 1; flex: 0 0 auto; border-radius: 7px; transition: background .12s; }
+  #mikibar .mb-titlebar button:hover { background: rgba(255,255,255,.28); }
+  #mikibar .mb-auto { font-size: 10.5px; font-weight: 700; padding: 4px 9px; }
+  #mikibar .mb-auto.on { background: var(--gold, #D4A852); color: #4a3608; border-color: var(--gold-deep, #A37A1F); }
+  #mikibar #mbHide { height: 22px; font-size: 10.5px; padding: 0 9px; }
+  #mikibar .mb-body { flex: 1 1 auto; display: flex; align-items: stretch; gap: 13px; padding: 13px 15px 8px; min-height: 0; }
+  #mikibar .mb-ava { width: 50px; height: 50px; border-radius: 13px; background: var(--action-pale, #DAE6F5);
+    color: var(--action-deep, #2E5894); display: grid; place-items: center; flex: 0 0 auto; align-self: flex-start;
+    cursor: pointer; animation: mbSway 3s ease-in-out infinite; }
+  #mikibar.dragging .mb-ava { animation: none; }
+  #mikibar .mb-ava svg { width: 34px; height: 34px; }
+  @keyframes mbSway { 0%,100% { transform: translateY(0) rotate(-1.5deg); } 50% { transform: translateY(-3px) rotate(1.5deg); } }
+  #mikibar .mb-screen { flex: 1; min-width: 0; position: relative; overflow-y: auto;
+    background-color: var(--paper, #F4F8FC);
+    background-image: radial-gradient(circle, var(--hairline, #D8E2EE) 1px, transparent 1.1px); background-size: 18px 18px;
+    border: 1.5px solid var(--hairline, #D8E2EE); border-radius: 11px 4px 12px 5px/5px 12px 4px 11px; padding: 10px 26px 10px 14px; }
+  #mikibar .mb-say { font-size: 15px; font-weight: 500; line-height: 1.7; color: var(--ink, #1A2B47); }
+  #mikibar .mb-say b { color: var(--ng, #C84A60); font-weight: 700; }
+  #mikibar .mb-cont { position: absolute; right: 8px; bottom: 4px; color: var(--action, #4A78C8); font-size: 14px; display: none; }
+  #mikibar.more .mb-cont { display: block; animation: mbBob .9s ease-in-out infinite; }
+  @keyframes mbBob { 0%,100% { transform: translateY(0); opacity: .55; } 50% { transform: translateY(2px); opacity: 1; } }
+  #mikibar .mb-screen::before { content: ""; position: absolute; left: -9px; top: 16px; width: 0; height: 0; border: 7px solid transparent; border-right-color: var(--hairline, #D8E2EE); }
+  #mikibar .mb-screen::after { content: ""; position: absolute; left: -6px; top: 17px; width: 0; height: 0; border: 6px solid transparent; border-right-color: var(--paper, #F4F8FC); }
+  #mikibar .mb-foot { flex: 0 0 auto; display: flex; align-items: center; gap: 10px; padding: 4px 15px 12px; }
+  #mikibar .mb-step { height: 28px; padding: 0 10px; border: 1.5px solid var(--hairline-2, #B8C5D7); background: #fff;
+    color: var(--action-deep, #2E5894); border-radius: 8px; cursor: pointer; font-size: 11px; font-weight: 700; line-height: 1; white-space: nowrap; transition: background .12s; }
+  #mikibar .mb-step:hover:not(:disabled) { background: var(--action-pale, #DAE6F5); }
+  #mikibar .mb-step:disabled { opacity: .3; cursor: not-allowed; }
+  #mikibar .mb-prog { font-family: var(--font-mono, monospace); font-size: 11px; color: var(--ink-3, #75839B); flex: 0 0 auto; }
+  #mikibar .mb-hint { flex: 1 1 auto; min-width: 0; font-size: 10.5px; font-weight: 600; color: var(--ink-3, #75839B);
+    white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+  #mikibar .mb-hint.np { color: var(--gold-deep, #A37A1F); }
+  #mikibar .mb-next { margin-left: auto; flex: 0 0 auto; font-size: 12px; font-weight: 700; color: #fff;
+    background: var(--action-deep, #2E5894); border: 2px solid var(--anchor, #122E55);
+    border-radius: 40px 6px 40px 6px/6px 40px 6px 40px; padding: 6px 16px; cursor: pointer; white-space: nowrap;
+    box-shadow: 0 3px 0 rgba(18,46,85,.18); transition: transform .12s, background .15s, border-color .15s; }
+  #mikibar .mb-next:hover { transform: translate(-1px,-1px); }
+  /* 次に進むとページが変わる → 金色で強調 */
+  #mikibar .mb-next.np { background: var(--gold, #D4A852); border-color: var(--gold-deep, #A37A1F); color: #4a3608;
+    box-shadow: 0 3px 0 rgba(163,122,31,.3); animation: npPulse 1.7s ease-in-out infinite; }
+  @keyframes npPulse { 0%,100% { box-shadow: 0 3px 0 rgba(163,122,31,.3); } 50% { box-shadow: 0 3px 0 rgba(163,122,31,.3), 0 0 12px 2px rgba(212,168,82,.6); } }
+  @media (prefers-reduced-motion: reduce) { #mikibar .mb-next.np { animation: none; } }
+  /* 2クリック送り: 1クリック目で「armed」= 強いアクションで「もう一度で次ページ」を予告 */
+  #mikibar .mb-next.armed { background: var(--gold, #D4A852); border-color: var(--gold-deep, #A37A1F); color: #4a3608;
+    animation: armedPulse .55s ease-in-out infinite; }
+  @keyframes armedPulse {
+    0%,100% { transform: scale(1); box-shadow: 0 3px 0 rgba(163,122,31,.35), 0 0 0 0 rgba(212,168,82,.5); }
+    50%     { transform: scale(1.07); box-shadow: 0 3px 0 rgba(163,122,31,.35), 0 0 16px 5px rgba(212,168,82,.75); }
+  }
+  @media (prefers-reduced-motion: reduce) { #mikibar .mb-next.armed { animation: none; outline: 2px dashed var(--gold-deep, #A37A1F); } }
+  #mikibar .mb-rz { position: absolute; width: 16px; height: 16px; z-index: 2; }
+  #mikibar .mb-rz.nw { left: -5px; top: -5px; cursor: nwse-resize; }
+  #mikibar .mb-rz.ne { right: -5px; top: -5px; cursor: nesw-resize; }
+  #mikibar .mb-rz.sw { left: -5px; bottom: -5px; cursor: nesw-resize; }
+  #mikibar .mb-rz.se { right: -5px; bottom: -5px; cursor: nwse-resize; }
+  #mikibar .mb-rz.se::after { content: ""; position: absolute; right: 4px; bottom: 4px; width: 8px; height: 8px;
+    border-right: 2.5px solid var(--hairline-2, #B8C5D7); border-bottom: 2.5px solid var(--hairline-2, #B8C5D7); border-radius: 0 0 3px 0; }
+  /* 最小化（顔だけ） */
+  #mikibar.collapsed { min-height: 0; min-width: 0; width: auto !important; max-width: none; height: auto !important;
+    padding: 0; border-radius: 14px 6px 14px 6px/6px 14px 6px 14px; }
+  #mikibar.collapsed .mb-titlebar, #mikibar.collapsed .mb-screen, #mikibar.collapsed .mb-foot, #mikibar.collapsed .mb-rz { display: none; }
+  #mikibar.collapsed .mb-body { padding: 7px; min-height: 0; }
+  #mikibar.collapsed { cursor: pointer; right: auto !important; box-shadow: 0 6px 18px rgba(18,46,85,.22); }
+  #mikibar.collapsed .mb-ava { position: relative; width: 48px; height: 48px; cursor: pointer; animation: mbInvite 2.4s ease-in-out infinite; }
+  #mikibar.collapsed .mb-ava::after { content: "クリックで解説 ▸"; position: absolute; left: 50%; bottom: -16px; transform: translateX(-50%);
+    font-size: 8.5px; font-weight: 700; color: var(--action-deep, #2E5894); white-space: nowrap; background: #fff; padding: 1px 6px;
+    border: 1px solid var(--action-pale2, #B8CDE6); border-radius: 7px; box-shadow: 0 2px 5px rgba(18,46,85,.12); }
+  @keyframes mbInvite { 0%,100% { transform: translateY(0) scale(1); } 50% { transform: translateY(-3px) scale(1.05); } }
+  @media (prefers-reduced-motion: reduce) { #mikibar.collapsed .mb-ava { animation: none; } }
+
+  /* ガイド中はスライド下端に余白（ウィンドウが内容を隠さない） */
+  body.miki-on .slide-inner, body.miki-on .gate-inner { padding-bottom: 170px; }
+
+  @media (prefers-reduced-motion: reduce) {
+    #mikibar .mb-ava { animation: none; }
+    #mikibar.more .mb-cont { animation: none; }
+    #tour-spot.on::after { animation: none; }
+    #tour-spot { transition: opacity .2s ease; }
+  }
+  @media (max-width: 720px) {
+    #mikibar { left: 3vw; right: 3vw; width: auto; max-width: none; min-width: 0; transform: none; bottom: calc(16px + env(safe-area-inset-bottom,0px)); max-height: 46vh; }
+    #mikibar .mb-rz { display: none; }
+    #mikibar .mb-body { padding: 10px 12px 6px; gap: 10px; }
+    #mikibar .mb-ava { width: 42px; height: 42px; }
+    #mikibar .mb-ava svg { width: 28px; height: 28px; }
+    #mikibar .mb-say { font-size: 13px; line-height: 1.6; }
+    #mikibar .mb-name { font-size: 11px; }
+    body.miki-on .slide-inner, body.miki-on .gate-inner { padding-bottom: 240px; }
+  }
+
+  /* === P コマンド: 強調文字の波打ち（toshin v3 / lec10 charPop 準拠・3キーフレーム単一 ease-out）=== */
+  .pchar { display: inline-block; transform: translateZ(0); will-change: transform; backface-visibility: hidden; }
+  @keyframes lec06CharPop {
+    0%   { color: inherit; transform: translate3d(0,0,0) scale(1); text-shadow: 0 0 0 transparent; }
+    22%  { color: var(--action, #4A78C8); transform: translate3d(0,-0.22em,0) scale(1.5); text-shadow: 0 0.18em 0.7em color-mix(in srgb, var(--action, #4A78C8) 40%, transparent); }
+    100% { color: inherit; transform: translate3d(0,0,0) scale(1); text-shadow: 0 0 0 transparent; }
+  }
+  .pchar.popping { animation: lec06CharPop 1.05s cubic-bezier(0.22, 1, 0.36, 1); animation-fill-mode: both; }
+  @keyframes lec06CharPopStrong {
+    0%   { transform: translate3d(0,0,0) scale(1) rotate(0deg); text-shadow: 0 0 0 transparent; }
+    18%  { transform: translate3d(0,-0.5em,0) scale(1.9) rotate(-3deg); text-shadow: 0 0.3em 0.9em color-mix(in srgb, currentColor 55%, transparent), 0 0 1.4em color-mix(in srgb, currentColor 35%, transparent); }
+    100% { transform: translate3d(0,0,0) scale(1) rotate(0deg); text-shadow: 0 0 0 transparent; }
+  }
+  .pchar.popping-strong { animation: lec06CharPopStrong 1.35s cubic-bezier(0.22, 1, 0.36, 1); animation-fill-mode: both; }
+  @media (prefers-reduced-motion: reduce) { .pchar.popping, .pchar.popping-strong { animation: none; } }
+</style>
+
+<div id="tour-spot" aria-hidden="true"></div>
+
+<!-- 折りたたみ(collapsed)= アイコンのみの非表示状態が初期。アイコンを押すと解説モードへ展開 -->
+<div id="mikibar" class="collapsed" role="dialog" aria-label="みきコン 解説ガイド">
+  <div class="mb-titlebar">
+    <span class="mb-grip" aria-hidden="true">⠿</span>
+    <span class="mb-name">みきコン <span class="mb-tag" id="mbTag"></span></span>
+    <button class="mb-auto" id="mbAuto" type="button" title="自動再生 オン／オフ">▶ 自動</button>
+    <button class="mb-min" id="mbHide" type="button" title="しまう（アイコンだけ残す）" aria-label="しまう">▽ しまう</button>
+  </div>
+  <div class="mb-body">
+    <div class="mb-ava" id="mbAva" title="クリックで開く／閉じる">
+      <svg viewBox="0 0 48 48" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+        <rect x="8" y="12" width="32" height="24" rx="5"/>
+        <line x1="24" y1="7" x2="24" y2="12"/><circle cx="24" cy="5.5" r="2" fill="currentColor" stroke="none"/>
+        <circle cx="18" cy="22" r="2.2" fill="currentColor" stroke="none"/><circle cx="30" cy="22" r="2.2" fill="currentColor" stroke="none"/>
+        <path d="M25 25 q 4 1.6 0 3.1 q 4 1.6 0 3.1"/><line x1="16" y1="41" x2="32" y2="41"/>
+      </svg>
+    </div>
+    <div class="mb-screen">
+      <div class="mb-say" id="mbSay"></div>
+      <span class="mb-cont" aria-hidden="true">▾</span>
+    </div>
+  </div>
+  <div class="mb-foot">
+    <button class="mb-step" id="mbPrev" type="button" title="前の解説へもどる（Backspace）" aria-label="前へもどる">◀ もどる</button>
+    <span class="mb-prog" id="mbProg">1 / 1</span>
+    <span class="mb-hint" id="mbHint"></span>
+    <button class="mb-next" id="mbNext" type="button">▶ つづき</button>
+    <div class="mb-rz nw" data-c="nw"></div>
+    <div class="mb-rz ne" data-c="ne"></div>
+    <div class="mb-rz sw" data-c="sw"></div>
+    <div class="mb-rz se" data-c="se"></div>
+  </div>
+</div>
+
+<script>
+(function () {
+  // ===== ガイドツアー台本（slide番号 / 対象セレクタ / 章タグ / セリフ）=====
+  // 口調 = 大学講義の自然な口語（です・ます、皆さん、落ち着いた中立動詞）。say は文字列/配列両対応。
+  const TOUR = [
+    { s: 1,  sel: '.cover-sub', tag: 'はじめに', say: ['情報数理入門・第 6 回へようこそ。進行役の <b>みきコン</b> です。今日は私が、資料の中を一緒に歩いて回ります。', '今日の主役は <b>関数</b>です。「入力を入れると、出力が 1 つ決まる」── たったこれだけの約束で、世界のいろいろな現象を表せます。', '絶対値から始めて、階段になる関数、なめらかに曲がる関数、そして AI で使われる関数まで見ていきます。', 'いまお話ししている箇所は、こうして <b>明るく照らして</b>お見せします。スペースキー・画面クリック・▶ ボタンのどれでも先へ進めます。'] },
+    { s: 2,  sel: '.review-grid', tag: '振り返り', say: ['本題の前に、第 2 回から第 5 回の復習です。ここまでで <b>直線・放物線・指数・波(sin)</b>の 4 種類のグラフを扱いました。', '直線は比例の関係、放物線は投げ上げや「一番得な値段」、指数は複利のような掛け算の増え方、波は観覧車や音の振動 ── どれも身の回りの現象でした。', '大事なのは、この 4 つがどれも <b>「入力 → 出力」の関数</b>だということ。今日はその仲間をさらに増やしていきます。'] },
+    { s: 2,  sel: '.rev-card.rev-line', tag: 'ほかの例', say: ['各カードの <b>「ほかの例を見る」</b>を開くと、その回で扱った別の題材も並びます。', 'たとえば直線なら「家電を買うのに何時間バイトすればいいか」、放物線なら「税収が最大になる税率」。<b>同じ形の式が、まったく違う場面で顔を出す</b>のが面白いところです。'] },
+    { s: 3,  sel: '.callout.amber', tag: '位置づけ', say: ['今日扱う <b>絶対値・床関数・1/x・√x・ReLU・シグモイド</b> も、見た目はバラバラですが、すべて「入力 → 出力」という同じ約束に従います。', 'つまり今日の話は「新しい関数を 6 つ丸暗記する」のではありません。<b>同じ 1 つの考え方</b>を、6 通りの形で見ていくということです。'] },
+    { s: 3,  sel: '.tocbar', tag: '全体像', say: ['今日の道のりです。PART 1 で関数とは何かを確認し、PART 2 で中心テーマの絶対値、PART 3 で階段の関数、PART 4 でなめらかに曲がる関数、PART 5 で AI の関数へと進みます。', '各カードを押せば、その PART へ直接飛べます。途中で迷ったら、この全体像に戻ってきてください。'] },
+    { s: 4,  sel: '.gate-title', tag: 'PART 1', say: ['では PART 1。まずは <b>「関数とは何か」</b>を、はっきりさせます。', 'キーワードは一つだけ ── <b>入力に対して、出力がただ 1 つ決まる</b>。この一点を、これから手を動かして確かめます。'] },
+    { s: 5,  sel: '#c1-x, #c1-machine, #c1-stat-y', union: true, wait: true, tag: '入力 x', say: ['ここが入力 <b>x</b> のスライダー。動かすと、左の青い入力ボールと右の赤い出力ボールが同時に動きます。関数は、x を受け取って規則どおりに計算し、y を返す <b>「箱」</b>です。', 'スライダーを右に動かすほど x が大きくなり、それに応じて出力 y も変わります。', 'では <b>スライダーを左右に動かしてみてください</b>。下の「出力 y ＝ f(x)」の数字が、入力に合わせて変わるはずです。'] },
+    { s: 5,  sel: '#c1-stat-fn', tag: '関数を選ぶ', say: ['上のボタンで関数を切り替えると、いま選んでいる規則がここに表示されます。<b>ボタンを押してみてください</b>。', '同じ x = 4 を入れても、y = 2x なら 8、y = x² なら 16、y = x+3 なら 7。<b>規則が変われば、出力も変わる</b>。これが「関数を選ぶ」ということです。'] },
+    { s: 5,  sel: '.callout.amber', tag: '関数の本質', say: ['いちばん大切なのは <b>「同じ x を入れたら、必ず同じ y が返る」</b>こと。自販機で同じボタンを押すと、いつも同じ商品が出てくるのと同じです。', 'じゃんけんの「グー」のように、同じ手でも勝ったり負けたりするものは、関数とは言いません。<b>出力が 1 つに決まる</b> ── これが関数の約束です。'] },
+    { s: 6,  sel: '#c2-x, #c2-graph, #c2-stat-y', union: true, wait: true, tag: 'グラフ', say: ['同じ関数を、今度は <b>(x, f(x)) の点</b>として平面に並べてみます。関数ごとに決まった形が現れる ── これが <b>グラフ</b>です。', 'スライダーを動かすと、グラフ上の点が線に沿って動き、縦線(入力 x)と横線(出力 y)で対応が見えます。', '<b>スライダーを動かしてみてください</b>。点がグラフをなぞり、右下の「出力 f(x)」の値が一緒に変わります。関数ボタンを切り替えると、形そのものが変わります。'] },
+    { s: 6,  sel: '.callout', tag: '形の違い', say: ['直線・U 字(x²)・V 字(|x|)・なめらかな曲線(√x, 1/x, sin)・折れ線(ReLU)。', '形は全然違いますが、<b>どれも「1 つの入力に 1 つの出力」</b>を満たしています。だから、すべて関数の仲間なのです。'] },
+    { s: 7,  sel: '#c3-x, #c3-yes', union: true, wait: true, tag: '○ 関数', say: ['では「関数かどうか」をどう見分けるか。左は y = x²。上の <b>縦線の位置 x</b> のスライダーを動かすと、青い縦線が左右に動きます。', '<b>スライダーを動かしてみてください</b>。縦線をどこに置いても、グラフとの交点はいつも <b>1 個</b>。だから関数です。'] },
+    { s: 7,  sel: '#c3-x, #c3-no', union: true, tag: '✗ 関数でない', say: ['同じ縦線を、右の y² = x にも引いてみます。', 'こちらは縦線が <b>2 個</b>の点で交わる場所があります。たとえば x = 4 では y が +2 でも −2 でもよい ── <b>出力が 1 つに決まりません</b>。これでは自販機のボタンになりませんね。'] },
+    { s: 7,  sel: '.callout.rose', tag: '見分け方', say: ['まとめると ── 縦線がどこでも 1 点なら関数、2 点以上で交わる場所があれば関数ではない。これが <b>縦線テスト</b>です。', 'グラフさえ描ければ、目で見て関数かどうかを判定できる ── という、とても便利な方法です。'] },
+    { s: 8,  sel: '.gate-title', tag: 'PART 2', say: ['ここからが今日の中心、<b>絶対値関数</b>です。', '|x| は「符号を外して、大きさだけを残す」関数。これを使うと、予測の <b>「ズレ」</b>を一つの数で測れるようになります。'] },
+    { s: 9,  sel: '.story-hero', tag: '距離', say: ['絶対値とは何か。|-3| も |+3| も、答えはどちらも <b>3</b> です。', 'プラスかマイナスかという <b>符号を取り除いて、ゼロからの距離だけ</b>を残す ── それが絶対値です。', '数直線の上で「ゼロから何歩離れているか」と考えると、ぐっと分かりやすくなります。'] },
+    { s: 9,  sel: '#cAbs-line, #cAbs-graph, #cAbs-stat-abs', union: true, wait: true, tag: '動かす', say: ['実際に数直線の点を <b>ドラッグ</b>してみてください(スライダーでも動きます)。点が右でも左でも、右の「ゼロからの距離 |x|」の数字が変わります。', '右上のグラフは <b>V 字</b>。マイナス側の入力も、ぜんぶプラスに「折り返して」返ってくる ── これが絶対値のグラフの特徴です。', '<b>点を 0 の左右に動かして</b>みてください。距離はどちらに動かしても正の値で返り、V の谷底はちょうど原点 (0, 0) になります。'] },
+    { s: 9,  sel: '.callout.amber', tag: '定義', say: ['式で書くと、x ≥ 0 のときは x、x < 0 のときは −x。<b>場合分け</b>になります。', 'でもグラフにすると <b>1 本の V 字</b>。式は 2 通りでも、関数としては 1 つの折れ線、というわけです。'] },
+    { s: 10, sel: '.controls', tag: '3 つの値', say: ['絶対値の V 字は、3 つのつまみで自由に動かせます。<b>傾き a・横移動 b・縦移動 c</b> です。', 'a は V の鋭さ、b は頂点の左右の位置、c は頂点の上下の位置を決めます。'] },
+    { s: 10, sel: '.controls, #c4-graph, #c4-stat-vertex', union: true, wait: true, tag: '頂点', say: ['では <b>3 つのスライダーを動かして</b>みてください。', '<b>b を変えると頂点が左右に</b>、<b>c を変えると頂点が上下に</b>動き、下の「頂点(谷底)の位置」がそれに合わせて変わります。', 'a を大きくすると V は鋭く尖り、1 より小さくすると大きく開きます。頂点の左側は傾き −a、右側は +a ── 符号が逆の直線が、頂点でつながっているわけです。'] },
+    { s: 11, sel: '#c5-a, #c5-mae, #c5-mae-val', union: true, wait: true, tag: 'ズレの平均', say: ['ここで絶対値が活躍します。6 人分の身長・体重データに、1 本の直線(予測モデル)を当てはめます。各点と直線の <b>縦のズレ</b>を絶対値で測り、平均したものが <b>MAE(平均絶対誤差)</b>です。', '<b>傾き a と切片 b のスライダーを動かして</b>みてください。直線が動き、左下の MAE の数値が変わります。', 'MAE が小さいほど、予測がよく当たっている状態。どこで一番小さくなるか、探してみてください。'] },
+    { s: 11, sel: '#c5-best, #c5-mae, #c5-mae-val', union: true, wait: true, tag: '当てはめ', say: ['手で合わせるのは大変です。そこで <b>「自動で当てはめる」</b>ボタン。', '<b>押してみてください</b>。MAE がいちばん小さくなる直線へ、一気に動きます。', 'これがまさに、機械学習が「データに最もよく合う線を探す」ときにやっていることの、いちばん簡単な形です。'] },
+    { s: 11, sel: '.callout.purple', tag: '外れ値に強い', say: ['MAE は誤差を <b>そのまま</b>足します。一方、第 4 回でやった最小二乗法は、誤差を <b>2 乗</b>してから足します。', '2 乗すると、大きく外れた 1 点の影響が極端に強くなる。だから <b>MAE は外れ値に強い</b>のです。', '株価予測・為替・売上予測など、たまに大きく外れる場面では、この性質がありがたく効いてきます。'] },
+    { s: 12, sel: '.gate-title', tag: 'PART 3', say: ['PART 3 は、これまでと毛色の違う関数です。', 'なめらかに繋がらない ── <b>階段</b>や<b>折れ線</b>になる関数。料金表や税金など、身の回りにたくさん隠れています。'] },
+    { s: 13, sel: '#c6-x, #c6-floor, #c6-stat-floor', union: true, wait: true, tag: '床関数', say: ['まずは <b>床関数 ⌊x⌋</b>。「x を超えない最大の整数」、つまり <b>小数点以下を切り捨てる</b>操作です。⌊3.7⌋ = 3、⌊5⌋ = 5、そして ⌊−1.2⌋ = <b>−2</b>。', 'グラフは整数のたびに 1 段ジャンプする <b>階段</b>。各 x に出力は 1 つなので関数ですが、絶対値と違って <b>繋がっていません</b>。', '<b>スライダーを動かして</b>みてください。x が整数をまたぐ瞬間に、⌊x⌋ の値がカクッと 1 段上がります。'] },
+    { s: 13, sel: '.callout.emerald', tag: '床と天井', say: ['似た仲間に <b>天井関数 ⌈x⌉</b>(切り上げ)があります。この使い分けが大事です。', '枚数を数えるなら切り捨て ── 950 円で 100 円玉は ⌊950/100⌋ = <b>9 枚</b>。', '必要な個数なら切り上げ ── 100 人を 30 人乗りバスで運ぶなら ⌈100/30⌉ = <b>4 台</b>。3 台では 90 人しか乗れませんからね。'] },
+    { s: 14, sel: '#c7-t, #c7-park, #c7-stat-fee', union: true, wait: true, tag: '実例', say: ['床関数の代表例が <b>コインパーキング</b>。「15 分ごとに 100 円」のように、段階的に料金が上がります。', '<b>駐車時間のスライダーを動かして</b>みてください。料金が階段状に増え、右の「支払う金額」が段ごとに跳ね上がります。', 'タクシーの「○○ m ごと加算」も、まったく同じ仕組みです。'] },
+    { s: 14, sel: '.callout.emerald', tag: '境界の段差', say: ['面白いのは <b>14 分と 16 分で料金が変わる</b>こと。15 分の境界をまたいだ瞬間、1 段ジャンプするからです。', 'パケット課金(○ MB ごと)、倉庫の月額(月単位)など、「単位の境界で段が上がる」現象は、すべて床関数で書けます。'] },
+    { s: 15, sel: '#c8-x, #c8-tax, #c8-stat-tax', union: true, wait: true, tag: '区分線形', say: ['同じ「段階的」でも、所得税の <b>累進課税</b>は少し違います。段ごとに <b>傾きの違う直線</b>がつながる「区分線形関数」── カクッと飛ばず、折れながらも <b>繋がって</b>います。', '<b>課税所得のスライダーを動かして</b>みてください。税額が、境界をまたぐたびに傾きを変えながら、連続的に増えていきます。'] },
+    { s: 15, sel: '.callout.emerald', tag: 'よくある誤解', say: ['ここでよくある誤解 ── 「税率が上がると、所得の全額に高い税率がかかる」。これは <b>間違い</b>です。', '新しい税率は、その段を <b>超えた分だけ</b>にかかります。だから境界をまたいでも税額は連続的に増え、急に手取りが減ることはありません。', '電気料金の 3 段制や、配送料の段階値引きも、同じ「区分線形」の考え方です。'] },
+    { s: 16, sel: '.gate-title', tag: 'PART 4', say: ['PART 4 は、<b>なめらかに曲がる</b>関数です。', '<b>反比例 1/x</b> と <b>平方根 √x</b>。同じ「曲線」でも、曲がり方がまったく違う 2 つを見比べます。'] },
+    { s: 17, sel: '#c9-x, #c9-inv, #c9-stat-y', union: true, wait: true, tag: '反比例', say: ['まず反比例 <b>y = k/x</b>。1000 km を時速 v で走ると時間は t = 1000/v ── <b>速さを 2 倍にすると、時間は半分</b>です。「○ × ○ = 一定」の関係はすべて反比例になります。', '<b>x のスライダーを動かして</b>みてください。x を小さくするほど y が急に大きくなり、右の y = k/x の値がはね上がります。', 'グラフは <b>双曲線</b>。x → 0 では無限大に発散します。'] },
+    { s: 17, sel: '.callout.purple', tag: '発散', say: ['反比例の特徴は、x が小さくなるほど y が急激に大きくなること。', 'そして x → 0 では <b>無限大に発散</b>します。「速さ 0 では、永遠に着かない」── 直感とも合いますね。だから x = 0 は定義域の外です。'] },
+    { s: 18, sel: '#c10-x, #c10-sqrt, #c10-stat-y', union: true, wait: true, tag: '平方根', say: ['もう一つの曲がり方が <b>平方根 √x</b>。2 乗すると x になる数で、√4 = 2、√9 = 3 です。', '<b>スライダーを動かして</b>みてください。x が増えると √x も増えますが、<b>増え方はだんだん緩く</b>なります。x を 4 倍にしても √x は 2 倍だけ。', '金融では「リスク = √分散」。投資期間を 4 倍にしても、リスクは √4 = 2 倍にしかならない ── これが時間分散の効果です。'] },
+    { s: 18, sel: '.callout.rose', tag: '定義域', say: ['注意してほしいのが <b>定義域</b>。√x は x ≥ 0 のときだけ定義されます。x が負だと、実数では答えがありません。', '1/x は「0 で発散」、√x は「負で存在しない」。<b>関数ごとに、使える x の範囲が違う</b> ── ここを押さえておくと、後で必ず役に立ちます。'] },
+    { s: 19, sel: '.gate-title', tag: 'PART 5', say: ['いよいよ最後の PART。今日の関数たちが、そのまま <b>AI の中身</b>で動いている、という話です。', '主役は <b>ReLU</b> と <b>シグモイド</b>。どちらも、今日見た絶対値や階段の親戚です。'] },
+    { s: 20, sel: '#c11-x, #c11-relu, #c11-stat-y', union: true, wait: true, tag: 'ReLU', say: ['<b>ReLU</b> は「マイナスは 0 に、プラスはそのまま返す」関数、max(0, x) です。グラフは <b>絶対値の右半分</b>のような折れ線。', '<b>スライダーを動かして</b>みてください。x が負の間は ReLU(x) がずっと 0、x が正になると x のまま立ち上がります。', 'シンプルですが、ChatGPT・画像認識・音声認識など、現代の AI の中で <b>いちばんよく使われる関数</b>です。'] },
+    { s: 20, sel: '.callout.rose', tag: '絶対値との関係', say: ['今日の絶対値とつながります。<b>|x| = ReLU(x) + ReLU(−x)</b>。', '右半分(ReLU(x))と、左半分を折り返したもの(ReLU(−x))を足すと、ちょうど V 字の絶対値になる。<b>絶対値は ReLU 2 つの組み合わせ</b>で書けるのです。'] },
+    { s: 20, sel: '.callout.purple', tag: '好まれる理由', say: ['なぜ AI は ReLU を好むのか。理由は 3 つあります。', '① max を取るだけで <b>計算が速い</b>。② プラス側では傾きが 1 のままで <b>信号が減衰しない</b>。③ マイナス側は 0 にして <b>不要な信号を切り捨てる</b>。', 'この「神経細胞の発火」に似た動きが、深層学習が一気に発展した原動力の一つになりました。'] },
+    { s: 21, sel: '#c12-x, #c12-sig, #c12-stat-y', union: true, wait: true, tag: 'シグモイド', say: ['最後は <b>シグモイド</b> σ(x) = 1 / (1 + e^(−x))。どんな実数を入れても、出力は必ず <b>0 〜 1</b> に収まる S 字曲線です。', '<b>スライダーを動かして</b>みてください。x を大きくすると 1 に、小さくすると 0 に近づき、σ(0) = 0.5 になります。', '出力が 0〜1 だから、そのまま <b>「確率」</b>として読めます ── ここがシグモイドの便利なところです。'] },
+    { s: 21, sel: '.callout.amber', tag: '応用', say: ['だから「Yes か No か」を確率で答えたい場面で、大活躍します。', '銀行の <b>融資審査</b>、メールの <b>spam 判定</b>、<b>病気の有無</b>の判定 ── スコアをシグモイドに通して、0〜1 の確率に変えます。0.5 を超えたら「危険」、下回れば「安全」のように使います。'] },
+    { s: 21, sel: '.callout.purple', tag: '形', say: ['シグモイドの形にも意味があります。<b>中心(x = 0)付近で傾きが最大</b>、両端では <b>飽和して</b>傾きが小さくなります。', '「あいまいな所では敏感に、はっきりした所では鈍く」反応する ── これが確率の感覚にぴったり合うのです。', 'ちなみに分母には、第 2 回でやった指数関数 e の x 乗が入っています。今日までの話が、ここで全部つながります。'] },
+    { s: 22, sel: '.submit-box', tag: '課題', say: ['では今回の課題です。いつもの表計算の代わりに、<b>Gemini と協働で「自作の関数のグラフ」を Canvas に描いて提出</b>してもらいます。', '直線・絶対値・床関数・1/x・√x・ReLU・シグモイドのうち、<b>2 つ以上を組み合わせた関数</b>を選んでください。'] },
+    { s: 22, sel: '.sb-prompt', tag: 'プロンプト', say: ['この発注プロンプトのひな型を参考にどうぞ。コツは <b>x の範囲を必ず明記する</b>こと(例: −5 から 5)。', 'うまく動かなければ、Gemini に「エラーは○○」と返して直してもらいます。最後に係数か色を 1 か所だけ自分で変える ── それが「あなたの作品」になる根拠です。'] },
+    { s: 23, sel: '.flow-card', tag: 'まとめ', say: ['今日の流れを振り返ります。<b>関数 = 入出力マシン</b> から始まり、<b>絶対値でズレを測り(MAE)</b>、最後は <b>ReLU・シグモイドで AI</b> へとつながりました。', '一見バラバラな話が、実は 1 本の線で結ばれていたのが分かると思います。'] },
+    { s: 23, sel: '.principle-card', n: 1, tag: '原理 ①', say: ['まとめの一つ目。<b>関数とは、入力に出力を 1 つだけ返す決まり</b>。', '今日の関数 ── 絶対値・床・1/x・√x・ReLU・シグモイド ── は、形こそ違えど、すべてこの 1 つの定義を満たしていました。'] },
+    { s: 23, sel: '.principle-card', n: 3, tag: 'おわりに', say: ['そして最後に。これらの関数は、形は違っても <b>すべて同じ枠組みの仲間</b>です。', '実は AI の中身も、ReLU やシグモイドを <b>大量に組み合わせた巨大な関数</b>でしかありません。第 2 回から今日まで積み上げてきた関数たちが、現代のデータサイエンスの土台になっています。', 'ガイドはここまでです。お疲れさまでした。気になった所は、もう一度クリックで戻って確かめてみてください。'] }
+  ];
+
+  const bar = document.getElementById('mikibar');
+  const spot = document.getElementById('tour-spot');
+  const sayEl = document.getElementById('mbSay');
+  const tagEl = document.getElementById('mbTag');
+  const progEl = document.getElementById('mbProg');
+  const nextBtn = document.getElementById('mbNext');
+  const prevBtn = document.getElementById('mbPrev');
+  const autoBtn = document.getElementById('mbAuto');
+  if (!bar || !spot) return;
+  const reduce = window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+  const haptic = (ms) => { try { navigator.vibrate && navigator.vibrate(ms); } catch (_) {} };
+
+  let guideOn = false, stepIdx = 0, lineIdx = 0, lines = [], typing = false, typeTimer = null, fullHtml = '';
+  let auto = false, autoTimer = null, pendingFocus = null, armed = false, curEls = [];
+
+  const curSlideNum = () => { const a = document.querySelector('.slide.active'); if (!a) return 1; const m = a.id.match(/slide-(\d+)/); return m ? +m[1] : 1; };
+
+  function typeLine(html) {
+    if (typeTimer) { clearInterval(typeTimer); typeTimer = null; }
+    fullHtml = html; typing = true;
+    if (reduce) { sayEl.innerHTML = html; typing = false; return; }
+    let i = 0; const n = html.length;
+    typeTimer = setInterval(() => {
+      i += 2;
+      if (i >= n) { sayEl.innerHTML = html; clearInterval(typeTimer); typeTimer = null; typing = false; return; }
+      let s = html.slice(0, i);
+      const lt = s.lastIndexOf('<'), gt = s.lastIndexOf('>'); if (lt > gt) s = s.slice(0, lt);
+      const op = (s.match(/<b>/g) || []).length, cl = (s.match(/<\/b>/g) || []).length; if (op > cl) s += '</b>';
+      sayEl.innerHTML = s;
+    }, 22);
+  }
+  function finishType() { if (typeTimer) { clearInterval(typeTimer); typeTimer = null; } sayEl.innerHTML = fullHtml; typing = false; }
+
+  const hintEl = document.getElementById('mbHint');
+  function renderLine() {
+    armed = false; nextBtn.classList.remove('armed');   // 行が変わったら2クリック待ちは解除
+    const step = TOUR[stepIdx];
+    tagEl.textContent = step.tag || '';
+    const more = lineIdx < lines.length - 1;          // 同じ解説のつづきがある
+    const ns = TOUR[stepIdx + 1];                       // 次のステップ
+    const turnsPage = !more && ns && ns.s !== step.s;   // 次に進むとページが変わる
+    const last = !more && !ns;                          // 全体の最後
+    const waitNow = step.wait && !more;                 // 操作待ち（インタラクション・ステップの最終行）
+    // ボタン文言 + ヒント: 「このページ継続」か「次のページへ」かを明示
+    if (more) { nextBtn.textContent = '▶ つづき'; }
+    else if (last) { nextBtn.textContent = '✓ おわり'; }
+    else if (turnsPage) { nextBtn.textContent = '次のページへ ≫'; }
+    else { nextBtn.textContent = '▶ つづき'; }
+    nextBtn.classList.toggle('np', turnsPage);          // ページ移動は金色で強調
+    if (hintEl) {
+      hintEl.textContent = last ? '解説はここまでです'
+        : (waitNow ? '動かしてみて、できたら ▶ で次へ'
+        : (turnsPage ? 'つづけると次のページへ ≫' : 'このページの解説がつづきます'));
+      hintEl.classList.toggle('np', turnsPage);
+    }
+    bar.classList.toggle('more', more);
+    progEl.textContent = (stepIdx + 1) + ' / ' + TOUR.length;
+    prevBtn.disabled = (stepIdx === 0 && lineIdx === 0);
+    typeLine(lines[lineIdx] || '');
+    scheduleAuto();
+  }
+
+  function showStep(i, opts) {
+    opts = opts || {};
+    stepIdx = Math.max(0, Math.min(TOUR.length - 1, i));
+    const step = TOUR[stepIdx];
+    lines = Array.isArray(step.say) ? step.say.slice() : [step.say];
+    lineIdx = opts.lastLine ? lines.length - 1 : 0;   // もどる時は前ステップの「最後の発話」へ
+    renderLine();
+    if (curSlideNum() !== step.s) { pendingFocus = step; location.hash = '#slide-' + step.s; }
+    else { focusTarget(step); }
+  }
+
+  const clearSpot = () => { spot.classList.remove('on'); curEls = []; };
+
+  function focusTarget(step) {
+    const slide = document.getElementById('slide-' + step.s);
+    if (!slide) { clearSpot(); return; }
+    let els = [];
+    if (step.union && step.sel) { els = Array.from(slide.querySelectorAll(step.sel)); }     // 操作部品＋出力をまとめて照らす
+    else if (step.sel) { const list = slide.querySelectorAll(step.sel); const el = list[(step.n || 1) - 1] || list[0]; if (el) els = [el]; }
+    curEls = els.filter(Boolean);
+    if (!curEls.length) { clearSpot(); return; }
+    scrollToCenter(slide);
+    requestAnimationFrame(positionSpot);
+    setTimeout(positionSpot, 260);
+    setTimeout(positionSpot, 520);
+  }
+
+  // curEls の合体バウンディングボックス（ビューポート座標）
+  function unionRect() {
+    let l = Infinity, t = Infinity, r = -Infinity, b = -Infinity, n = 0;
+    for (const el of curEls) {
+      const x = el.getBoundingClientRect();
+      if (x.width < 1 && x.height < 1) continue;
+      l = Math.min(l, x.left); t = Math.min(t, x.top); r = Math.max(r, x.right); b = Math.max(b, x.bottom); n++;
+    }
+    if (!n) return null;
+    return { left: l, top: t, width: r - l, height: b - t };
+  }
+
+  function scrollToCenter(slide) {
+    const sr = slide.getBoundingClientRect();
+    let t = Infinity, b = -Infinity;
+    for (const el of curEls) { const x = el.getBoundingClientRect(); t = Math.min(t, x.top); b = Math.max(b, x.bottom); }
+    if (t === Infinity) return;
+    const cy = (t + b) / 2;
+    const delta = (cy - sr.top) - slide.clientHeight / 2;
+    try { slide.scrollBy({ top: delta, behavior: reduce ? 'auto' : 'smooth' }); }
+    catch (_) { slide.scrollTop += delta; }
+  }
+
+  function positionSpot() {
+    if (!curEls.length || !guideOn) return;
+    const u = unionRect();
+    if (!u || u.width < 1 || u.height < 1) { clearSpot(); return; }
+    const pad = 10;
+    spot.style.left = (u.left - pad) + 'px';
+    spot.style.top = (u.top - pad) + 'px';
+    spot.style.width = (u.width + pad * 2) + 'px';
+    spot.style.height = (u.height + pad * 2) + 'px';
+    spot.classList.add('on');
+  }
+
+  function advance() {
+    if (typing) { finishType(); clearAuto(); scheduleAuto(); return; }   // タイプ中の1クリック目は全文表示
+    if (lineIdx < lines.length - 1) { lineIdx++; renderLine(); haptic(6); return; }
+    if (stepIdx < TOUR.length - 1) {
+      const turnsPage = TOUR[stepIdx + 1].s !== TOUR[stepIdx].s;
+      // フールプルーフ: ページが変わるときは「1クリック目=予告(armed)／2クリック目=移動」（自動再生中は即移動）
+      if (turnsPage && !armed && !auto) {
+        armed = true;
+        nextBtn.classList.add('armed');
+        nextBtn.textContent = 'もう一度で次ページ ≫';
+        if (hintEl) { hintEl.textContent = 'もう 1 回で次のページへ移ります'; hintEl.classList.add('np'); }
+        haptic(12);
+        return;
+      }
+      armed = false;
+      showStep(stepIdx + 1); haptic(8);
+    } else { stopAuto(); }
+  }
+  function back() {
+    if (auto) stopAuto();
+    if (typing) { finishType(); return; }                       // タイプ中はまず全文表示
+    if (lineIdx > 0) { lineIdx--; renderLine(); }
+    else if (stepIdx > 0) { showStep(stepIdx - 1, { lastLine: true }); }  // 前ステップの最後の発話へ
+    haptic(6);
+  }
+
+  const clearAuto = () => { if (autoTimer) { clearTimeout(autoTimer); autoTimer = null; } };
+  function scheduleAuto() {
+    clearAuto();
+    if (!auto || !guideOn) return;
+    const step = TOUR[stepIdx];
+    // 操作待ち（インタラクション・ステップの最終行）では自動送りを止め、学生が試す時間を確保
+    if (step.wait && lineIdx === lines.length - 1) { stopAuto(); return; }
+    const txt = (lines[lineIdx] || '').replace(/<[^>]+>/g, '');
+    const dur = Math.min(9000, 2400 + txt.length * 55);
+    autoTimer = setTimeout(() => {
+      if (typing) { finishType(); scheduleAuto(); return; }
+      if (stepIdx === TOUR.length - 1 && lineIdx === lines.length - 1) { stopAuto(); return; }
+      advance();
+    }, dur);
+  }
+  function startAuto() { auto = true; autoBtn.classList.add('on'); autoBtn.textContent = '⏸ 自動'; if (typing) finishType(); scheduleAuto(); }
+  function stopAuto() { auto = false; autoBtn.classList.remove('on'); autoBtn.textContent = '▶ 自動'; clearAuto(); }
+  const toggleAuto = () => { auto ? stopAuto() : startAuto(); haptic(8); };
+
+  let started = false;   // 一度でも解説を始めたか（再開時は続きから）
+  // 解説モードへ展開（アイコン → フル）。シームレスにその場で開く。
+  function enterGuide() {
+    guideOn = true;
+    bar.classList.remove('collapsed');
+    document.body.classList.add('miki-on');
+    if (!started) {
+      started = true;
+      const cur = curSlideNum();
+      let idx = TOUR.findIndex((s) => s.s === cur);
+      if (idx < 0) idx = TOUR.findIndex((s) => s.s >= cur);
+      if (idx < 0) idx = 0;
+      showStep(idx);
+    } else {
+      renderLine();                          // 続きから再開
+      focusTarget(TOUR[stepIdx]);
+    }
+    haptic(10);
+  }
+  // 非表示（その場にアイコンだけ残す）。ツアー状態は保持して、次に開いたとき続きから。
+  function exitGuide() {
+    guideOn = false;
+    bar.classList.add('collapsed');
+    document.body.classList.remove('miki-on');
+    stopAuto(); clearSpot(); finishType();
+    haptic(8);
+  }
+
+  document.getElementById('mbHide').addEventListener('click', (e) => { e.stopPropagation(); exitGuide(); });
+  // アバターのタップ（移動なし）= 展開/折りたたみ。ドラッグ末尾で判定（下の移動 IIFE 内）。
+  nextBtn.addEventListener('click', advance);
+  prevBtn.addEventListener('click', back);
+  autoBtn.addEventListener('click', toggleAuto);
+  sayEl.addEventListener('click', () => { if (typing) finishType(); });
+
+  // スライド遷移の観測（デッキ非依存: .slide に付け外しされる .active の class 変化を監視）
+  //   ※ lec05 テンプレのデッキは go() で .slide の .active を付け替える。これを MutationObserver で
+  //     検知するため、lecNN-slide-change という回ごとのイベント名に依存しない（= TOUR 差し替えだけで他回に載る）。
+  let lastActive = curSlideNum();
+  function onSlideChange() {
+    if (!guideOn) { lastActive = curSlideNum(); return; }
+    const cur = curSlideNum();
+    if (pendingFocus) {                                   // みきコン自身の遷移
+      const s = pendingFocus; pendingFocus = null; lastActive = cur;
+      requestAnimationFrame(() => focusTarget(s));
+      setTimeout(() => focusTarget(s), 80);
+      return;
+    }
+    if (cur === lastActive) return;                        // 同一スライド内の class 変化は無視
+    lastActive = cur;
+    // 手動でスライドが変わった → 自動再生を止め、そのスライドの先頭ステップに同期
+    stopAuto();
+    const idx = TOUR.findIndex((s) => s.s === cur);
+    if (idx >= 0) {
+      stepIdx = idx; lineIdx = 0;
+      const step = TOUR[idx];
+      lines = Array.isArray(step.say) ? step.say.slice() : [step.say];
+      renderLine();
+      setTimeout(() => focusTarget(step), 80);
+    } else { clearSpot(); }
+  }
+  const deckEl = document.getElementById('slide-deck') || document.querySelector('.slide-deck');
+  if (deckEl && 'MutationObserver' in window) {
+    new MutationObserver((muts) => {
+      for (const m of muts) { if (m.attributeName === 'class') { onSlideChange(); break; } }
+    }).observe(deckEl, { attributes: true, attributeFilter: ['class'], subtree: true });
+  }
+
+  // スクロール／リサイズでスポットライト追従
+  let rafId = null;
+  const reposition = () => { if (rafId) return; rafId = requestAnimationFrame(() => { rafId = null; positionSpot(); }); };
+  window.addEventListener('resize', reposition);
+  window.addEventListener('scroll', reposition, true);
+
+  // フォーム要素・操作部品（クリック/スペースを横取りしない対象）
+  const INTERACTIVE = 'button, a, input, select, textarea, label, [onclick], [role="button"], .rev-toggle, .preset-btn, .toc-item, .nav-link, #cAbs-line, #mikibar, #slide-nav, .slide-nav, #sidebar, .sidebar, .menu-btn';
+
+  // スペースキーで会話を進める（ガイドON時）。デッキのスライド送り（Space）より優先。
+  window.addEventListener('keydown', (e) => {
+    if (!guideOn) return;
+    if (e.key === ' ' || e.key === 'Spacebar') {
+      e.stopPropagation();                                // 常にデッキの「Space＝次スライド」を抑止（二重送り防止）
+      const t = e.target;
+      if (t && t.closest && t.closest('input, select, textarea, button, a, [contenteditable]')) return; // 部品上はネイティブ動作（ボタンなら click=つづき）
+      e.preventDefault();
+      if (auto) stopAuto();
+      advance();
+      return;
+    }
+    if (e.key === 'Backspace') {                          // Backspace = 会話をもどる
+      const t = e.target;
+      if (t && t.closest && t.closest('input, select, textarea, [contenteditable]')) return; // 入力欄では本来の削除
+      e.preventDefault(); e.stopPropagation();
+      back();
+      return;
+    }
+    if (['ArrowLeft', 'ArrowRight', 'PageUp', 'PageDown', 'Home', 'End'].includes(e.key)) {
+      if (auto) stopAuto();                               // 矢印等はデッキ送り（miki は再同期）。自動再生だけ止める
+    }
+  }, true);
+
+  // 画面クリック/タップで会話を進める（ガイドON時・操作部品の上は除く）
+  document.addEventListener('click', (e) => {
+    if (!guideOn) return;
+    if (e.target.closest && e.target.closest(INTERACTIVE)) return; // 部品は本来の動作を優先
+    advance();
+  }, false);
+
+  // デッキのポインタ操作で自動再生を一時停止
+  document.addEventListener('pointerdown', (e) => {
+    if (!guideOn || !auto) return;
+    if (e.target.closest && e.target.closest('#mikibar')) return;
+    stopAuto();
+  }, true);
+
+  // ウィンドウ移動（タイトルバー）＋ 四隅リサイズ（PC）
+  (function () {
+    const clamp = (v, lo, hi) => Math.max(lo, Math.min(hi, v));
+    let m = null; // {mode:'drag'|'resize', ...}  ※ lec10 方式: タイトルバー/アバターで移動、四隅でリサイズ
+    bar.addEventListener('pointerdown', function (e) {
+      if (e.target.closest('button')) return;
+      const rz = e.target.closest('.mb-rz');
+      const onTitle = e.target.closest('.mb-titlebar');
+      const onAva = e.target.closest('.mb-ava');
+      const r = bar.getBoundingClientRect();
+      if (rz && window.innerWidth > 720) {
+        m = { mode: 'resize', c: rz.dataset.c, sx: e.clientX, sy: e.clientY, L: r.left, T: r.top, W: r.width, H: r.height };
+      } else if (onTitle || onAva) {
+        // アバターでも掴んで移動できる（折りたたみアイコンのドラッグ＆ドロップ移動に対応）
+        m = { mode: 'drag', dx: e.clientX - r.left, dy: e.clientY - r.top, sx: e.clientX, sy: e.clientY, moved: false, onAva: !!onAva };
+      } else { return; }
+      bar.classList.add('dragging');
+      try { bar.setPointerCapture(e.pointerId); } catch (_) {}
+    });
+    bar.addEventListener('pointermove', function (e) {
+      if (!m) return;
+      if (m.mode === 'drag') {
+        if (Math.abs(e.clientX - m.sx) > 4 || Math.abs(e.clientY - m.sy) > 4) m.moved = true;
+        const x = clamp(e.clientX - m.dx, 4, window.innerWidth - bar.offsetWidth - 4);
+        const y = clamp(e.clientY - m.dy, 8, window.innerHeight - bar.offsetHeight - 4);
+        bar.style.left = x + 'px'; bar.style.top = y + 'px'; bar.style.right = 'auto'; bar.style.bottom = 'auto'; bar.style.transform = 'none';
+      } else {
+        const ddx = e.clientX - m.sx, ddy = e.clientY - m.sy;
+        const minW = 300, minH = 140, maxW = window.innerWidth * 0.96, maxH = window.innerHeight * 0.8;
+        let L = m.L, T = m.T, W = m.W, H = m.H;
+        if (m.c.indexOf('e') >= 0) W = m.W + ddx;
+        if (m.c.indexOf('w') >= 0) { W = m.W - ddx; L = m.L + ddx; }
+        if (m.c.indexOf('s') >= 0) H = m.H + ddy;
+        if (m.c.indexOf('n') >= 0) { H = m.H - ddy; T = m.T + ddy; }
+        if (W < minW) { if (m.c.indexOf('w') >= 0) L = m.L + (m.W - minW); W = minW; }
+        if (W > maxW) W = maxW;
+        if (H < minH) { if (m.c.indexOf('n') >= 0) T = m.T + (m.H - minH); H = minH; }
+        if (H > maxH) H = maxH;
+        bar.style.left = L + 'px'; bar.style.top = T + 'px'; bar.style.right = 'auto'; bar.style.bottom = 'auto'; bar.style.transform = 'none';
+        bar.style.width = W + 'px'; bar.style.height = H + 'px';
+      }
+    });
+    function end() {
+      if (!m) return;
+      // アバターを「動かさずにタップ」= 展開/折りたたみ（lec10 の mikiMin 相当）
+      if (m.mode === 'drag' && !m.moved && m.onAva) {
+        if (bar.classList.contains('collapsed')) enterGuide(); else exitGuide();
+      }
+      m = null; bar.classList.remove('dragging');
+    }
+    bar.addEventListener('pointerup', end);
+    bar.addEventListener('pointercancel', end);
+  })();
+
+  // ===== P コマンド: 強調したい文字を左→右へ波打ち（toshin v3 / lec10 文字ポップ波） =====
+  // 各見出しの文字を1字ずつ span(.pchar) に分割し、強調語(em / .gate-accent / strong)を
+  // 大袈裟に、強調が無ければ見出し全体を通常振幅で、45ms ずつずらして跳ねさせる。
+  function pWrap(el) {
+    if (el.dataset.pwrapped) return; el.dataset.pwrapped = '1';
+    const walker = document.createTreeWalker(el, NodeFilter.SHOW_TEXT, null, false);
+    const tns = []; let nd;
+    while ((nd = walker.nextNode())) { if (nd.textContent.replace(/\s/g, '').length > 0) tns.push(nd); }
+    tns.forEach((tn) => {
+      const frag = document.createDocumentFragment();
+      for (const ch of tn.textContent) {
+        if (ch === ' ' || ch === '\n' || ch === '\t' || ch === '　') { frag.appendChild(document.createTextNode(ch)); }
+        else { const s = document.createElement('span'); s.className = 'pchar'; s.textContent = ch; frag.appendChild(s); }
+      }
+      tn.parentNode.replaceChild(frag, tn);
+    });
+  }
+  // 見出し系（h2 / 章扉 / 表紙）の文字を分割。本文は分割しない（リフロー回避）。
+  document.querySelectorAll('.slide h2, .slide .gate-title, .slide .cover-sub, .slide .cover-title').forEach(pWrap);
+
+  function firePop() {
+    const cur = document.querySelector('.slide.active'); if (!cur) return;
+    const containers = cur.querySelectorAll('h2, .gate-title, .cover-sub, .cover-title');
+    const targets = []; // [{el, strong}]
+    containers.forEach((c) => {
+      const all = c.querySelectorAll('.pchar'); if (!all.length) return;
+      const emph = new Set();
+      c.querySelectorAll('em .pchar, .gate-accent .pchar, strong .pchar').forEach((x) => emph.add(x));
+      if (all.length >= 10 && emph.size > 0) { all.forEach((x) => { if (emph.has(x)) targets.push({ el: x, strong: true }); }); } // 長文→強調語のみ強振幅
+      else { all.forEach((x) => targets.push({ el: x, strong: false })); }                                                        // 短文→全文字を通常振幅
+    });
+    if (!targets.length) return;
+    targets.forEach((t) => { t.el.classList.remove('popping', 'popping-strong'); t.el.style.animationDelay = ''; });
+    void cur.offsetWidth;                       // reflow を強制して再アニメを確実に
+    const stepMs = 45;
+    targets.forEach((t, idx) => { t.el.style.animationDelay = (idx * stepMs) + 'ms'; t.el.classList.add(t.strong ? 'popping-strong' : 'popping'); });
+    haptic(10);
+  }
+  // P キーで発火（みきコンの開閉に関係なく動作）。入力欄では本来の入力を優先。
+  window.addEventListener('keydown', (e) => {
+    if (e.key !== 'p' && e.key !== 'P') return;
+    const t = e.target;
+    if (t && t.closest && t.closest('input, select, textarea, [contenteditable]')) return;
+    e.preventDefault();
+    firePop();
+  });
+})();
+</script>
