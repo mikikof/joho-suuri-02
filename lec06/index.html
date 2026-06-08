@@ -4279,17 +4279,21 @@ const FN_TABLE = {
     guideOn = true;
     bar.classList.remove('collapsed');
     document.body.classList.add('miki-on');
-    if (!started) {
+    const cur = curSlideNum();
+    // 現在表示中のページが、前回みていた step のページと一致するときだけ「続きから」。
+    // 別ページへジャンプしてから開いた場合は、そのページの頭出しに同期する。
+    const onSamePage = started && TOUR[stepIdx] && TOUR[stepIdx].s === cur;
+    if (!onSamePage) {
       started = true;
-      const cur = curSlideNum();
       let idx = TOUR.findIndex((s) => s.s === cur);
       if (idx < 0) idx = TOUR.findIndex((s) => s.s >= cur);
       if (idx < 0) idx = 0;
       showStep(idx);
     } else {
-      renderLine();                          // 続きから再開
+      renderLine();                          // 同じページ → 続きから再開
       focusTarget(TOUR[stepIdx]);
     }
+    lastActive = cur;                          // onSlideChange の二重発火を防ぐ
     haptic(10);
   }
   // 非表示（その場にアイコンだけ残す）。ツアー状態は保持して、次に開いたとき続きから。
