@@ -1472,16 +1472,17 @@
     </div>
     <div class="nav-group">
       <div class="nav-group-label">微分で、変化をとらえる</div>
-      <a class="nav-link" href="#slide-4" data-slide="4" data-slide-range="4-7"><span class="icon">1</span>平均変化率<span class="sub-num">4 – 7</span></a>
-      <a class="nav-link" href="#slide-8" data-slide="8" data-slide-range="8-11"><span class="icon">2</span>微分 ＝ 瞬間の変化率<span class="sub-num">8–11</span></a>
-      <a class="nav-link" href="#slide-12" data-slide="12" data-slide-range="12-15"><span class="icon">3</span>傾きで増減を読む<span class="sub-num">12–15</span></a>
-      <a class="nav-link" href="#slide-16" data-slide="16" data-slide-range="16-19"><span class="icon">4</span>最適化<span class="sub-num">16–19</span></a>
-      <a class="nav-link" href="#slide-20" data-slide="20" data-slide-range="20-23"><span class="icon">5</span>勾配降下法<span class="sub-num">20–23</span></a>
+      <a class="nav-link" href="#slide-4" data-slide="4" data-slide-range="4-6"><span class="icon">1</span>微分の正体<span class="sub-num">4 – 6</span></a>
+      <a class="nav-link" href="#slide-7" data-slide="7" data-slide-range="7-10"><span class="icon">2</span>平均変化率<span class="sub-num">7 – 10</span></a>
+      <a class="nav-link" href="#slide-11" data-slide="11" data-slide-range="11-14"><span class="icon">3</span>微分 ＝ 瞬間の変化率<span class="sub-num">11–14</span></a>
+      <a class="nav-link" href="#slide-15" data-slide="15" data-slide-range="15-18"><span class="icon">4</span>傾きで増減を読む<span class="sub-num">15–18</span></a>
+      <a class="nav-link" href="#slide-19" data-slide="19" data-slide-range="19-22"><span class="icon">5</span>最適化<span class="sub-num">19–22</span></a>
+      <a class="nav-link" href="#slide-23" data-slide="23" data-slide-range="23-26"><span class="icon">6</span>勾配降下法<span class="sub-num">23–26</span></a>
     </div>
     <div class="nav-group">
       <div class="nav-group-label">まとめ</div>
-      <a class="nav-link" href="#slide-24" data-slide="24"><span class="icon">◆</span>まとめ<span class="sub-num">24</span></a>
-      <a class="nav-link" href="#slide-25" data-slide="25"><span class="icon">▶</span>提出課題<span class="sub-num">25</span></a>
+      <a class="nav-link" href="#slide-27" data-slide="27"><span class="icon">◆</span>まとめ<span class="sub-num">27</span></a>
+      <a class="nav-link" href="#slide-28" data-slide="28"><span class="icon">▶</span>提出課題<span class="sub-num">28</span></a>
     </div>
   </aside>
 
@@ -1503,7 +1504,7 @@
       .rule-tbl td { background: var(--paper-2); padding: 12px 14px; font-size: 17px; border-top: 1px solid var(--hairline); border-bottom: 1px solid var(--hairline); }
       .rule-tbl td:first-child { border-left: 1px solid var(--hairline); border-radius: 10px 0 0 10px; font-family: var(--font-mono); color: var(--anchor); font-weight: 700; }
       .rule-tbl td:last-child { border-right: 1px solid var(--hairline); border-radius: 0 10px 10px 0; font-family: var(--font-mono); color: var(--action-deep); font-weight: 700; }
-      .rule-tbl td .rt-note { font-family: var(--font-body); font-size: 13px; color: var(--ink-3); font-weight: 500; }
+      .rule-tbl td .rt-note { font-family: var(--font-body); font-size: 13px; color: #475569; font-weight: 600; }
       /* lec10: 意味のある控えめな動き（アクティブスライドでのみ作動） */
       @keyframes lec10Float { 0%,100%{transform:translateY(0);} 50%{transform:translateY(-6px);} }
       @keyframes lec10Flow { to { stroke-dashoffset:-24; } }
@@ -1645,7 +1646,7 @@
         <div class="cover-meta">平成国際大学 情報デザイン学部 ／ Lecture 10</div>
         <div class="cover-title">情報数理入門</div>
         <div class="cover-num">第 10 回</div>
-        <div class="cover-sub">いまの変化の速さを、<br>1 つの数でつかむ。</div>
+        <div class="cover-sub">いまの変化の速さを、<br>一つの数でつかむ。</div>
         <div class="cover-author">小船 幹生</div>
       </div>
     </section>
@@ -1667,7 +1668,7 @@
                 <line x1="20" y1="100" x2="186" y2="100" stroke="#D1D5DB" stroke-width="1"/>
                 <line x1="28" y1="108" x2="28" y2="20" stroke="#D1D5DB" stroke-width="1"/>
                 <line x1="34" y1="96" x2="180" y2="30" stroke="#2563EB" stroke-width="3" stroke-linecap="round"/>
-                <path d="M 96 63 H 150 V 38" fill="none" stroke="#1D4ED8" stroke-width="1.6" stroke-dasharray="4 4"/>
+                <path d="M 96 68 H 150 V 44" fill="none" stroke="#1D4ED8" stroke-width="1.6" stroke-dasharray="4 4"/>
                 <text x="123" y="78" text-anchor="middle" fill="#1D4ED8" font-family="JetBrains Mono" font-size="12" font-weight="700">→ 横</text>
                 <text x="164" y="54" fill="#1D4ED8" font-family="JetBrains Mono" font-size="12" font-weight="700">↑縦</text>
               </svg>
@@ -1696,8 +1697,8 @@
               <svg viewBox="0 0 200 120" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
                 <line x1="20" y1="100" x2="186" y2="100" stroke="#D1D5DB" stroke-width="1"/>
                 <path d="M 36 32 Q 103 142, 172 32" fill="none" stroke="#F59E0B" stroke-width="3" stroke-linecap="round"/>
-                <circle cx="104" cy="92" r="5" fill="#B45309"/>
-                <line x1="78" y1="92" x2="130" y2="92" stroke="#B45309" stroke-width="2.2" stroke-linecap="round"/>
+                <circle cx="104" cy="87" r="5" fill="#B45309"/>
+                <line x1="78" y1="87" x2="130" y2="87" stroke="#B45309" stroke-width="2.2" stroke-linecap="round"/>
                 <text x="104" y="56" text-anchor="middle" fill="#B45309" font-family="Zen Kaku Gothic New" font-size="12" font-weight="700">頂点で水平</text>
               </svg>
             </div>
@@ -1753,9 +1754,9 @@
               <svg viewBox="0 0 200 120" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
                 <line x1="20" y1="100" x2="186" y2="100" stroke="#D1D5DB" stroke-width="1"/>
                 <path d="M 30 40 Q 100 130, 175 70" fill="none" stroke="#7C3AED" stroke-width="3" stroke-linecap="round"/>
-                <line x1="60" y1="118" x2="150" y2="44" stroke="#6D28D9" stroke-width="2.4" stroke-linecap="round"/>
-                <circle cx="104" cy="83" r="5.5" fill="#6D28D9"/>
-                <text x="104" y="34" text-anchor="middle" fill="#6D28D9" font-family="Zen Kaku Gothic New" font-size="12" font-weight="700">その点の傾き</text>
+                <line x1="102" y1="104" x2="182" y2="74" stroke="#6D28D9" stroke-width="2.4" stroke-linecap="round"/>
+                <circle cx="142" cy="89" r="5.5" fill="#6D28D9"/>
+                <text x="142" y="30" text-anchor="middle" fill="#6D28D9" font-family="Zen Kaku Gothic New" font-size="12" font-weight="700">その点の傾き</text>
               </svg>
             </div>
             <div>
@@ -1785,7 +1786,7 @@
         <div class="eyebrow">全体像 ／ 変化の速さを数でとらえる</div>
         <h2>2 点で<em>測り</em>、近づけて<em>瞬間</em>に、<br>傾きで<em>増減</em>を読む。</h2>
         <p class="section-sub">
-          本日は、 微分を 5 つの PART でたどる。 まず PART 1 で、 2 点を結んだ坂の傾き ── <strong>平均変化率</strong>を確かめる。 PART 2 で、 その 2 点を限りなく近づけて、 1 点での傾き ＝ <strong>微分</strong>を取り出す。 PART 3 で、 傾きの符号から関数の <strong>増減や山・谷</strong>を読み、 PART 4 で「いちばん良い点」 を探す <strong>最適化</strong>に使う。 最後の PART 5 で、 同じ仕組みが <strong>AI の学習（勾配降下法）</strong>を支えていることを見る。
+          本日は、 微分を 6 つの PART でたどる。 まず PART 1 で、 微分の正体 ── 変化のうち <strong>効く 1 次だけ残し、 小さすぎる 2 次（ゴミ）を捨てる</strong>ことを、 面積でつかむ。 PART 2 で、 その同じ傾きを <strong>2 点を結んだ坂（平均変化率）</strong>として図でも確かめ、 PART 3 で 2 点を近づけて <strong>1 点での傾き ＝ 微分</strong>を取り出す。 PART 4 で傾きの符号から <strong>増減や山・谷</strong>を読み、 PART 5 で「いちばん良い点」 を探す <strong>最適化</strong>に使う。 最後の PART 6 で、 同じ仕組みが <strong>AI の学習（勾配降下法）</strong>を支えていることを見る。
         </p>
 
         <div class="callout amber" style="margin-top: 12px;">
@@ -1798,55 +1799,66 @@
         <div class="tocbar" style="margin-top: 24px;">
           <a class="toc-item" href="#slide-4" data-slide="4">
             <div class="toc-icon"><svg viewBox="0 0 256 256" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
-              <line x1="28" y1="200" x2="228" y2="200" stroke="#94A3B8" stroke-width="6"/>
-              <path d="M 36 170 Q 128 250, 220 70" fill="none" stroke="#93C5FD" stroke-width="7" stroke-linecap="round"/>
-              <circle cx="70" cy="158" r="9" fill="#1D4ED8"/><circle cx="190" cy="104" r="9" fill="#1D4ED8"/>
-              <line x1="70" y1="158" x2="190" y2="104" stroke="#1D4ED8" stroke-width="5" stroke-linecap="round"/>
+              <rect x="46" y="106" width="92" height="92" fill="none" stroke="#93C5FD" stroke-width="7"/>
+              <rect x="138" y="106" width="26" height="92" fill="#60A5FA" opacity="0.5"/>
+              <rect x="46" y="80" width="92" height="26" fill="#60A5FA" opacity="0.5"/>
+              <rect x="138" y="80" width="26" height="26" fill="none" stroke="#FB7185" stroke-width="5" stroke-dasharray="5 5"/>
             </svg></div>
             <div class="toc-num">01 ／ PART 1</div>
+            <div class="toc-name">微分の正体</div>
+            <div class="toc-hint">効くぶんを残し、ゴミを捨てる</div>
+          </a>
+          <a class="toc-item" href="#slide-7" data-slide="7">
+            <div class="toc-icon"><svg viewBox="0 0 256 256" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+              <line x1="28" y1="200" x2="228" y2="200" stroke="#94A3B8" stroke-width="6"/>
+              <path d="M 36 170 Q 128 250, 220 70" fill="none" stroke="#93C5FD" stroke-width="7" stroke-linecap="round"/>
+              <circle cx="70" cy="191" r="9" fill="#1D4ED8"/><circle cx="190" cy="122" r="9" fill="#1D4ED8"/>
+              <line x1="70" y1="191" x2="190" y2="122" stroke="#1D4ED8" stroke-width="5" stroke-linecap="round"/>
+            </svg></div>
+            <div class="toc-num">02 ／ PART 2</div>
             <div class="toc-name">平均変化率</div>
             <div class="toc-hint">2 点を結ぶ坂の傾き</div>
           </a>
-          <a class="toc-item" href="#slide-8" data-slide="8">
+          <a class="toc-item" href="#slide-11" data-slide="11">
             <div class="toc-icon"><svg viewBox="0 0 256 256" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
               <line x1="28" y1="200" x2="228" y2="200" stroke="#94A3B8" stroke-width="6"/>
               <path d="M 36 170 Q 128 250, 220 70" fill="none" stroke="#FCD34D" stroke-width="7" stroke-linecap="round"/>
-              <line x1="92" y1="150" x2="210" y2="92" stroke="#F59E0B" stroke-width="7" stroke-linecap="round"/>
-              <circle cx="150" cy="121" r="10" fill="#B45309"/>
+              <line x1="100" y1="213" x2="200" y2="125" stroke="#F59E0B" stroke-width="7" stroke-linecap="round"/>
+              <circle cx="150" cy="169" r="10" fill="#B45309"/>
             </svg></div>
-            <div class="toc-num">02 ／ PART 2</div>
+            <div class="toc-num">03 ／ PART 3</div>
             <div class="toc-name">微分 ＝ 瞬間の変化率</div>
             <div class="toc-hint">2 点を近づけて接線へ</div>
           </a>
-          <a class="toc-item" href="#slide-12" data-slide="12">
+          <a class="toc-item" href="#slide-15" data-slide="15">
             <div class="toc-icon"><svg viewBox="0 0 256 256" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
               <line x1="28" y1="200" x2="228" y2="200" stroke="#94A3B8" stroke-width="6"/>
               <path d="M 36 90 C 80 200, 120 200, 128 128 S 176 40, 220 150" fill="none" stroke="#34D399" stroke-width="7" stroke-linecap="round"/>
               <line x1="100" y1="190" x2="156" y2="190" stroke="#059669" stroke-width="6" stroke-linecap="round"/>
             </svg></div>
-            <div class="toc-num">03 ／ PART 3</div>
+            <div class="toc-num">04 ／ PART 4</div>
             <div class="toc-name">傾きで増減を読む</div>
             <div class="toc-hint">のぼり・くだり・山と谷</div>
           </a>
-          <a class="toc-item" href="#slide-16" data-slide="16">
+          <a class="toc-item" href="#slide-19" data-slide="19">
             <div class="toc-icon"><svg viewBox="0 0 256 256" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
               <line x1="28" y1="200" x2="228" y2="200" stroke="#94A3B8" stroke-width="6"/>
               <path d="M 36 60 Q 128 240, 220 60" fill="none" stroke="#C4B5FD" stroke-width="7" stroke-linecap="round"/>
               <circle cx="128" cy="172" r="11" fill="#7C3AED"/>
               <line x1="98" y1="172" x2="158" y2="172" stroke="#7C3AED" stroke-width="6" stroke-linecap="round"/>
             </svg></div>
-            <div class="toc-num">04 ／ PART 4</div>
+            <div class="toc-num">05 ／ PART 5</div>
             <div class="toc-name">最適化</div>
             <div class="toc-hint">傾きゼロで「いちばん良い点」</div>
           </a>
-          <a class="toc-item" href="#slide-20" data-slide="20">
+          <a class="toc-item" href="#slide-23" data-slide="23">
             <div class="toc-icon"><svg viewBox="0 0 256 256" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
               <path d="M 30 50 C 96 70, 110 200, 160 200 S 222 110, 226 96" fill="none" stroke="#FDA4AF" stroke-width="7" stroke-linecap="round"/>
               <circle cx="70" cy="92" r="13" fill="#E11D48"/>
               <path d="M 78 104 L 104 150" stroke="#E11D48" stroke-width="6" stroke-linecap="round"/>
               <polyline points="92,142 104,150 96,128" fill="none" stroke="#E11D48" stroke-width="6" stroke-linecap="round" stroke-linejoin="round"/>
             </svg></div>
-            <div class="toc-num">05 ／ PART 5</div>
+            <div class="toc-num">06 ／ PART 6</div>
             <div class="toc-name">勾配降下法</div>
             <div class="toc-hint">坂を下るように AI が学ぶ</div>
           </a>
@@ -1854,17 +1866,110 @@
       </div>
     </section>
 
-    <!-- ============ PART 1 平均変化率 (4-7) ============ -->
+    <!-- ============ PART 2 平均変化率（図で見る傾き） (7-10) ============ -->
+    <!-- ============ PART 1 微分の正体・小さいものを捨てる (4-6) ============ -->
     <section class="slide gate" id="slide-4" data-title="PART 1 ｜ 扉">
       <div class="gate-inner">
         <div class="gate-icon">
           <svg viewBox="0 0 256 256" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
-            <path d="M 24 180 Q 128 250, 224 70" fill="none" stroke="#93C5FD" stroke-width="7" stroke-linecap="round"/>
-            <circle cx="64" cy="166" r="9" fill="#60A5FA"/><circle cx="196" cy="100" r="9" fill="#60A5FA"/>
-            <line x1="64" y1="166" x2="196" y2="100" stroke="#A5B4FC" stroke-width="6" stroke-linecap="round"/>
+            <rect x="40" y="96" width="104" height="104" rx="4" fill="none" stroke="#93C5FD" stroke-width="7"/>
+            <rect x="144" y="96" width="34" height="104" fill="#A5B4FC" opacity="0.5"/>
+            <rect x="40" y="62" width="104" height="34" fill="#A5B4FC" opacity="0.5"/>
+            <rect x="144" y="62" width="34" height="34" fill="none" stroke="#FDA4AF" stroke-width="5" stroke-dasharray="6 6"/>
+            <path d="M 186 76 L 224 54" stroke="#FDA4AF" stroke-width="6" stroke-linecap="round"/>
+            <polyline points="212,50 224,54 218,66" fill="none" stroke="#FDA4AF" stroke-width="6" stroke-linecap="round" stroke-linejoin="round"/>
           </svg>
         </div>
         <div class="gate-part-num">P A R T  &nbsp;1</div>
+        <h1 class="gate-title">効くぶんだけ残して、<br><span class="gate-accent">小さすぎる分は捨てる</span>。</h1>
+        <p class="gate-sub">
+          微分の正体は、 ほんの少し動かしたときの変化を、 <strong style="color: white;">効くぶん（1 次）</strong>と <strong style="color: white;">ごく小さいぶん（2 次）</strong>に分け、 小さいほうを思いきって捨てることにある。 まずは正方形の面積を例に、 その考え方そのものを見ていく。
+        </p>
+      </div>
+    </section>
+
+    <section class="slide" id="slide-5" data-title="PART 1 ｜ 面積で分ける">
+      <div class="slide-inner">
+        <div class="eyebrow">入口 ／ 正方形を少しだけ大きくする</div>
+        <h2>正方形を少し広げると、<br>増えるのは<em>帯</em>と<em>すみの角</em>。</h2>
+        <p class="section-sub">
+          一辺 <strong>x</strong> の正方形の面積は <strong>x²</strong>。 一辺を <strong>Δx だけ</strong>のばすと、 増える面積は <strong>細長い帯 2 本</strong>と <strong>すみの小さな四角 1 つ</strong>に分かれる。 帯は <strong>x × Δx が 2 本で 2x Δx</strong>、 角は <strong>Δx × Δx ＝ Δx²</strong>。 スライダーで Δx を小さくして、 ふたつの大きさを見くらべる。
+        </p>
+
+        <div class="block">
+          <div class="control-row" style="margin-bottom: 12px;">
+            <div class="control-label"><span>のばす幅 Δx（x ＝ 3 に固定）</span><span class="control-value" id="c0-dx-val">0.60</span></div>
+            <input type="range" id="c0-dx" min="0.05" max="0.9" value="0.6" step="0.01">
+          </div>
+
+          <div class="chart-wrap" style="height: 300px;">
+            <canvas id="c0-canvas"></canvas>
+          </div>
+
+          <div class="stat-row" style="margin-top: 14px;">
+            <div class="stat primary"><div class="stat-label">帯 2 本（効く・1 次）＝ 2x Δx</div><div class="stat-value" id="c0-stat-band" style="font-size: 26px;">3.60</div></div>
+            <div class="stat rose"><div class="stat-label">すみの角（ゴミ・2 次）＝ Δx²</div><div class="stat-value" id="c0-stat-corner" style="font-size: 26px;">0.36</div></div>
+            <div class="stat amber"><div class="stat-label">角は帯の何倍か ＝ Δx ／ 2x</div><div class="stat-value" id="c0-stat-ratio" style="font-size: 26px;">0.100</div></div>
+          </div>
+
+          <div class="callout" style="margin-top: 12px;">
+            <div class="ico">◎</div>
+            <div class="body">
+              帯は <strong>Δx に比例</strong>（1 次）、 角は <strong>Δx² に比例</strong>（2 次）。 Δx を半分にすると帯も半分になるが、 角は <strong>4 分の 1</strong>まで小さくなる。 Δx が小さいほど、 すみの角は帯にくらべて <strong>どんどん小さく</strong>なっていく。
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section class="slide" id="slide-6" data-title="PART 1 ｜ ゴミを捨てる">
+      <div class="slide-inner">
+        <div class="eyebrow">本質 ／ 2 次を捨てると傾きが残る</div>
+        <h2>2 次の<em>ゴミ</em>を捨てると、<br>増え方は<em>2x</em> になる。</h2>
+        <p class="section-sub">
+          増える面積は <strong>2x Δx ＋ Δx²</strong>。 これを「のばした幅 Δx あたり」になおすと <strong>2x ＋ Δx</strong>。 Δx を 0 に近づけると、 残った <strong>Δx</strong> は消えて <strong>2x</strong> だけが残る。 この 2x が、 x² の <strong>その場での増え方 ＝ 傾き ＝ 微分</strong>である。 すみの角 Δx² は帯にくらべて桁ちがいに小さく、 Δx で割って 0 に近づけると消える。 ここでは便宜上これを「ゴミ」と呼んで切り落とす。
+        </p>
+        <div style="display:flex;flex-wrap:wrap;gap:8px;margin:6px 0 4px;"><button class="supp-chip" data-supp="WHYDISCARD"><span class="sc-tag">補足</span><span class="sc-ic"><svg viewBox="0 0 24 24"><circle cx="11" cy="11" r="7"/><path d="M21 21l-4.2-4.2M11 8.2v5.6M8.2 11h5.6"/></svg></span>2 次の項を、なぜ捨ててよい？</button></div>
+
+        <div class="block">
+          <div class="equation light" style="margin-top:2px;">
+            増える面積　<span class="op">＝</span>　<span class="var">2x Δx</span>　＋　<span class="var">Δx²</span>
+          </div>
+          <div class="equation" style="margin-top:10px;">
+            Δx あたり　<span class="op">＝</span>　2x ＋ Δx　<span class="op">→（Δx→0）→</span>　<span class="var">2x</span>
+          </div>
+
+          <div class="flow-card" style="margin:14px 0 0;">
+            <div class="flow-label">x ＝ 3 で確かめる ／ Δx を 0 に近づける</div>
+            <table class="rule-tbl">
+              <tr><th>のばす幅 Δx</th><th>Δx あたりの増え方 ＝ 2x ＋ Δx</th></tr>
+              <tr><td>0.1</td><td>6.1</td></tr>
+              <tr><td>0.01</td><td>6.01</td></tr>
+              <tr><td>0.001</td><td>6.001</td></tr>
+              <tr><td>0 に近づく</td><td>6 に近づく（＝ 2 × 3）</td></tr>
+            </table>
+          </div>
+
+          <div class="callout purple" style="margin-top: 12px;">
+            <div class="ico">◎</div>
+            <div class="body">
+              なめらかな関数では、 少し動かしたときの変化は <strong>傾き × Δx</strong>と、 それより小さい余りに分けられる（多項式なら、 余りは Δx² 以上の項）。 知りたいのは傾きなので、 <strong>Δx で割って Δx → 0 とし、 残る 1 次の係数だけを取り出す</strong>。 小さい項は、 この極限で消える。 これが微分の正体。 次の PART からは、 この同じ <strong>2x</strong> を、 グラフの上で「2 点を近づける」やり方でも確かめる。 <strong>代数で捨てても、 図で近づけても、 行き着く先は同じ</strong>。
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section class="slide gate" id="slide-7" data-title="PART 2 ｜ 扉">
+      <div class="gate-inner">
+        <div class="gate-icon">
+          <svg viewBox="0 0 256 256" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+            <path d="M 24 180 Q 128 250, 224 70" fill="none" stroke="#93C5FD" stroke-width="7" stroke-linecap="round"/>
+            <circle cx="64" cy="198" r="9" fill="#60A5FA"/><circle cx="196" cy="115" r="9" fill="#60A5FA"/>
+            <line x1="64" y1="198" x2="196" y2="115" stroke="#A5B4FC" stroke-width="6" stroke-linecap="round"/>
+          </svg>
+        </div>
+        <div class="gate-part-num">P A R T  &nbsp;2</div>
         <h1 class="gate-title">なめらかな変化を<br><span class="gate-accent">2 点で測る</span>。</h1>
         <p class="gate-sub">
           曲がったグラフでも、 <strong style="color: white;">2 つの点を選んで直線で結べば</strong>、 その区間の「平均の傾き」 が分かる。 これを <strong style="color: white;">平均変化率</strong>という。 「ある時間のあいだ、 平均してどれくらいの速さで変わったか」 を表す、 微分の出発点である。
@@ -1872,7 +1977,7 @@
       </div>
     </section>
 
-    <section class="slide" id="slide-5" data-title="PART 1 ｜ 変化の速さは傾き">
+    <section class="slide" id="slide-8" data-title="PART 2 ｜ 変化の速さは傾き">
       <div class="slide-inner">
         <div class="eyebrow">入口 ／ 速さも坂も、同じ「傾き」</div>
         <h2>変化の速さは、<br>グラフの<em>傾き</em>で表せる。</h2>
@@ -1911,7 +2016,7 @@
       </div>
     </section>
 
-    <section class="slide" id="slide-6" data-title="PART 1 ｜ 平均変化率">
+    <section class="slide" id="slide-9" data-title="PART 2 ｜ 平均変化率">
       <div class="slide-inner">
         <div class="eyebrow">式にする ／ 区間の平均の傾き</div>
         <h2>2 点を結ぶ直線の傾きが、<br><em>平均変化率</em>。</h2>
@@ -1926,12 +2031,12 @@
             <svg viewBox="0 0 760 190" preserveAspectRatio="xMidYMid meet" xmlns="http://www.w3.org/2000/svg" style="width:100%;height:100%;">
               <line x1="70" y1="160" x2="710" y2="160" stroke="#D1D5DB" stroke-width="2"/>
               <line x1="70" y1="20" x2="70" y2="160" stroke="#D1D5DB" stroke-width="2"/>
-              <path d="M 150 120 C 250 70, 330 150, 430 90 S 560 40, 620 56" fill="none" stroke="#93C5FD" stroke-width="3" stroke-linecap="round"/>
+              <path d="M 150 120 C 240 110, 300 126, 390 104 C 480 82, 540 66, 620 56" fill="none" stroke="#93C5FD" stroke-width="3" stroke-linecap="round"/>
               <line x1="150" y1="120" x2="620" y2="56" stroke="#1D4ED8" stroke-width="3" stroke-linecap="round"/>
               <circle cx="150" cy="120" r="7" fill="#1D4ED8"/><circle cx="620" cy="56" r="7" fill="#1D4ED8"/>
               <text x="150" y="142" text-anchor="middle" fill="#1D4ED8" font-family="Zen Kaku Gothic New" font-weight="700" font-size="14">1 日目 100 円</text>
               <text x="620" y="44" text-anchor="middle" fill="#1D4ED8" font-family="Zen Kaku Gothic New" font-weight="700" font-size="14">4 日目 130 円</text>
-              <text x="385" y="104" text-anchor="middle" fill="#B45309" font-family="Zen Kaku Gothic New" font-weight="700" font-size="14">平均 ＋10 円 ／ 日</text>
+              <text x="385" y="140" text-anchor="middle" fill="#B45309" stroke="#FFFFFF" stroke-width="4" paint-order="stroke" stroke-linejoin="round" font-family="Zen Kaku Gothic New" font-weight="700" font-size="14">平均 ＋10 円 ／ 日</text>
             </svg>
           </div>
 
@@ -1949,7 +2054,7 @@
       </div>
     </section>
 
-    <section class="slide" id="slide-7" data-title="PART 1 ｜ 割線の傾き">
+    <section class="slide" id="slide-10" data-title="PART 2 ｜ 割線の傾き">
       <div class="slide-inner">
         <div class="eyebrow">動かしてみる ／ 区間を狭めると</div>
         <h2>区間を狭めるほど、<br>傾きは<em>その場の傾き</em>に近づく。</h2>
@@ -1984,17 +2089,17 @@
     </section>
 
     <!-- ============ PART 2 微分＝瞬間の変化率 (8-11) ============ -->
-    <section class="slide gate" id="slide-8" data-title="PART 2 ｜ 扉">
+    <section class="slide gate" id="slide-11" data-title="PART 3 ｜ 扉">
       <div class="gate-inner">
         <div class="gate-icon">
           <svg viewBox="0 0 256 256" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
             <path d="M 28 60 Q 128 240, 228 60" fill="none" stroke="#FCD34D" stroke-width="6" stroke-linecap="round" opacity="0.7"/>
-            <circle cx="150" cy="150" r="9" fill="#FCD34D"/>
+            <circle cx="150" cy="146" r="9" fill="#FCD34D"/>
             <line x1="74" y1="150" x2="226" y2="92" stroke="#FDE68A" stroke-width="6" stroke-linecap="round"/>
-            <circle cx="200" cy="111" r="7" fill="#FFFFFF"/>
+            <circle cx="200" cy="102" r="7" fill="#FFFFFF"/>
           </svg>
         </div>
-        <div class="gate-part-num">P A R T  &nbsp;2</div>
+        <div class="gate-part-num">P A R T  &nbsp;3</div>
         <h1 class="gate-title">2 点を、限りなく<br><span class="gate-accent">近づける</span>。</h1>
         <p class="gate-sub">
           平均変化率は「区間の平均」 だった。 では、 その区間を <strong style="color: white;">限りなく狭めて 0 に近づける</strong>と、 何が残るか。 残るのは、 たった 1 点での <strong style="color: white;">瞬間の変化率</strong>。 これが <strong style="color: white;">微分</strong>であり、 その点に接する直線 ── <strong style="color: white;">接線の傾き</strong>に等しい。
@@ -2002,7 +2107,7 @@
       </div>
     </section>
 
-    <section class="slide" id="slide-9" data-title="PART 2 ｜ 接線へ近づく">
+    <section class="slide" id="slide-12" data-title="PART 3 ｜ 接線へ近づく">
       <div class="slide-inner">
         <div class="eyebrow">動かしてみる ／ 幅 h を 0 へ</div>
         <h2>幅を 0 に近づけると、<br>割線は<em>接線</em>になる。</h2>
@@ -2030,14 +2135,14 @@
           <div class="callout emerald" style="margin-top: 14px;">
             <div class="ico">◎</div>
             <div class="body">
-              傾きは <strong>2 ＋ h</strong>。 h を 1.6 → 0.5 → 0.05 と小さくするほど、 値は <strong>2 に近づく</strong>。 h をちょうど 0 にすると、 2 点が重なって割り算ができない。 そこで「h を 0 そのものにはせず、 <strong>限りなく 0 に近づけたときの行き先</strong>」 を答えとする ── これを <strong>極限</strong>といい、 ここでは 2 になる。
+              傾きは <strong>2 ＋ h</strong>。 h を 1.6 → 0.5 → 0.05 と小さくするほど、 値は <strong>2 に近づく</strong>。 h をちょうど 0 にすると、 2 点が重なって割り算ができない。 そこで「h を 0 そのものにはせず、 <strong>限りなく 0 に近づけたときの行き先</strong>」 を答えとする ── これを <strong>極限</strong>といい、 ここでは 2 になる。 なお、 この図では右から近づけているが、 なめらかな関数では左から近づけても同じ値になる。
             </div>
           </div>
         </div>
       </div>
     </section>
 
-    <section class="slide" id="slide-10" data-title="PART 2 ｜ 導関数">
+    <section class="slide" id="slide-13" data-title="PART 3 ｜ 導関数">
       <div class="slide-inner">
         <div class="eyebrow">記号にする ／ 傾きを集めた関数</div>
         <h2>各点の傾きを集めると、<br><em>導関数</em> f′(x) になる。</h2>
@@ -2048,7 +2153,7 @@
 
         <div class="block">
           <div class="equation" style="margin-top: 2px;">
-            f′(x) <span class="op">＝</span> <span class="op">（</span><span class="var">f(x ＋ h) − f(x)</span><span class="op">）／</span> <span class="var">h</span> <span class="op">（h を 0 に近づけた値）</span>
+            f′(x) <span class="op">＝</span> <span class="op">（</span><span class="var">f(x ＋ h) − f(x)</span><span class="op">）／</span> <span class="var">h</span> <span class="op">（h を 0 に近づけたときの極限）</span>
           </div>
 
           <div class="flow-card" style="margin:16px 0 0;">
@@ -2056,20 +2161,20 @@
             <svg viewBox="0 0 800 200" xmlns="http://www.w3.org/2000/svg" aria-hidden="true" style="width:100%;height:auto;">
               <line x1="60" y1="170" x2="380" y2="170" stroke="#D1D5DB" stroke-width="2"/>
               <line x1="120" y1="24" x2="120" y2="170" stroke="#D1D5DB" stroke-width="2"/>
-              <path d="M 70 160 Q 120 -20, 360 30" fill="none" stroke="#93C5FD" stroke-width="3.5" stroke-linecap="round"/>
-              <g stroke="#1D4ED8" stroke-width="2.6" stroke-linecap="round">
-                <line x1="150" y1="150" x2="210" y2="120"/>
-                <line x1="220" y1="118" x2="280" y2="58"/>
+              <path d="M 120 170 L 158 167 L 196 157 L 234 141 L 272 119 L 310 90 L 347 54 L 370 30" fill="none" stroke="#93C5FD" stroke-width="3.5" stroke-linecap="round"/>
+              <path d="M 196 170 V 157" stroke="#9CA3AF" stroke-width="1.2" stroke-dasharray="3 3"/><path d="M 347 170 V 54" stroke="#9CA3AF" stroke-width="1.2" stroke-dasharray="3 3"/><g stroke="#1D4ED8" stroke-width="2.6" stroke-linecap="round">
+                <line x1="161" y1="169" x2="231" y2="145"/>
+                <line x1="317" y1="85" x2="377" y2="24"/>
               </g>
-              <circle cx="180" cy="135" r="5" fill="#1D4ED8"/><circle cx="250" cy="88" r="5" fill="#1D4ED8"/>
-              <text x="180" y="166" text-anchor="middle" fill="#1D4ED8" font-family="JetBrains Mono" font-size="13" font-weight="700">x=1 → 傾き2</text>
-              <text x="300" y="60" text-anchor="middle" fill="#1D4ED8" font-family="JetBrains Mono" font-size="13" font-weight="700">x=3 → 傾き6</text>
-              <text x="110" y="20" fill="#6B7280" font-family="Zen Kaku Gothic New" font-size="13" font-weight="700">y=x²</text>
+              <circle cx="196" cy="157" r="5" fill="#1D4ED8"/><circle cx="347" cy="54" r="5" fill="#1D4ED8"/>
+              <text x="150" y="187" text-anchor="middle" fill="#1D4ED8" font-family="JetBrains Mono" font-size="12.5" font-weight="700">x=1 → 傾き2</text>
+              <text x="347" y="187" text-anchor="middle" fill="#1D4ED8" font-family="JetBrains Mono" font-size="12.5" font-weight="700">x=3 → 傾き6</text>
+              <text x="126" y="30" fill="#6B7280" font-family="Zen Kaku Gothic New" font-size="13" font-weight="700">y=x²</text>
               <g stroke="#9CA3AF" stroke-width="2.5" fill="none" class="lec10-flowg"><line x1="410" y1="96" x2="460" y2="96" stroke-linecap="round"/><polyline points="452,89 460,96 452,103" stroke-linejoin="round" stroke-linecap="round"/></g>
               <text x="435" y="80" text-anchor="middle" fill="#6B7280" font-family="Zen Kaku Gothic New" font-size="12" font-weight="700">微分</text>
               <line x1="500" y1="150" x2="760" y2="150" stroke="#D1D5DB" stroke-width="2"/>
               <line x1="560" y1="40" x2="560" y2="150" stroke="#D1D5DB" stroke-width="2"/>
-              <line x1="510" y1="146" x2="750" y2="52" stroke="#B45309" stroke-width="3.5" stroke-linecap="round"/>
+              <line x1="560" y1="150" x2="750" y2="50" stroke="#B45309" stroke-width="3.5" stroke-linecap="round"/>
               <text x="700" y="44" fill="#B45309" font-family="JetBrains Mono" font-size="13" font-weight="700">f′(x)=2x</text>
               <text x="640" y="172" text-anchor="middle" fill="#6B7280" font-family="Zen Kaku Gothic New" font-size="12" font-weight="700">傾きは右へ行くほど大きい</text>
             </svg>
@@ -2085,7 +2190,7 @@
       </div>
     </section>
 
-    <section class="slide" id="slide-11" data-title="PART 2 ｜ 微分のルール">
+    <section class="slide" id="slide-14" data-title="PART 3 ｜ 微分のルール">
       <div class="slide-inner">
         <div class="eyebrow">道具にする ／ よく使う微分の型</div>
         <h2>よく出る形は、<br><em>型</em>で一気に微分できる。</h2>
@@ -2121,7 +2226,7 @@
           </div>
 
           <div class="equation light" style="margin-top: 12px;">
-            <span class="var">xⁿ</span> を微分すると　<span class="op">→</span>　<span class="var">n x<sup>n−1</sup></span>
+            <span class="var">xⁿ</span>（n は正の整数）を微分すると　<span class="op">→</span>　<span class="var">n x<sup>n−1</sup></span>
           </div>
 
           <div class="callout emerald" style="margin-top: 14px;">
@@ -2135,7 +2240,7 @@
     </section>
 
     <!-- ============ PART 3 傾きで増減を読む (12-15) ============ -->
-    <section class="slide gate" id="slide-12" data-title="PART 3 ｜ 扉">
+    <section class="slide gate" id="slide-15" data-title="PART 4 ｜ 扉">
       <div class="gate-inner">
         <div class="gate-icon">
           <svg viewBox="0 0 256 256" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
@@ -2144,7 +2249,7 @@
             <circle cx="128" cy="186" r="8" fill="#FFFFFF"/>
           </svg>
         </div>
-        <div class="gate-part-num">P A R T  &nbsp;3</div>
+        <div class="gate-part-num">P A R T  &nbsp;4</div>
         <h1 class="gate-title">傾きの<span class="gate-accent">符号</span>で、<br>関数の形を読む。</h1>
         <p class="gate-sub">
           微分（傾き）が <strong style="color: white;">プラスなら、 グラフはのぼり坂</strong>。 <strong style="color: white;">マイナスなら、 くだり坂</strong>。 そして <strong style="color: white;">ちょうど 0 になる所</strong>が、 のぼりとくだりの境目 ── <strong style="color: white;">山（極大）や谷（極小）</strong>である。 傾きの符号さえ追えば、 グラフ全体の形が読める。
@@ -2152,7 +2257,7 @@
       </div>
     </section>
 
-    <section class="slide" id="slide-13" data-title="PART 3 ｜ 動く接線">
+    <section class="slide" id="slide-16" data-title="PART 4 ｜ 動く接線">
       <div class="slide-inner">
         <div class="eyebrow">動かしてみる ／ 点を動かして傾きを見る</div>
         <h2>傾きが <em>＋</em> ならのぼり、<br><em>−</em> ならくだり、<em>0</em> で山か谷。</h2>
@@ -2187,7 +2292,7 @@
       </div>
     </section>
 
-    <section class="slide" id="slide-14" data-title="PART 3 ｜ 極大・極小">
+    <section class="slide" id="slide-17" data-title="PART 4 ｜ 極大・極小">
       <div class="slide-inner">
         <div class="eyebrow">使いどころ ／ 山と谷をさがす</div>
         <h2>「いちばん」をさがすには、<br><em>傾きが 0</em> の所を見る。</h2>
@@ -2203,8 +2308,8 @@
               <svg viewBox="0 0 360 150" xmlns="http://www.w3.org/2000/svg" aria-hidden="true" style="width:100%;height:auto;">
                 <line x1="20" y1="120" x2="340" y2="120" stroke="#D1D5DB" stroke-width="2"/>
                 <path d="M 40 110 Q 180 -10, 320 110" fill="none" stroke="#B45309" stroke-width="3.5" stroke-linecap="round"/>
-                <line x1="120" y1="38" x2="240" y2="38" stroke="#E11D48" stroke-width="3" stroke-linecap="round"/>
-                <circle cx="180" cy="38" r="6" fill="#E11D48"/>
+                <line x1="120" y1="50" x2="240" y2="50" stroke="#E11D48" stroke-width="3" stroke-linecap="round"/>
+                <circle cx="180" cy="50" r="6" fill="#E11D48"/>
                 <text x="180" y="78" text-anchor="middle" fill="#B45309" font-family="Zen Kaku Gothic New" font-size="14" font-weight="700">のぼり → 水平 → くだり</text>
               </svg>
             </div>
@@ -2213,8 +2318,8 @@
               <svg viewBox="0 0 360 150" xmlns="http://www.w3.org/2000/svg" aria-hidden="true" style="width:100%;height:auto;">
                 <line x1="20" y1="120" x2="340" y2="120" stroke="#D1D5DB" stroke-width="2"/>
                 <path d="M 40 24 Q 180 150, 320 24" fill="none" stroke="#2563EB" stroke-width="3.5" stroke-linecap="round"/>
-                <line x1="120" y1="100" x2="240" y2="100" stroke="#059669" stroke-width="3" stroke-linecap="round"/>
-                <circle cx="180" cy="100" r="6" fill="#059669"/>
+                <line x1="120" y1="87" x2="240" y2="87" stroke="#059669" stroke-width="3" stroke-linecap="round"/>
+                <circle cx="180" cy="87" r="6" fill="#059669"/>
                 <text x="180" y="40" text-anchor="middle" fill="#2563EB" font-family="Zen Kaku Gothic New" font-size="14" font-weight="700">くだり → 水平 → のぼり</text>
               </svg>
             </div>
@@ -2230,7 +2335,7 @@
       </div>
     </section>
 
-    <section class="slide" id="slide-15" data-title="PART 3 ｜ 速度と加速度">
+    <section class="slide" id="slide-18" data-title="PART 4 ｜ 速度と加速度">
       <div class="slide-inner">
         <div class="eyebrow">もう一歩 ／ 微分を 2 回くり返す</div>
         <h2>位置を微分すると速度、<br>もう一度で<em>加速度</em>。</h2>
@@ -2244,7 +2349,7 @@
             <svg viewBox="0 0 820 170" xmlns="http://www.w3.org/2000/svg" aria-hidden="true" style="width:100%;height:auto;">
               <rect x="14" y="40" width="210" height="92" rx="14" fill="#EFF6FF" stroke="#1D4ED8" stroke-width="2"/>
               <text x="119" y="68" text-anchor="middle" fill="#1D4ED8" font-family="Zen Kaku Gothic New" font-weight="700" font-size="16">位置</text>
-              <path d="M 36 116 C 80 70, 150 70, 206 100" fill="none" stroke="#1D4ED8" stroke-width="3"/>
+              <path d="M 36 120 C 110 116, 160 96, 206 56" fill="none" stroke="#1D4ED8" stroke-width="3"/>
               <text x="119" y="152" text-anchor="middle" fill="#6B7280" font-family="Zen Kaku Gothic New" font-weight="700" font-size="13">どこにいるか</text>
               <g stroke="#9CA3AF" stroke-width="2.5" fill="none" class="lec10-flowg"><line x1="234" y1="86" x2="286" y2="86" stroke-linecap="round"/><polyline points="278,79 286,86 278,93" stroke-linejoin="round" stroke-linecap="round"/></g>
               <text x="260" y="70" text-anchor="middle" fill="#6B7280" font-family="Zen Kaku Gothic New" font-size="12" font-weight="700">微分</text>
@@ -2264,7 +2369,7 @@
           <div class="callout" style="margin-top: 16px;">
             <div class="ico">◎</div>
             <div class="body">
-              2 回微分した「加速度」 は、 グラフの <strong>曲がり方（カーブの向き）</strong>とも結びつく。 加速度がプラスなら<strong>下に凸</strong>（お椀のような ∪ 型・谷をつくりやすい）、 マイナスなら<strong>上に凸</strong>（∩ 型・山になりやすい）。 微分をくり返すことで、 「のぼり・くだり」 だけでなく、 <strong>「ぐっと加速したか、 ゆるんだか」</strong>まで読めるようになる。
+              2 回微分した「加速度」 は、 グラフの <strong>曲がり方（カーブの向き）</strong>とも結びつく。 位置を時間の関数として描くと、 加速度がプラスなら<strong>下に凸</strong>（お椀のような ∪ 型・谷をつくりやすい）、 マイナスなら<strong>上に凸</strong>（∩ 型・山になりやすい）。 微分をくり返すことで、 「のぼり・くだり」 だけでなく、 <strong>「ぐっと加速したか、 ゆるんだか」</strong>まで読めるようになる。
             </div>
           </div>
         </div>
@@ -2272,16 +2377,16 @@
     </section>
 
     <!-- ============ PART 4 最適化 (16-19) ============ -->
-    <section class="slide gate" id="slide-16" data-title="PART 4 ｜ 扉">
+    <section class="slide gate" id="slide-19" data-title="PART 5 ｜ 扉">
       <div class="gate-inner">
         <div class="gate-icon">
           <svg viewBox="0 0 256 256" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
             <path d="M 28 70 Q 128 250, 228 70" fill="none" stroke="#C4B5FD" stroke-width="7" stroke-linecap="round"/>
-            <circle cx="128" cy="178" r="11" fill="#FFFFFF"/>
-            <line x1="98" y1="178" x2="158" y2="178" stroke="#C4B5FD" stroke-width="6" stroke-linecap="round"/>
+            <circle cx="128" cy="160" r="11" fill="#FFFFFF"/>
+            <line x1="98" y1="160" x2="158" y2="160" stroke="#C4B5FD" stroke-width="6" stroke-linecap="round"/>
           </svg>
         </div>
-        <div class="gate-part-num">P A R T  &nbsp;4</div>
+        <div class="gate-part-num">P A R T  &nbsp;5</div>
         <h1 class="gate-title">いちばん良い<br>所を<span class="gate-accent">さがす</span>。</h1>
         <p class="gate-sub">
           利益を <strong style="color: white;">いちばん大きく</strong>したい。 費用を <strong style="color: white;">いちばん小さく</strong>したい。 こうした「いちばん」 を求める問題を <strong style="color: white;">最適化</strong>という。 山も谷も <strong style="color: white;">傾きが 0</strong>になるのだから、 <strong style="color: white;">微分 ＝ 0 を解けば</strong>、 いちばん良い点の<strong style="color: white;">候補</strong>が見つかる。
@@ -2289,7 +2394,7 @@
       </div>
     </section>
 
-    <section class="slide" id="slide-17" data-title="PART 4 ｜ 利益の最大">
+    <section class="slide" id="slide-20" data-title="PART 5 ｜ 利益の最大">
       <div class="slide-inner">
         <div class="eyebrow">動かしてみる ／ 傾きを手がかりに</div>
         <h2>利益のてっぺんでは、<br>傾きが<em>ちょうど 0</em>。</h2>
@@ -2316,14 +2421,14 @@
           <div class="callout emerald" style="margin-top: 14px;">
             <div class="ico">◎</div>
             <div class="body">
-              傾きがプラスのうちは「もっと売れば利益が増える」、 マイナスになったら「売りすぎ」。 ちょうど <strong>傾き 0 の x ＝ 6（六百個）</strong>で利益が最大の <strong>62 万円</strong>になる。 やみくもに試さなくても、 傾き ＝ 0 を解けば一発で「いちばん良い個数」 が分かる。 これを次のスライドで計算してみる。
+              傾きがプラスのうちは「もっと売れば利益が増える」、 マイナスになったら「売りすぎ」。 ちょうど <strong>傾き 0 の x ＝ 6（六百個）</strong>で利益が最大の <strong>62 万円</strong>になる。 やみくもに試さなくても、 傾き ＝ 0 を解けば、 最適な個数の候補が計算で求まる。 これを次のスライドで計算してみる。
             </div>
           </div>
         </div>
       </div>
     </section>
 
-    <section class="slide" id="slide-18" data-title="PART 4 ｜ 微分＝0 で解く">
+    <section class="slide" id="slide-21" data-title="PART 5 ｜ 微分＝0 で解く">
       <div class="slide-inner">
         <div class="eyebrow">式で解く ／ 微分 ＝ 0</div>
         <h2>傾きの式を <em>0</em> とおいて、<br>最適な点を解く。</h2>
@@ -2346,19 +2451,19 @@
           <div class="callout" style="margin-top: 14px;">
             <div class="ico">◎</div>
             <div class="body">
-              ポイントは <strong>「最適 ＝ 傾き 0」</strong>という言い換え。 これで「いちばん」 を探す問題が、 「f′(x) ＝ 0 を解く」 という方程式の問題に変わる。 ただし、 これが気持ちよく解けるのは <strong>式が単純なとき</strong>。 変数が増えて式が複雑になると、 手では解けなくなる ── そこが次のスライドの出発点である。
+              ポイントは <strong>「最適 ＝ 傾き 0」</strong>という言い換え。 これで「いちばん」 を探す問題が、 「f′(x) ＝ 0 を解く」 という方程式の問題に変わる。 ただし、 これが直接使えるのは <strong>式が単純なとき</strong>。 変数が増えて式が複雑になると、 手では解けなくなる ── そこが次のスライドの出発点である。
             </div>
           </div>
         </div>
       </div>
     </section>
 
-    <section class="slide" id="slide-19" data-title="PART 4 ｜ 解けないときは">
+    <section class="slide" id="slide-22" data-title="PART 5 ｜ 解けないときは">
       <div class="slide-inner">
         <div class="eyebrow">橋渡し ／ 手で解けない問題へ</div>
         <h2>解けないなら、<br>傾きを手がかりに<em>少しずつ</em>。</h2>
         <p class="section-sub">
-          現実の問題では、 調整するつまみ（変数）が <strong>何百万個</strong>あることもある。 AI の中身がまさにそれで、 <strong>f′(x) ＝ 0</strong>を一度に解くことはできない。 そこで発想を変える。 いまいる場所の <strong>傾きだけは計算できる</strong>のだから、 その傾きを手がかりに <strong>「良くなる方へ少しずつ動く」</strong>。 これをくり返せば、 式を解かなくても、 だんだん良い点へたどり着ける。
+          現実の問題では、 調整するつまみ（変数）が <strong>何百万個</strong>あることもある。 ニューラルネットワークでは、 調整するつまみが何百万個にもなり、 <strong>f′(x) ＝ 0</strong>を一度に解くことはできない。 そこで発想を変える。 いまいる場所の <strong>傾きだけは計算できる</strong>のだから、 その傾きを手がかりに <strong>「良くなる方へ少しずつ動く」</strong>。 これをくり返せば、 式を解かなくても、 だんだん良い点へたどり着ける。
         </p>
         <div style="display:flex;flex-wrap:wrap;gap:8px;margin:6px 0 4px;"><button class="supp-chip" data-supp="NUMDIFF"><span class="sc-tag">補足</span><span class="sc-ic"><svg viewBox="0 0 24 24"><circle cx="11" cy="11" r="7"/><path d="M21 21l-4.2-4.2M11 8.2v5.6M8.2 11h5.6"/></svg></span>式がなくても、傾きは測れる？</button></div>
 
@@ -2389,7 +2494,7 @@
     </section>
 
     <!-- ============ PART 5 勾配降下法 (20-23) ============ -->
-    <section class="slide gate" id="slide-20" data-title="PART 5 ｜ 扉">
+    <section class="slide gate" id="slide-23" data-title="PART 6 ｜ 扉">
       <div class="gate-inner">
         <div class="gate-icon">
           <svg viewBox="0 0 256 256" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
@@ -2399,15 +2504,15 @@
             <polyline points="90,144 104,152 96,128" fill="none" stroke="#FDA4AF" stroke-width="6" stroke-linecap="round" stroke-linejoin="round"/>
           </svg>
         </div>
-        <div class="gate-part-num">P A R T  &nbsp;5 ｜ 情報の理論へ</div>
+        <div class="gate-part-num">P A R T  &nbsp;6 ｜ 情報の理論へ</div>
         <h1 class="gate-title">AI は、<span class="gate-accent rose">坂を下る</span><br>ように学ぶ。</h1>
         <p class="gate-sub">
-          AI の学習とは、 「答えのまちがい（<strong style="color: white;">損失</strong>）をできるだけ小さくする」 こと。 損失を山や谷のある地形だと思えば、 学習は <strong style="color: white;">いちばん低い所へ下りていく</strong>ことになる。 道しるべは、 足もとの <strong style="color: white;">傾き ＝ 微分</strong>。 傾きの逆向きに一歩ずつ下る ── これが <strong style="color: white;">勾配降下法</strong>である。
+          AI の学習とは、 「答えのまちがい（<strong style="color: white;">損失</strong>）をできるだけ小さくする」 こと。 損失を山や谷のある地形だと思えば、 学習は <strong style="color: white;">できるだけ低い所へ下りていく</strong>ことになる。 道しるべは、 足もとの <strong style="color: white;">傾き ＝ 微分</strong>。 傾きの逆向きに一歩ずつ下る ── これが <strong style="color: white;">勾配降下法</strong>である。
         </p>
       </div>
     </section>
 
-    <section class="slide" id="slide-21" data-title="PART 5 ｜ 勾配降下法">
+    <section class="slide" id="slide-24" data-title="PART 6 ｜ 勾配降下法">
       <div class="slide-inner">
         <div class="eyebrow">動かしてみる ／ 坂を下って最小へ</div>
         <h2>傾きの逆向きに一歩、<br>くり返して<em>谷底</em>へ。</h2>
@@ -2450,7 +2555,7 @@
       </div>
     </section>
 
-    <section class="slide" id="slide-22" data-title="PART 5 ｜ 学習率">
+    <section class="slide" id="slide-25" data-title="PART 6 ｜ 学習率">
       <div class="slide-inner">
         <div class="eyebrow">さじ加減 ／ 一歩の大きさ</div>
         <h2>学習率は、<br><em>大きすぎても小さすぎても</em>困る。</h2>
@@ -2465,7 +2570,7 @@
               <div class="flow-label" style="color:var(--action-deep);">小さすぎ ／ 遅い</div>
               <svg viewBox="0 0 260 150" xmlns="http://www.w3.org/2000/svg" aria-hidden="true" style="width:100%;height:auto;">
                 <path d="M 20 24 Q 130 168, 240 24" fill="none" stroke="#93C5FD" stroke-width="3.5"/>
-                <g fill="#2563EB"><circle cx="40" cy="50" r="5"/><circle cx="58" cy="68" r="5"/><circle cx="76" cy="84" r="5"/><circle cx="94" cy="98" r="5"/><circle cx="112" cy="108" r="5"/></g>
+                <g fill="#2563EB"><circle cx="40" cy="48" r="5"/><circle cx="58" cy="65" r="5"/><circle cx="76" cy="79" r="5"/><circle cx="94" cy="88" r="5"/><circle cx="112" cy="94" r="5"/></g>
                 <text x="130" y="142" text-anchor="middle" fill="#1D4ED8" font-family="Zen Kaku Gothic New" font-size="13" font-weight="700">少しずつしか進まない</text>
               </svg>
             </div>
@@ -2473,8 +2578,8 @@
               <div class="flow-label" style="color:var(--ok);">ちょうどよい</div>
               <svg viewBox="0 0 260 150" xmlns="http://www.w3.org/2000/svg" aria-hidden="true" style="width:100%;height:auto;">
                 <path d="M 20 24 Q 130 168, 240 24" fill="none" stroke="#6EE7B7" stroke-width="3.5"/>
-                <g fill="#059669"><circle cx="44" cy="54" r="5"/><circle cx="90" cy="96" r="5"/><circle cx="130" cy="118" r="6"/></g>
-                <path d="M 44 54 Q 88 96, 130 118" fill="none" stroke="#059669" stroke-width="2" stroke-dasharray="4 4"/>
+                <g fill="#059669"><circle cx="44" cy="52" r="5"/><circle cx="90" cy="87" r="5"/><circle cx="130" cy="96" r="6"/></g>
+                <path d="M 44 52 Q 90 100, 130 96" fill="none" stroke="#059669" stroke-width="2" stroke-dasharray="4 4"/>
                 <text x="130" y="142" text-anchor="middle" fill="#059669" font-family="Zen Kaku Gothic New" font-size="13" font-weight="700">むだなく谷底へ</text>
               </svg>
             </div>
@@ -2482,8 +2587,8 @@
               <div class="flow-label" style="color:var(--ng);">大きすぎ ／ 飛び越す</div>
               <svg viewBox="0 0 260 150" xmlns="http://www.w3.org/2000/svg" aria-hidden="true" style="width:100%;height:auto;">
                 <path d="M 20 24 Q 130 168, 240 24" fill="none" stroke="#FDA4AF" stroke-width="3.5"/>
-                <g fill="#E11D48"><circle cx="50" cy="58" r="5"/><circle cx="206" cy="60" r="5"/><circle cx="64" cy="74" r="5"/><circle cx="196" cy="44" r="5"/></g>
-                <path d="M 50 58 Q 130 150, 206 60" fill="none" stroke="#E11D48" stroke-width="2" stroke-dasharray="4 4"/>
+                <g fill="#E11D48"><circle cx="50" cy="58" r="5"/><circle cx="206" cy="62" r="5"/><circle cx="64" cy="70" r="5"/><circle cx="196" cy="70" r="5"/></g>
+                <path d="M 50 58 Q 130 140, 206 62" fill="none" stroke="#E11D48" stroke-width="2" stroke-dasharray="4 4"/>
                 <text x="130" y="142" text-anchor="middle" fill="#BE123C" font-family="Zen Kaku Gothic New" font-size="13" font-weight="700">左右に飛んで遠ざかる</text>
               </svg>
             </div>
@@ -2499,7 +2604,7 @@
       </div>
     </section>
 
-    <section class="slide" id="slide-23" data-title="PART 5 ｜ AI・データサイエンスへ">
+    <section class="slide" id="slide-26" data-title="PART 6 ｜ AI・データサイエンスへ">
       <div class="slide-inner">
         <div class="eyebrow">その先へ ／ 微分が AI を動かす</div>
         <h2>微分が、<br>AI の<em>学ぶ仕組み</em>を支える。</h2>
@@ -2520,7 +2625,7 @@
                   <path class="flw" d="M 120 104 L 150 110" stroke-linecap="round"/>
                 </g>
                 <circle cx="180" cy="110" r="7" fill="#10B981"/>
-                <text x="180" y="132" text-anchor="middle" fill="#6D28D9" font-family="Zen Kaku Gothic New" font-weight="700" font-size="13">損失が最小の所へ</text>
+                <text x="180" y="132" text-anchor="middle" fill="#6D28D9" font-family="Zen Kaku Gothic New" font-weight="700" font-size="13">損失が小さい所へ</text>
               </svg>
             </div>
             <p style="font-size:14px;margin-top:6px;line-height:1.8;">傾き（勾配）の逆向きに、 つまみを少しずつ動かして <strong>まちがいを減らす</strong>。 これが学習。</p>
@@ -2547,14 +2652,14 @@
         <div class="callout emerald" style="margin-top: 16px;">
           <div class="ico">◎</div>
           <div class="body">
-            画像認識も、 文章を書く AI も、 学習の中心はこの <strong>「傾きをたどって損失を下る」</strong>くり返し。 本日の平均変化率から始まった微分が、 そのまま <strong>AI がデータから学ぶ仕組み</strong>になっている。 変化をとらえる道具は、 これからのデータサイエンスを支える土台である。
+            画像認識も、 文章を書く AI も、 学習の中心はこの <strong>「傾きをたどって損失を下る」</strong>くり返し。 本日の微分が、 <strong>AI がデータから学ぶときの勾配計算</strong>につながっている。 変化をとらえるこの道具は、 これからのデータサイエンスの基礎になる。
           </div>
         </div>
       </div>
     </section>
 
     <!-- ============ SUMMARY (24) ============ -->
-    <section class="slide" id="slide-24" data-title="まとめ">
+    <section class="slide" id="slide-27" data-title="まとめ">
       <div class="slide-inner">
         <div class="hr-section"><span class="label">SUMMARY</span></div>
         <div class="eyebrow">本日のまとめ</div>
@@ -2567,12 +2672,12 @@
           <div class="flow-label">FLOW ／ 今日の流れ</div>
           <svg viewBox="0 0 800 150" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
             <rect x="14" y="44" width="176" height="76" rx="14" fill="#EFF6FF" stroke="#1D4ED8" stroke-width="2"/>
-            <line x1="34" y1="104" x2="170" y2="66" stroke="#1D4ED8" stroke-width="3" stroke-linecap="round"/>
-            <text x="102" y="140" text-anchor="middle" fill="#1D4ED8" font-family="Zen Kaku Gothic New" font-weight="700" font-size="13">平均変化率（2 点の傾き）</text>
+            <rect x="74" y="72" width="40" height="40" fill="none" stroke="#1D4ED8" stroke-width="2.5"/><rect x="114" y="72" width="11" height="40" fill="#93C5FD"/><rect x="74" y="61" width="40" height="11" fill="#93C5FD"/><rect x="114" y="61" width="11" height="11" fill="none" stroke="#E11D48" stroke-width="2" stroke-dasharray="3 3"/>
+            <text x="102" y="140" text-anchor="middle" fill="#1D4ED8" font-family="Zen Kaku Gothic New" font-weight="700" font-size="13">小さいものを捨てる（面積）</text>
             <g stroke="#9CA3AF" stroke-width="2" fill="none" class="lec10-flowg"><line x1="196" y1="82" x2="228" y2="82" stroke-linecap="round"/><polyline points="222,76 228,82 222,88" stroke-linejoin="round" stroke-linecap="round"/></g>
             <rect x="236" y="44" width="176" height="76" rx="14" fill="#FFFBEB" stroke="#B45309" stroke-width="2"/>
             <path d="M 252 110 Q 324 30, 396 70" fill="none" stroke="#B45309" stroke-width="3"/>
-            <line x1="276" y1="92" x2="384" y2="58" stroke="#B45309" stroke-width="2.4"/>
+            <line x1="255" y1="97" x2="335" y2="49" stroke="#B45309" stroke-width="2.4" stroke-linecap="round"/><circle cx="295" cy="73" r="4" fill="#B45309"/>
             <text x="324" y="140" text-anchor="middle" fill="#B45309" font-family="Zen Kaku Gothic New" font-weight="700" font-size="13">微分（瞬間の傾き）</text>
             <g stroke="#9CA3AF" stroke-width="2" fill="none" class="lec10-flowg"><line x1="418" y1="82" x2="450" y2="82" stroke-linecap="round"/><polyline points="444,76 450,82 444,88" stroke-linejoin="round" stroke-linecap="round"/></g>
             <rect x="458" y="44" width="150" height="76" rx="14" fill="#ECFDF5" stroke="#059669" stroke-width="2"/>
@@ -2591,13 +2696,13 @@
           <div class="principle-icon">
             <svg viewBox="0 0 256 256" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
               <path d="M 30 180 Q 128 250, 226 70" fill="none" stroke="#1D4ED8" stroke-width="8" stroke-linecap="round"/>
-              <circle cx="80" cy="160" r="8" fill="#1D4ED8"/><circle cx="190" cy="100" r="8" fill="#1D4ED8"/>
-              <line x1="80" y1="160" x2="190" y2="100" stroke="#1D4ED8" stroke-width="6" stroke-linecap="round"/>
+              <circle cx="80" cy="199" r="8" fill="#1D4ED8"/><circle cx="190" cy="128" r="8" fill="#1D4ED8"/>
+              <line x1="80" y1="199" x2="190" y2="128" stroke="#1D4ED8" stroke-width="6" stroke-linecap="round"/>
             </svg>
           </div>
           <div class="content">
-            <h4>微分 ＝ 瞬間の変化率 ＝ 接線の傾き</h4>
-            <p>2 点を結ぶ直線の傾きが <strong>平均変化率</strong>。 その 2 点を <strong>限りなく近づけた</strong>ときの傾きが <strong>微分</strong>で、 1 点に接する <strong>接線の傾き</strong>に等しい。 各点の傾きを集めた関数が <strong>導関数 f′(x)</strong>で、 xⁿ は n x<sup>n−1</sup> のように型で求まる。</p>
+            <h4>微分 ＝ 効く 1 次だけ残し、小さいゴミを捨てる</h4>
+            <p>少し動かしたときの変化を <strong>効く 1 次</strong>と <strong>小さすぎる 2 次（Δx²）</strong>に分け、 ゴミの 2 次を捨てて残る <strong>1 次の係数</strong>が、 その点の傾き ＝ <strong>微分</strong>。 図で見れば <strong>接線の傾き</strong>、 2 点を近づけた <strong>平均変化率の行き先</strong>でもある。 各点の傾きを集めた関数が <strong>導関数 f′(x)</strong>（xⁿ → n x<sup>n−1</sup>）。</p>
           </div>
         </div>
         <div class="principle-card">
@@ -2605,13 +2710,13 @@
           <div class="principle-icon">
             <svg viewBox="0 0 256 256" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
               <path d="M 30 70 Q 128 250, 226 70" fill="none" stroke="#B45309" stroke-width="8" stroke-linecap="round"/>
-              <line x1="96" y1="178" x2="160" y2="178" stroke="#E11D48" stroke-width="8" stroke-linecap="round"/>
-              <circle cx="128" cy="178" r="8" fill="#E11D48"/>
+              <line x1="96" y1="160" x2="160" y2="160" stroke="#E11D48" stroke-width="8" stroke-linecap="round"/>
+              <circle cx="128" cy="160" r="8" fill="#E11D48"/>
             </svg>
           </div>
           <div class="content">
             <h4>傾きの符号で増減を読み、傾き 0 で「いちばん」を見つける</h4>
-            <p>傾きが <strong>＋ ならのぼり、 − ならくだり</strong>。 のぼりとくだりの境目、 <strong>傾き 0 の所が山（極大）や谷（極小）</strong>。 だから「利益が最大」 「費用が最小」 といった <strong>最適化</strong>は、 <strong>f′(x) ＝ 0 を解いて候補を見つける</strong>ことから始められる。</p>
+            <p>傾きが <strong>＋ ならのぼり、 − ならくだり</strong>。 のぼりとくだりの境目、 <strong>傾き 0 の所が山（極大）や谷（極小）の候補</strong>。 だから「利益が最大」 「費用が最小」 といった <strong>最適化</strong>は、 <strong>f′(x) ＝ 0 を解いて候補を見つける</strong>ことから始められる。</p>
           </div>
         </div>
         <div class="principle-card">
@@ -2626,19 +2731,19 @@
           </div>
           <div class="content">
             <h4>傾きをたどって下る ＝ AI の学習（勾配降下法）</h4>
-            <p>式で解けないほど複雑な問題でも、 <strong>いまの傾きの逆向きに少しずつ動く</strong>ことをくり返せば、 損失が最小の点へ近づける。 一歩の大きさが <strong>学習率</strong>。 この <strong>勾配降下法</strong>が、 何百万個ものつまみをもつ <strong>AI の学習</strong>を支えている。 微分は、 これからのデータサイエンスの土台である。</p>
+            <p>式で解けないほど複雑な問題でも、 <strong>いまの傾きの逆向きに少しずつ動く</strong>ことをくり返せば、 損失が低い点へ近づける。 一歩の大きさが <strong>学習率</strong>。 この <strong>勾配降下法</strong>が、 何百万個ものつまみをもつ <strong>AI の学習</strong>で使われている。 微分は、 これからのデータサイエンスの土台である。</p>
           </div>
         </div>
       </div>
     </section>
 
     <!-- ============ 提出課題 (25) ============ -->
-    <section class="slide" id="slide-25" data-title="提出課題">
+    <section class="slide" id="slide-28" data-title="提出課題">
       <div class="slide-inner">
         <div class="eyebrow">提出課題 ／ Gemini と試す</div>
         <h2>身近な「いちばん」を、<br>微分で<em>見つける</em>。</h2>
         <p class="section-sub">
-          本日学んだ微分を、 自分で 1 つの問題に使ってみる。 2 次関数で表される「利益」 や「費用」 を 1 つ用意し、 微分 ＝ 0 を解いて <strong>いちばん良い点</strong>を求める。 さらに、 同じ問題を勾配降下法で <strong>少しずつ近づける</strong>とどうなるかも考える。 計算の確認や考察には、 対話型 AI の <strong>Gemini</strong>を相棒に使ってよい。
+          本日学んだ微分を、 自分で 1 つの問題に使ってみる。 2 次関数で表される「費用」 を 1 つ用意し、 微分 ＝ 0 を解いて <strong>費用がいちばん小さくなる点</strong>を求める。 さらに、 同じ問題を勾配降下法で <strong>少しずつ近づける</strong>とどうなるかも考える。 計算の確認や考察には、 対話型 AI の <strong>Gemini</strong>を相棒に使ってよい。
         </p>
 
         <div class="submit-box">
@@ -2648,12 +2753,12 @@
             次の手順で、 1 つの「最適化」 を自分の手で解き、 気づいたことを 400 字程度でまとめて提出する。 数式は無理に難しくせず、 <strong>2 次関数</strong>で構わない。
           </div>
           <div class="sb-steps">
-            <div class="sb-step"><div class="sn">1</div><div class="desc">利益または費用を表す 2 次関数を 1 つ決める（例 <code>利益 ＝ −x² ＋ 10x − 6</code>）。 これを微分し、 <strong>f′(x) ＝ 0</strong>を解いて最適な点と、 そのときの値を求める。</div></div>
-            <div class="sb-step"><div class="sn">2</div><div class="desc">同じ関数で、 適当な出発点から <strong>新しい w ＝ w − 学習率 × 傾き</strong>を <strong>3 回</strong>くり返し、 値がどう最適点へ近づくかを表にする。</div></div>
+            <div class="sb-step"><div class="sn">1</div><div class="desc">費用を表す 2 次関数を 1 つ決める（例 <code>費用 ＝ x² − 8x ＋ 20</code>）。 これを微分し、 <strong>f′(x) ＝ 0</strong>を解いて、 費用がいちばん小さくなる点と、 そのときの費用を求める。</div></div>
+            <div class="sb-step"><div class="sn">2</div><div class="desc">同じ関数で、 適当な出発点から <strong>新しい x ＝ x − 学習率 × 傾き</strong>を <strong>3 回</strong>くり返し、 値がだんだん最小の点へ近づくようすを表にする。</div></div>
             <div class="sb-step"><div class="sn">3</div><div class="desc">Gemini に計算を確認してもらい、 「式で解く方法」 と「少しずつ近づく方法」 の <strong>長所と短所</strong>を説明させて、 自分の言葉で書き直す。</div></div>
           </div>
-          <div class="sb-prompt">あなたは情報数理の学習を手伝う相棒です。<span class="pkw">利益 ＝ −x² ＋ 10x − 6</span> という関数について、まず微分して <span class="pkw">f′(x) ＝ 0</span> を解き、利益が最大になる x と、そのときの利益を求めてください。次に、x ＝ 0 から始めて <span class="pkw">新しい x ＝ x − 0.2 ×（傾き）</span> を 3 回くり返した値を表にし、最適点にどれくらい近づくかを示してください。最後に、式で一度に解く方法と、少しずつ近づく方法の長所・短所をやさしく説明してください。</div>
-          <div class="sb-note">傾き（微分）は「肩の数を前に下ろし、 肩を 1 つ減らす」 で求める。 まず自分で計算してから、 Gemini に確かめてもらうこと。</div>
+          <div class="sb-prompt">あなたは情報数理の学習を手伝う相棒です。<span class="pkw">費用 ＝ x² − 8x ＋ 20</span> という関数について、まず微分して <span class="pkw">f′(x) ＝ 0</span> を解き、費用が最小になる x と、そのときの費用を求めてください。次に、x ＝ 0 から始めて <span class="pkw">新しい x ＝ x − 0.2 ×（傾き）</span> を 3 回くり返した値を表にし、最小の点にどれくらい近づくかを示してください。最後に、式で一度に解く方法と、少しずつ近づく方法の長所・短所をやさしく説明してください。</div>
+          <div class="sb-note">傾き（微分）は「肩の数を前に下ろし、 肩を 1 つ減らす」 で求める。 まず自分で計算してから、 Gemini に確かめてもらうこと。 〈確認用〉 f(x) ＝ x² − 8x ＋ 20 なら f′(x) ＝ 2x − 8、 最小は x ＝ 4・費用 4。 x ＝ 0・学習率 0.2 で x → 1.6 → 2.56 → 3.136 と、 3 回ではまだ収束の途中。</div>
         </div>
 
         <footer style="margin-top: 40px; padding-top: 24px; border-top: 1px solid var(--line); color: var(--ink-3); font-size: 13px; text-align: center;">
@@ -2667,7 +2772,7 @@
 
 <nav class="slide-nav" id="slide-nav" aria-label="スライドナビゲーション">
   <button id="nav-prev" aria-label="前のスライド">‹</button>
-  <div class="slide-counter"><span id="nav-current">1</span><span class="sep">/</span><span id="nav-total">25</span></div>
+  <div class="slide-counter"><span id="nav-current">1</span><span class="sep">/</span><span id="nav-total">28</span></div>
   <button id="nav-next" aria-label="次のスライド">›</button>
 </nav>
 <script>
@@ -2889,7 +2994,7 @@ const AXIS_TICK_FONT = '700 12px "JetBrains Mono", "Zen Kaku Gothic New", sans-s
 const AXIS_TITLE_COLOR = '#1F2937';
 const AXIS_TICK_COLOR = '#4B5563';
 
-// ====================== REVIEW / GALLERY アコーディオン (slide-2, slide-16) ======================
+// ====================== REVIEW / GALLERY アコーディオン (slide-2, slide-19) ======================
 (() => {
   document.querySelectorAll('.rev-toggle').forEach((btn) => {
     const label = btn.querySelector('.rev-toggle-label');
@@ -2921,7 +3026,65 @@ function fmtSize(bytes) {
 }
 const toHex2 = (v) => Math.max(0, Math.min(255, Math.round(v))).toString(16).toUpperCase().padStart(2, '0');
 
-// ====================== PART 1: 平均変化率 / 割線 (slide-7) ======================
+// ====================== PART 1: 面積で見る微分 / 帯と角 (slide-5) ======================
+(() => {
+  const dxS = document.getElementById('c0-dx'); if (!dxS) return;
+  const cv = document.getElementById('c0-canvas');
+  const xF = 3; // 一辺 x を 3 に固定
+  const draw = () => {
+    const rect = cv.getBoundingClientRect(); if (rect.width < 10) return;
+    const { ctx, w, h } = ensureSize(cv);
+    ctx.clearRect(0, 0, w, h);
+    const dx = +dxS.value;
+    const D = 4.2;                                   // データ領域 [0,D]
+    const padT = 14, padB = 30, padL = 14, padR = 14;
+    const availW = w - padL - padR, availH = h - padT - padB;
+    const sc = Math.min(availW, availH) / D;          // 縦横同一スケール（面積が正しく見える）
+    const ox = padL + (availW - sc * D) / 2;
+    const oy = h - padB - (availH - sc * D) / 2;
+    const PX = (u) => ox + u * sc;
+    const PY = (u) => oy - u * sc;
+    // もとの正方形 x×x
+    ctx.fillStyle = '#DBEAFE';
+    ctx.fillRect(PX(0), PY(xF), sc * xF, sc * xF);
+    // 効く帯 2 本（右・上）＝ 2xΔx
+    ctx.fillStyle = 'rgba(245,158,11,0.32)';
+    ctx.fillRect(PX(xF), PY(xF), sc * dx, sc * xF);
+    ctx.fillRect(PX(0), PY(xF + dx), sc * xF, sc * dx);
+    // すみの角（2次・ゴミ）＝ Δx²
+    ctx.fillStyle = 'rgba(225,29,72,0.34)';
+    ctx.fillRect(PX(xF), PY(xF + dx), sc * dx, sc * dx);
+    // 枠線
+    ctx.lineWidth = 2; ctx.strokeStyle = '#2563EB'; ctx.strokeRect(PX(0), PY(xF), sc * xF, sc * xF);
+    ctx.strokeStyle = '#B45309'; ctx.strokeRect(PX(xF), PY(xF), sc * dx, sc * xF); ctx.strokeRect(PX(0), PY(xF + dx), sc * xF, sc * dx);
+    ctx.strokeStyle = '#BE123C'; ctx.strokeRect(PX(xF), PY(xF + dx), sc * dx, sc * dx);
+    // 大正方形ラベル x²
+    ctx.fillStyle = BLUE_D; ctx.textAlign = 'center'; ctx.textBaseline = 'middle';
+    ctx.font = '800 19px "Zen Kaku Gothic New", sans-serif'; ctx.fillText('x²', PX(xF / 2), PY(xF / 2) - 7);
+    ctx.fillStyle = '#3B5B8C'; ctx.font = '600 11px "Zen Kaku Gothic New", sans-serif'; ctx.fillText('もとの面積', PX(xF / 2), PY(xF / 2) + 15);
+    // 帯ラベル（上の帯の上）
+    pillLabel(ctx, '帯 2 本 ＝ 2x Δx（効く）', PX(xF / 2), PY(xF + dx) - 6, { bg: 'rgba(180,83,9,0.92)', fg: 'white', font: '700 12px "Zen Kaku Gothic New", sans-serif', anchor: 'bottom-center' });
+    // 角ラベル（リーダーで外へ）
+    const cxp = PX(xF + dx / 2), cyp = PY(xF + dx / 2);
+    const lx = PX(xF + dx) + 16, ly = PY(xF + dx) - 14;
+    ctx.strokeStyle = '#BE123C'; ctx.lineWidth = 1.4; ctx.beginPath(); ctx.moveTo(cxp, cyp); ctx.lineTo(lx, ly); ctx.stroke();
+    pillLabel(ctx, 'すみの角 ＝ Δx²（ゴミ）', lx, ly, { bg: 'rgba(225,29,72,0.92)', fg: 'white', font: '700 12px "Zen Kaku Gothic New", sans-serif', anchor: 'bottom-left' });
+    // 辺ラベル x / Δx（下）
+    pillLabel(ctx, 'x', PX(xF / 2), PY(0) + 6, { bg: 'rgba(30,58,138,0.10)', fg: '#1E3A8A', font: '800 13px "Zen Kaku Gothic New", sans-serif', anchor: 'top-center' });
+    pillLabel(ctx, 'Δx', PX(xF + dx / 2), PY(0) + 6, { bg: 'rgba(180,83,9,0.16)', fg: '#B45309', font: '800 12px "Zen Kaku Gothic New", sans-serif', anchor: 'top-center' });
+    // 数値
+    document.getElementById('c0-dx-val').textContent = dx.toFixed(2);
+    document.getElementById('c0-stat-band').textContent = (2 * xF * dx).toFixed(2);
+    document.getElementById('c0-stat-corner').textContent = (dx * dx).toFixed(3);
+    document.getElementById('c0-stat-ratio').textContent = (dx / (2 * xF)).toFixed(3);
+  };
+  dxS.addEventListener('input', draw);
+  window.addEventListener('lec10-slide-change', (e) => { if (e.detail && e.detail.target === 5) requestAnimationFrame(draw); });
+  window.addEventListener('resize', () => { if (document.querySelector('.slide.active')?.id === 'slide-5') draw(); });
+  window.addEventListener('load', draw); requestAnimationFrame(draw);
+})();
+
+// ====================== PART 1: 平均変化率 / 割線 (slide-10) ======================
 (() => {
   const bS = document.getElementById('c1-b'); if (!bS) return;
   const cv = document.getElementById('c1-canvas');
@@ -2960,12 +3123,12 @@ const toHex2 = (v) => Math.max(0, Math.min(255, Math.round(v))).toString(16).toU
     document.getElementById('c1-stat-slope').textContent = slope.toFixed(2);
   };
   bS.addEventListener('input', draw);
-  window.addEventListener('lec10-slide-change', (e) => { if (e.detail && e.detail.target === 7) requestAnimationFrame(draw); });
-  window.addEventListener('resize', () => { if (document.querySelector('.slide.active')?.id === 'slide-7') draw(); });
+  window.addEventListener('lec10-slide-change', (e) => { if (e.detail && e.detail.target === 10) requestAnimationFrame(draw); });
+  window.addEventListener('resize', () => { if (document.querySelector('.slide.active')?.id === 'slide-10') draw(); });
   window.addEventListener('load', draw); requestAnimationFrame(draw);
 })();
 
-// ====================== PART 2: 接線へ近づく / h→0 (slide-9) ======================
+// ====================== PART 2: 接線へ近づく / h→0 (slide-12) ======================
 (() => {
   const hS = document.getElementById('c2-h'); if (!hS) return;
   const cv = document.getElementById('c2-canvas');
@@ -3003,12 +3166,12 @@ const toHex2 = (v) => Math.max(0, Math.min(255, Math.round(v))).toString(16).toU
     document.getElementById('c2-stat-slope').textContent = slope.toFixed(2);
   };
   hS.addEventListener('input', draw);
-  window.addEventListener('lec10-slide-change', (e) => { if (e.detail && e.detail.target === 9) requestAnimationFrame(draw); });
-  window.addEventListener('resize', () => { if (document.querySelector('.slide.active')?.id === 'slide-9') draw(); });
+  window.addEventListener('lec10-slide-change', (e) => { if (e.detail && e.detail.target === 12) requestAnimationFrame(draw); });
+  window.addEventListener('resize', () => { if (document.querySelector('.slide.active')?.id === 'slide-12') draw(); });
   window.addEventListener('load', draw); requestAnimationFrame(draw);
 })();
 
-// ====================== PART 3: 動く接線 / 増減 (slide-13) ======================
+// ====================== PART 3: 動く接線 / 増減 (slide-16) ======================
 (() => {
   const xS = document.getElementById('c3-x'); if (!xS) return;
   const cv = document.getElementById('c3-canvas');
@@ -3050,12 +3213,12 @@ const toHex2 = (v) => Math.max(0, Math.min(255, Math.round(v))).toString(16).toU
     const ms = document.getElementById('c3-stat-mono'); ms.textContent = label;
   };
   xS.addEventListener('input', draw);
-  window.addEventListener('lec10-slide-change', (e) => { if (e.detail && e.detail.target === 13) requestAnimationFrame(draw); });
-  window.addEventListener('resize', () => { if (document.querySelector('.slide.active')?.id === 'slide-13') draw(); });
+  window.addEventListener('lec10-slide-change', (e) => { if (e.detail && e.detail.target === 16) requestAnimationFrame(draw); });
+  window.addEventListener('resize', () => { if (document.querySelector('.slide.active')?.id === 'slide-16') draw(); });
   window.addEventListener('load', draw); requestAnimationFrame(draw);
 })();
 
-// ====================== PART 4: 利益の最大 (slide-17) ======================
+// ====================== PART 4: 利益の最大 (slide-20) ======================
 (() => {
   const xS = document.getElementById('c4-x'); if (!xS) return;
   const cv = document.getElementById('c4-canvas');
@@ -3092,12 +3255,12 @@ const toHex2 = (v) => Math.max(0, Math.min(255, Math.round(v))).toString(16).toU
     document.getElementById('c4-stat-slope').textContent = m.toFixed(1);
   };
   xS.addEventListener('input', draw);
-  window.addEventListener('lec10-slide-change', (e) => { if (e.detail && e.detail.target === 17) requestAnimationFrame(draw); });
-  window.addEventListener('resize', () => { if (document.querySelector('.slide.active')?.id === 'slide-17') draw(); });
+  window.addEventListener('lec10-slide-change', (e) => { if (e.detail && e.detail.target === 20) requestAnimationFrame(draw); });
+  window.addEventListener('resize', () => { if (document.querySelector('.slide.active')?.id === 'slide-20') draw(); });
   window.addEventListener('load', draw); requestAnimationFrame(draw);
 })();
 
-// ====================== PART 5: 勾配降下法 (slide-21) ======================
+// ====================== PART 5: 勾配降下法 (slide-24) ======================
 (() => {
   const lrS = document.getElementById('c5-lr'); if (!lrS) return;
   const cv = document.getElementById('c5-canvas');
@@ -3105,7 +3268,7 @@ const toHex2 = (v) => Math.max(0, Math.min(255, Math.round(v))).toString(16).toU
   const L = (w) => (w - MIN_W) * (w - MIN_W);   // 損失
   const dL = (w) => 2 * (w - MIN_W);            // 傾き
   const W0 = 7.5;
-  const XMIN = -3, XMAX = 9, YMIN = 0, YMAX = 38;
+  const XMIN = -6, XMAX = 9, YMIN = 0, YMAX = 44;
   let w = W0, n = 0, autoTimer = null;
   const clampW = (v) => Math.max(XMIN, Math.min(XMAX, v));
   const draw = () => {
@@ -3124,7 +3287,7 @@ const toHex2 = (v) => Math.max(0, Math.min(255, Math.round(v))).toString(16).toU
     ctx.strokeStyle = '#C4B5FD'; ctx.lineWidth = 3.4; ctx.beginPath();
     for (let px = 0; px <= 360; px++) { const x = XMIN + px / 360 * (XMAX - XMIN), y = L(x); if (px === 0) ctx.moveTo(X(x), Y(y)); else ctx.lineTo(X(x), Y(y)); }
     ctx.stroke();
-    const wc = clampW(w), yc = L(wc), m = dL(w);
+    const wc = clampW(w), yc = L(wc), yActual = L(w), m = dL(w);
     // 接線
     const tan = (t) => yc + m * (t - wc);
     ctx.strokeStyle = '#7C3AED'; ctx.lineWidth = 2.4; ctx.setLineDash([5, 5]);
@@ -3136,10 +3299,12 @@ const toHex2 = (v) => Math.max(0, Math.min(255, Math.round(v))).toString(16).toU
       ctx.strokeStyle = '#E11D48'; ctx.lineWidth = 3; ctx.beginPath(); ctx.moveTo(ax, ay); ctx.lineTo(ex, ay); ctx.stroke();
       ctx.beginPath(); ctx.moveTo(ex, ay); ctx.lineTo(ex - dir * 9, ay - 6); ctx.lineTo(ex - dir * 9, ay + 6); ctx.closePath(); ctx.fillStyle = '#E11D48'; ctx.fill();
     }
-    // 玉
-    ctx.fillStyle = '#6D28D9'; ctx.beginPath(); ctx.arc(X(wc), Y(yc), 9, 0, Math.PI * 2); ctx.fill();
-    ctx.fillStyle = 'white'; ctx.beginPath(); ctx.arc(X(wc) - 2.5, Y(yc) - 2.5, 2.6, 0, Math.PI * 2); ctx.fill();
-    pillLabel(ctx, 'w = ' + w.toFixed(2), X(wc), Y(yc) - 16, { bg: 'rgba(109,40,217,0.92)', fg: 'white', font: '800 12px "Zen Kaku Gothic New", sans-serif', anchor: 'bottom-center' });
+    // 玉（範囲外でも画面端に留めて明示）
+    const oob = (w < XMIN || w > XMAX);
+    const bx = X(wc), by = Y(Math.min(yActual, YMAX * 0.94));
+    ctx.fillStyle = oob ? '#B6A6D8' : '#6D28D9'; ctx.beginPath(); ctx.arc(bx, by, 9, 0, Math.PI * 2); ctx.fill();
+    ctx.fillStyle = 'white'; ctx.beginPath(); ctx.arc(bx - 2.5, by - 2.5, 2.6, 0, Math.PI * 2); ctx.fill();
+    pillLabel(ctx, 'w = ' + w.toFixed(2) + (oob ? '（範囲外）' : ''), bx, by - 16, { bg: oob ? 'rgba(150,130,200,0.96)' : 'rgba(109,40,217,0.92)', fg: 'white', font: '800 12px "Zen Kaku Gothic New", sans-serif', anchor: 'bottom-center' });
     document.getElementById('c5-lr-val').textContent = lr.toFixed(2);
     document.getElementById('c5-stat-w').textContent = w.toFixed(2);
     document.getElementById('c5-stat-loss').textContent = L(w).toFixed(2);
@@ -3156,8 +3321,8 @@ const toHex2 = (v) => Math.max(0, Math.min(255, Math.round(v))).toString(16).toU
     autoTimer = setInterval(() => { step(); if (Math.abs(dL(w)) < 0.02 || n > 60 || Math.abs(w) > 38) stopAuto(); }, 520);
   });
   lrS.addEventListener('input', draw);
-  window.addEventListener('lec10-slide-change', (e) => { if (e.detail && e.detail.target === 21) requestAnimationFrame(draw); else stopAuto(); });
-  window.addEventListener('resize', () => { if (document.querySelector('.slide.active')?.id === 'slide-21') draw(); });
+  window.addEventListener('lec10-slide-change', (e) => { if (e.detail && e.detail.target === 24) requestAnimationFrame(draw); else stopAuto(); });
+  window.addEventListener('resize', () => { if (document.querySelector('.slide.active')?.id === 'slide-24') draw(); });
   window.addEventListener('load', draw); requestAnimationFrame(draw);
 })();
 
@@ -3276,6 +3441,30 @@ const toHex2 = (v) => Math.max(0, Math.min(255, Math.round(v))).toString(16).toU
 //   数値はすべて手計算で検算済み。
 // ============================================================
 window.HOSOKU_SUPP = {
+
+  // ---- slide 6: 2 次を捨てる ----
+  WHYDISCARD: {
+    tag: 'SUPPLEMENT · 2 次を捨てる',
+    title: '2 次の項を、なぜ <b>捨ててよい</b>のか',
+    sub: '1 次は Δx に比例、2 次はそれにもう一度 Δx をかけた分。けたが ちがいます。',
+    body: `
+    <div class="supp-sec"><div class="sec-no">1</div><div class="sec-main">
+      <div class="sec-h">Δx² は「Δx の Δx 倍」だけ小さい</div>
+      <div class="sec-p">帯は <span class="mq">2x Δx</span>、角は <span class="mq">Δx²</span>。角を帯で割ると <span class="mq">Δx ／ 2x</span> です。x ＝ 3、Δx ＝ 0.01 なら、角は帯の <b>およそ 0.17 ％</b>。Δx をさらに小さくすれば、この比はいくらでも 0 に近づきます。だから傾きを知りたいとき、Δx で割って 0 に近づければ、2 次以降は消えて答えに残りません。</div>
+      <div class="sec-fig">
+        <table class="supp-tbl">
+          <tr><th>Δx</th><th>帯 2x Δx</th><th>角 Δx²</th><th>角 ／ 帯</th></tr>
+          <tr><td><span class="mq">0.1</span></td><td><span class="mq">0.6</span></td><td><span class="mq">0.01</span></td><td><span class="mq">1.7 ％</span></td></tr>
+          <tr><td><span class="mq">0.01</span></td><td><span class="mq">0.06</span></td><td><span class="mq">0.0001</span></td><td><span class="mq">0.17 ％</span></td></tr>
+          <tr><td><span class="mq">0.001</span></td><td><span class="mq">0.006</span></td><td><span class="mq">0.000001</span></td><td><span class="mq">0.017 ％</span></td></tr>
+        </table>
+      </div>
+    </div></div>
+    <div class="supp-sec"><div class="sec-no">2</div><div class="sec-main">
+      <div class="sec-h">x³ でも同じ ── 主役は 1 次の項</div>
+      <div class="sec-p"><span class="mq">(x+Δx)³ ＝ x³ + 3x²Δx + 3xΔx² + Δx³</span>。増えた分のうち <b>3x²Δx</b> だけが 1 次で、残りは Δx² や Δx³ のゴミ。Δx あたりになおして 0 に近づけると <b>3x²</b> が残ります。これが「肩を下ろす」公式の正体で、PART 3 でもう一度出てきます。</div>
+    </div></div>`
+  },
 
   // ---- slide 6: 平均変化率 ----
   AVGRATE: {
@@ -3424,7 +3613,7 @@ window.HOSOKU_SUPP = {
     body: `
     <div class="supp-sec"><div class="sec-no">1</div><div class="sec-main">
       <div class="sec-h">微分の定義そのものを使う</div>
-      <div class="sec-p">傾きは <span class="mq">(f(x+h) − f(x)) ／ h</span>。<b>小さな h</b>でこれを計算すれば、傾きのよい近似が得られます。関数の形（式）を知らなくても、<b>値さえ測れれば</b>傾きが分かる ── これを <b>数値微分</b>といいます。コンピュータが複雑な関数を扱うときの基本です。</div>
+      <div class="sec-p">傾きは <span class="mq">(f(x+h) − f(x)) ／ h</span>。<b>小さな h</b>でこれを計算すれば、傾きのよい近似が得られます。関数の形（式）を知らなくても、<b>値さえ測れれば</b>傾きが分かる ── これを <b>数値微分</b>といいます。ただし AI の学習では、ふつう数値微分ではなく、連鎖律にもとづく <b>自動微分（誤差逆伝播）</b>で勾配を計算します（数値微分は入口・検算向き）。</div>
     </div></div>
     <div class="supp-sec"><div class="sec-no">2</div><div class="sec-main">
       <div class="sec-h">だから「式が解けない」問題でも進める</div>
@@ -3468,7 +3657,7 @@ window.HOSOKU_SUPP = {
         <table class="supp-tbl">
           <tr><th>学習率</th><th>1 歩でのずれ</th><th>ようす</th></tr>
           <tr><td><span class="mq">0.1</span></td><td><span class="mq">×0.8</span></td><td>ゆっくり近づく</td></tr>
-          <tr><td><span class="mq">0.5</span></td><td><span class="mq">×0</span></td><td>一発で谷底</td></tr>
+          <tr><td><span class="mq">0.5</span></td><td><span class="mq">×0</span></td><td>1 歩で谷底</td></tr>
           <tr><td><span class="mq">1.2</span></td><td><span class="mq">×(−1.4)</span></td><td>飛び越して発散</td></tr>
         </table>
       </div>
@@ -3491,7 +3680,7 @@ window.HOSOKU_SUPP = {
     </div></div>
     <div class="supp-sec"><div class="sec-no">2</div><div class="sec-main">
       <div class="sec-h">出力側から逆にたどる ＝ 誤差逆伝播</div>
-      <div class="sec-p">この掛け算を <b>出力側から入力側へ逆向きに</b>たどると、すべてのつまみの傾きが <b>まとめて一度に</b>求まります。これが <b>誤差逆伝播</b>。だからつまみが何百万個あっても、現実的な時間で勾配を計算でき、AI は学習できます。本日の微分が、最先端の AI の足もとまで通じています。</div>
+      <div class="sec-p">この掛け算を <b>出力側から入力側へ逆向きに</b>たどると、すべてのつまみの傾きが <b>まとめて一度に</b>求まります。これが <b>誤差逆伝播</b>。だからつまみが何百万個あっても、現実的な時間で勾配を計算でき、AI は学習できます。本日の微分は、ニューラルネットワークの学習で使う勾配計算にもつながっています。</div>
     </div></div>`
   }
 };
@@ -3701,32 +3890,35 @@ window.HOSOKU_SUPP = {
     { s: 2,  sel: '.review-grid', tag: '振り返り', say: ['まずこれまでの復習です。1 次関数では <b>傾きが一定</b>、2 次関数では <b>場所によって傾きが変わり</b>、指数関数では <b>増え方そのものが速く</b>なりました。', 'どれも「傾き ＝ 変化の速さ」という見方でつながります。この 4 枚が今日の土台です。'] },
     { s: 2,  sel: '.rev-card.rev-wave', tag: '本日の主役', say: ['今日の主役はこれ。曲線の <b>1 点に接する直線（接線）</b>の傾きが、その点での変化の速さです。', 'これを数で取り出すのが <b>微分</b>。各カードの「ほかの例を見る」も開いてみてください。'] },
     { s: 3,  sel: '.callout.amber', tag: 'つながり', say: ['今日の位置づけです。これまで学んだ「傾き」がそのまま土台になります。', '1 次関数では一定だった傾きを、今日は <b>曲線のどの点でも</b>測れるようにします。その傾きが「どちらへ動けばよくなるか」を教えてくれるので、最適化や AI の学習に直結します。'] },
-    { s: 3,  sel: '.tocbar', tag: '全体像', say: ['今日の道のりです。PART 1 平均変化率、PART 2 微分、PART 3 傾きで増減を読む、PART 4 最適化、PART 5 勾配降下法へと進みます。', '「2 点で測る → 近づけて瞬間に → 傾きで読む → 良い点をさがす → AI が学ぶ」 という一本道です。各カードからその PART へ飛べます。'] },
-    { s: 4,  sel: '.gate-title', tag: 'PART 1', say: ['では PART 1。<b>平均変化率</b>です。', '曲がったグラフでも、2 つの点を選んで直線で結べば、その区間の「平均の傾き」がわかります。これが微分の出発点です。'] },
-    { s: 5,  sel: '.anim-wrap', tag: '変化の速さ', say: ['まず大事な見方を 1 つ。<b>変化の速さは、グラフの傾きで表せる</b>ということです。', '車で 2 時間に 100 km なら時速 50 km。これは「距離のグラフの傾き」です。坂道のきつさも同じ傾き。傾き ＝ 縦の変化 ÷ 横の変化、と覚えてください。'] },
-    { s: 6,  sel: '.anim-wrap', tag: '平均変化率', say: ['2 点 (a, f(a)) と (b, f(b)) を結ぶ直線の傾きが <b>平均変化率</b>です。式は <b>(f(b) − f(a)) ／ (b − a)</b>。', '株価が 3 日で 100 円から 130 円なら、平均は 1 日あたり ＋10 円。ただし「ならした平均」なので、途中のいきおいまではわかりません。'] },
-    { s: 7,  sel: '#c1-b, #c1-canvas, #c1-stat-slope', union: true, wait: true, tag: '割線の傾き', say: ['放物線 y ＝ x² の上で、点 A を x ＝ 1 に固定し、点 B を動かします。2 点を結ぶ直線（割線）の傾きが、その区間の平均変化率です。', '<b>スライダーで B を動かして</b>みてください。区間 [1, B] の傾きは <b>1 ＋ B</b>。B を 1 に近づけるほど、傾きは 2 にじわじわ近づきます。', 'B をぴたりと 1 にはできませんが、近づけた先の <b>2</b> が、x ＝ 1 での「その場の傾き」です。これが次の PART の微分につながります。'] },
-    { s: 8,  sel: '.gate-title', tag: 'PART 2', say: ['PART 2 は、いよいよ <b>微分</b>です。', '平均変化率は「区間の平均」でした。その区間を限りなく狭めて 0 に近づけると、たった 1 点での <b>瞬間の変化率</b>が残ります。'] },
-    { s: 9,  sel: '#c2-h, #c2-canvas, #c2-stat-slope', union: true, wait: true, tag: '接線へ', say: ['点 A を x ＝ 1 に置き、そこから幅 h だけ離れた点 B をとります。割線の傾きは <b>2 ＋ h</b> です。', '<b>スライダーで h を小さく</b>してみてください。B が A に近づき、割線が <b>接線</b>に重なっていきます。傾きは 2 へ。緑の点線が、その目標の接線です。', 'h をちょうど 0 にはできないので、「0 に限りなく近づけた行き先」を答えにします。これを <b>極限</b>といい、ここでは 2。これが微分です。'] },
-    { s: 10, sel: '.flow-card', tag: '導関数', say: ['どの x でも同じように傾きを求められます。各点の傾きを集めた関数を <b>導関数 f′(x)</b> といいます。', 'f(x) ＝ x² の導関数は <b>f′(x) ＝ 2x</b>。左の放物線で接線を引くと右へ行くほど急になり、その傾きだけを取り出すと、右のまっすぐな直線 2x になります。'] },
-    { s: 11, sel: '.rule-tbl', tag: '微分のルール', say: ['毎回「幅を 0 に近づける」のは大変なので、よく出る形には <b>型（公式）</b>があります。基本は <b>xⁿ → n x の(n−1)乗</b>。「肩の数を前に下ろし、肩を 1 つ減らす」です。', '定数は変化しないので微分すると 0。足し算は項ごとに微分して足すだけ。だから x² ＋ 5x ＋ 7 の微分は 2x ＋ 5 になります。'] },
-    { s: 12, sel: '.gate-title', tag: 'PART 3', say: ['PART 3 は、<b>傾きで関数の形を読む</b>話です。', '傾きがプラスならのぼり坂、マイナスならくだり坂、ちょうど 0 になる所が山や谷。傾きの符号を追うだけで、グラフ全体の形が読めます。'] },
-    { s: 13, sel: '#c3-x, #c3-canvas, #c3-stat-mono', union: true, wait: true, tag: '動く接線', say: ['関数 y ＝ x³ − 3x の上を、点が動きます。その点の接線の傾き <b>f′(x) ＝ 3x² − 3</b> を、数と色で示します。', '<b>スライダーで点を動かして</b>みてください。傾きがプラスの所は青「のぼり」、マイナスは赤「くだり」、0 に近づくと黄色「山か谷」に変わります。', '傾きが 0 になるのは x ＝ −1（山）と x ＝ ＋1（谷）。接線を追うだけで、描く前にグラフの形がわかります。'] },
-    { s: 14, sel: '.callout.emerald', tag: '極大・極小', say: ['山も谷も、共通点は <b>その点で傾きが 0</b> になること。だから「いちばん高い・低い点」をさがすときは、まず f′(x) ＝ 0 を解きます。', '前後で傾きが ＋ から − に変われば山、− から ＋ なら谷。次の PART で、これを「最適化」として実際に使います。'] },
-    { s: 15, sel: '.flow-card', tag: '速度と加速度', say: ['微分は、同じ関数にくり返しかけられます。<b>位置を微分すると速度</b>、その速度をもう一度微分すると <b>加速度</b>です。', 'スピードメーターが示すのが速度、アクセルやブレーキで体に感じるのが加速度。「変化の、さらにその変化」まで追いかけられます。'] },
-    { s: 16, sel: '.gate-title', tag: 'PART 4', say: ['PART 4 は <b>最適化</b>です。', '利益をいちばん大きく、費用をいちばん小さく ── こうした「いちばん」をさがす問題です。山も谷も傾きが 0 なので、微分 ＝ 0 を解けば、いちばん良い点の候補が見つかります。'] },
-    { s: 17, sel: '#c4-x, #c4-canvas, #c4-stat-profit', union: true, wait: true, tag: '利益の最大', say: ['利益が、売る個数 x で「利益 ＝ −2x² ＋ 24x − 10」と決まるとします。少なすぎても多すぎても利益は下がります。', '<b>スライダーで x を動かして</b>みてください。傾きがプラスのうちは「もっと売れば増える」、マイナスなら「売りすぎ」。', 'ちょうど <b>傾き 0 の x ＝ 6</b> で、利益が最大の 62 万円になります。やみくもに試さなくても、傾き ＝ 0 で一発です。'] },
-    { s: 18, sel: '.callout', tag: '式で解く', say: ['グラフを動かさなくても、<b>微分 ＝ 0 という式を解く</b>だけで最適な点は求まります。', 'f′(x) ＝ −4x ＋ 24 を 0 とおくと x ＝ 6、利益は 62 万円。「最適 ＝ 傾き 0」 という言い換えがポイントです。ただし、気持ちよく解けるのは式が単純なときだけ。'] },
-    { s: 19, sel: '.callout.purple', tag: '解けないとき', say: ['現実には、調整するつまみが何百万個あることもあります。AI がまさにそれで、f′(x) ＝ 0 を一度には解けません。', 'そこで発想を変えます。いまいる場所の <b>傾きだけは計算できる</b>ので、それを手がかりに「良くなる方へ少しずつ動く」。このやり方が <b>勾配降下法</b>です。'] },
-    { s: 20, sel: '.gate-title', tag: 'PART 5', say: ['最後の PART 5、<b>勾配降下法</b>です。ここが今日の山場、情報の理論への接続です。', 'AI の学習とは「答えのまちがい（損失）をできるだけ小さくする」こと。損失を地形だと思えば、学習は <b>いちばん低い所へ下りていく</b>ことになります。'] },
-    { s: 21, sel: '#c5-lr, #c5-canvas, #c5-stat-w', union: true, wait: true, tag: '坂を下る', say: ['損失 L(w) を谷型のグラフとします。いまいる場所の傾き L′(w) を計算し、その <b>逆向きに少しだけ動く</b>。これをくり返すと、玉が坂を転がるように谷底へ向かいます。', '<b>「1 歩すすむ」や「自動で下る」</b>を押してみてください。更新の式は「新しい w ＝ w − 学習率 × 傾き」。谷底に近づくほど傾きが 0 に近づき、自然に止まります。', 'これが <b>勾配降下法</b>。何百万個のつまみをもつ AI も、中身はこの同じくり返しです。'] },
-    { s: 22, sel: '.block', tag: '学習率', say: ['一歩の大きさ ＝ <b>学習率</b>は、いちばん大事なさじ加減です。小さすぎると、ちょこちょこしか進まず遅い。', '大きすぎると、谷を飛び越して反対側へ駆け上がり、かえって遠ざかります。前のスライドで学習率を 0.1 → 0.5 → 1.2 と変えて、見比べてみてください。'] },
-    { s: 23, sel: '.callout.emerald', tag: 'AI へ', say: ['AI の学習も中身は今日と同じ。まちがい（損失）の <b>傾きを計算して、減る方へつまみを少しずつ動かす</b>だけです。ちがいは、つまみが何百万個あること。', 'その傾きの集まりを <b>勾配</b>といいます。今日の平均変化率から始まった微分が、そのまま AI がデータから学ぶ仕組みになっています。'] },
-    { s: 24, sel: '.flow-card', tag: 'まとめ', say: ['今日の全体を振り返ります。2 点で測り、近づけて瞬間の傾きに、その傾きで増減と最適を読み、最後は坂を下る学習へ ── 一本の線でつながりました。', 'では、3 つの原理にまとめます。'] },
-    { s: 24, sel: '.principle-card', n: 1, tag: '原理 ①', say: ['一つ目。<b>微分 ＝ 瞬間の変化率 ＝ 接線の傾き</b>。2 点を結ぶ平均変化率を、2 点を近づけた極限です。', '各点の傾きを集めた関数が導関数 f′(x)。xⁿ は n x の(n−1)乗、という型で求まります。'] },
-    { s: 24, sel: '.principle-card', n: 2, tag: '原理 ②', say: ['二つ目。<b>傾きの符号で増減を読み、傾き 0 で「いちばん」を見つける</b>。', '＋ ならのぼり、− ならくだり、その境目の傾き 0 が山や谷の候補。最適化は、まず f′(x) ＝ 0 を解いて候補を出すことになります。'] },
-    { s: 24, sel: '.principle-card', n: 3, tag: 'おわりに', say: ['三つ目。<b>傾きをたどって下る ＝ AI の学習（勾配降下法）</b>。式で解けないほど複雑でも、傾きの逆向きに少しずつ動けば、最小へ近づけます。', '一歩の大きさが学習率。微分は、これからのデータサイエンスの土台です。お疲れさまでした。気になった所は、もう一度クリックで戻って確かめてみてください。'] },
-    { s: 25, sel: '.submit-box', tag: '提出課題', say: ['最後に提出課題です。2 次関数で表される利益や費用を 1 つ用意し、微分 ＝ 0 を解いて、いちばん良い点を求めてみてください。', '同じ問題を勾配降下法で少しずつ近づけるとどうなるかも比べます。計算の確認は Gemini を相棒に使ってかまいません。'] }
+    { s: 3,  sel: '.tocbar', tag: '全体像', say: ['今日の道のりです。PART 1 微分の正体、PART 2 平均変化率、PART 3 微分、PART 4 傾きで増減を読む、PART 5 最適化、PART 6 勾配降下法へと進みます。', '「小さいものを捨てて正体をつかむ → 2 点で測る → 近づけて瞬間に → 傾きで読む → 良い点をさがす → AI が学ぶ」 という一本道です。各カードからその PART へ飛べます。'] },
+    { s: 4,  sel: '.gate-title', tag: 'PART 1', say: ['では PART 1。今日いちばん大事な考え方、<b>微分の正体</b>です。', '微分とは、ほんの少し動かしたときの変化を <b>効くぶん（1 次）</b>と <b>ごく小さいぶん（2 次）</b>に分けて、小さいほうを思いきって <b>捨てる</b>こと。まずは正方形の面積で、その心をつかみます。'] },
+    { s: 5,  sel: '#c0-dx, #c0-canvas, #c0-stat-corner', union: true, wait: true, tag: '面積で分ける', say: ['一辺 x の正方形を、幅 Δx だけのばします。増えた面積は <b>細長い帯 2 本（合わせて 2x Δx）</b>と、<b>すみの小さな四角ひとつ（Δx²）</b>に分かれます。', '<b>スライダーで Δx を小さく</b>してみてください。帯（オレンジ）はそれなりに残りますが、すみの角（赤）は <b>みるみる小さく</b>なります。', '角は帯の Δx ／ 2x 倍。Δx が小さいほど、角は無視できるほど小さい「ゴミ」になります。'] },
+    { s: 6,  sel: '.callout.purple', tag: '捨てて 2x', say: ['増えた面積は <b>2x Δx ＋ Δx²</b>。幅 Δx あたりになおすと <b>2x ＋ Δx</b> です。Δx を 0 に近づけると Δx が消えて、<b>2x</b> だけが残ります。', 'この 2x が、x² の「その場での増え方 ＝ 傾き ＝ 微分」。すみの角 Δx² は桁ちがいに小さいので、捨ててよかったわけです。', '今日のなめらかな関数では、変化は「傾き × Δx ＋ もっと小さい項」の形（多項式なら Δx² 以上）。<b>1 次だけ残して捨てる</b> ── これが微分の正体です。次からは、同じ 2x をグラフでも確かめます。'] },
+    { s: 7,  sel: '.gate-title', tag: 'PART 2', say: ['では PART 2。<b>平均変化率</b>です。', '曲がったグラフでも、2 つの点を選んで直線で結べば、その区間の「平均の傾き」がわかります。これが微分の出発点です。'] },
+    { s: 8,  sel: '.anim-wrap', tag: '変化の速さ', say: ['まず大事な見方を 1 つ。<b>変化の速さは、グラフの傾きで表せる</b>ということです。', '車で 2 時間に 100 km なら時速 50 km。これは「距離のグラフの傾き」です。坂道のきつさも同じ傾き。傾き ＝ 縦の変化 ÷ 横の変化、と覚えてください。'] },
+    { s: 9,  sel: '.anim-wrap', tag: '平均変化率', say: ['2 点 (a, f(a)) と (b, f(b)) を結ぶ直線の傾きが <b>平均変化率</b>です。式は <b>(f(b) − f(a)) ／ (b − a)</b>。', '株価が 3 日で 100 円から 130 円なら、平均は 1 日あたり ＋10 円。ただし「ならした平均」なので、途中のいきおいまではわかりません。'] },
+    { s: 10,  sel: '#c1-b, #c1-canvas, #c1-stat-slope', union: true, wait: true, tag: '割線の傾き', say: ['放物線 y ＝ x² の上で、点 A を x ＝ 1 に固定し、点 B を動かします。2 点を結ぶ直線（割線）の傾きが、その区間の平均変化率です。', '<b>スライダーで B を動かして</b>みてください。区間 [1, B] の傾きは <b>1 ＋ B</b>。B を 1 に近づけるほど、傾きは 2 にじわじわ近づきます。', 'B をぴたりと 1 にはできませんが、近づけた先の <b>2</b> が、x ＝ 1 での「その場の傾き」です。これが次の PART の微分につながります。'] },
+    { s: 11,  sel: '.gate-title', tag: 'PART 3', say: ['PART 3 は、いよいよ <b>微分</b>です。', '平均変化率は「区間の平均」でした。その区間を限りなく狭めて 0 に近づけると、たった 1 点での <b>瞬間の変化率</b>が残ります。'] },
+    { s: 12,  sel: '#c2-h, #c2-canvas, #c2-stat-slope', union: true, wait: true, tag: '接線へ', say: ['点 A を x ＝ 1 に置き、そこから幅 h だけ離れた点 B をとります。割線の傾きは <b>2 ＋ h</b> です。', '<b>スライダーで h を小さく</b>してみてください。B が A に近づき、割線が <b>接線</b>に重なっていきます。傾きは 2 へ。緑の点線が、その目標の接線です。', 'h をちょうど 0 にはできないので、「0 に限りなく近づけた行き先」を答えにします。これを <b>極限</b>といい、ここでは 2。これが微分です。'] },
+    { s: 13, sel: '.flow-card', tag: '導関数', say: ['どの x でも同じように傾きを求められます。各点の傾きを集めた関数を <b>導関数 f′(x)</b> といいます。', 'f(x) ＝ x² の導関数は <b>f′(x) ＝ 2x</b>。左の放物線で接線を引くと右へ行くほど急になり、その傾きだけを取り出すと、右のまっすぐな直線 2x になります。'] },
+    { s: 14, sel: '.rule-tbl', tag: '微分のルール', say: ['毎回「幅を 0 に近づける」のは大変なので、よく出る形には <b>型（公式）</b>があります。基本は <b>xⁿ → n x の(n−1)乗</b>。「肩の数を前に下ろし、肩を 1 つ減らす」です。', '定数は変化しないので微分すると 0。足し算は項ごとに微分して足すだけ。だから x² ＋ 5x ＋ 7 の微分は 2x ＋ 5 になります。'] },
+    { s: 15, sel: '.gate-title', tag: 'PART 4', say: ['PART 4 は、<b>傾きで関数の形を読む</b>話です。', '傾きがプラスならのぼり坂、マイナスならくだり坂、ちょうど 0 になる所が山や谷の候補です。前後の符号を追えば、グラフ全体の形が読めます。'] },
+    { s: 16, sel: '#c3-x, #c3-canvas, #c3-stat-mono', union: true, wait: true, tag: '動く接線', say: ['関数 y ＝ x³ − 3x の上を、点が動きます。その点の接線の傾き <b>f′(x) ＝ 3x² − 3</b> を、数と色で示します。', '<b>スライダーで点を動かして</b>みてください。傾きがプラスの所は青「のぼり」、マイナスは赤「くだり」、0 に近づくと黄色「山か谷」に変わります。', '傾きが 0 になるのは x ＝ −1（山）と x ＝ ＋1（谷）。接線を追うだけで、描く前にグラフの形がわかります。'] },
+    { s: 17, sel: '.callout.emerald', tag: '極大・極小', say: ['山も谷も、共通点は <b>その点で傾きが 0</b> になること。だから「いちばん高い・低い点」をさがすときは、まず f′(x) ＝ 0 を解きます。', '前後で傾きが ＋ から − に変われば山、− から ＋ なら谷。次の PART で、これを「最適化」として実際に使います。'] },
+    { s: 18, sel: '.flow-card', tag: '速度と加速度', say: ['微分は、同じ関数にくり返しかけられます。<b>位置を微分すると速度</b>、その速度をもう一度微分すると <b>加速度</b>です。', 'スピードメーターが示すのが速度、アクセルやブレーキで体に感じるのが加速度。「変化の、さらにその変化」まで追いかけられます。'] },
+    { s: 19, sel: '.gate-title', tag: 'PART 5', say: ['PART 5 は <b>最適化</b>です。', '利益をいちばん大きく、費用をいちばん小さく ── こうした「いちばん」をさがす問題です。山も谷も傾きが 0 なので、微分 ＝ 0 を解けば、いちばん良い点の候補が見つかります。'] },
+    { s: 20, sel: '#c4-x, #c4-canvas, #c4-stat-profit', union: true, wait: true, tag: '利益の最大', say: ['利益が、売る個数 x で「利益 ＝ −2x² ＋ 24x − 10」と決まるとします。少なすぎても多すぎても利益は下がります。', '<b>スライダーで x を動かして</b>みてください。傾きがプラスのうちは「もっと売れば増える」、マイナスなら「売りすぎ」。', 'ちょうど <b>傾き 0 の x ＝ 6</b> で、利益が最大の 62 万円になります。やみくもに試さなくても、傾き ＝ 0 を解けば最適な個数の候補が求まります。'] },
+    { s: 21, sel: '.callout', tag: '式で解く', say: ['グラフを動かさなくても、<b>微分 ＝ 0 という式を解く</b>だけで最適な点は求まります。', 'f′(x) ＝ −4x ＋ 24 を 0 とおくと x ＝ 6、利益は 62 万円。「最適 ＝ 傾き 0」 という言い換えがポイントです。ただし、直接使えるのは式が単純なときだけ。'] },
+    { s: 22, sel: '.callout.purple', tag: '解けないとき', say: ['現実には、調整するつまみが何百万個あることもあります。ニューラルネットワークでは、傾き＝0 の条件を一度には解けません。', 'そこで発想を変えます。いまいる場所の <b>傾きだけは計算できる</b>ので、それを手がかりに「良くなる方へ少しずつ動く」。このやり方が <b>勾配降下法</b>です。'] },
+    { s: 23, sel: '.gate-title', tag: 'PART 6', say: ['最後の PART 6、<b>勾配降下法</b>です。ここが今日の山場、情報の理論への接続です。', 'AI の学習とは「答えのまちがい（損失）をできるだけ小さくする」こと。損失を地形だと思えば、学習は <b>できるだけ低い所へ下りていく</b>ことになります。'] },
+    { s: 24, sel: '#c5-lr, #c5-canvas, #c5-stat-w', union: true, wait: true, tag: '坂を下る', say: ['損失 L(w) を谷型のグラフとします。いまいる場所の傾き L′(w) を計算し、その <b>逆向きに少しだけ動く</b>。これをくり返すと、玉が坂を転がるように谷底へ向かいます。', '<b>「1 歩すすむ」や「自動で下る」</b>を押してみてください。更新の式は「新しい w ＝ w − 学習率 × 傾き」。谷底に近づくほど傾きが 0 に近づき、自然に止まります。', 'これが <b>勾配降下法</b>。何百万個のつまみをもつ AI でも、勾配を計算して損失を下げるという考えは同じです。'] },
+    { s: 25, sel: '.block', tag: '学習率', say: ['一歩の大きさ ＝ <b>学習率</b>は、いちばん大事なさじ加減です。小さすぎると、ちょこちょこしか進まず遅い。', '大きすぎると、谷を飛び越して反対側へ駆け上がり、かえって遠ざかります。前のスライドで学習率を 0.1 → 0.5 → 1.2 と変えて、見比べてみてください。'] },
+    { s: 26, sel: '.callout.emerald', tag: 'AI へ', say: ['AI の学習も、基本にある考えは今日と同じ。まちがい（損失）の <b>傾きを計算して、減る方へつまみを少しずつ動かす</b>。ちがいは、つまみが何百万個あること。', 'その傾きの集まりを <b>勾配</b>といいます。今日の微分が、AI がデータから学ぶときの勾配計算につながっています。'] },
+    { s: 27, sel: '.flow-card', tag: 'まとめ', say: ['今日の全体を振り返ります。2 点で測り、近づけて瞬間の傾きに、その傾きで増減と最適を読み、最後は坂を下る学習へ ── 一本の線でつながりました。', 'では、3 つの原理にまとめます。'] },
+    { s: 27, sel: '.principle-card', n: 1, tag: '原理 ①', say: ['一つ目。<b>微分 ＝ 瞬間の変化率 ＝ 接線の傾き</b>。2 点を結ぶ平均変化率を、2 点を近づけた極限です。', '各点の傾きを集めた関数が導関数 f′(x)。xⁿ は n x の(n−1)乗、という型で求まります。'] },
+    { s: 27, sel: '.principle-card', n: 2, tag: '原理 ②', say: ['二つ目。<b>傾きの符号で増減を読み、傾き 0 で「いちばん」を見つける</b>。', '＋ ならのぼり、− ならくだり、その境目の傾き 0 が山や谷の候補。最適化は、まず f′(x) ＝ 0 を解いて候補を出すことになります。'] },
+    { s: 27, sel: '.principle-card', n: 3, tag: 'おわりに', say: ['三つ目。<b>傾きをたどって下る ＝ AI の学習（勾配降下法）</b>。式で解けないほど複雑でも、傾きの逆向きに少しずつ動けば、できるだけ低い点へ近づけます。', '一歩の大きさが学習率。微分は、これからのデータサイエンスの土台です。お疲れさまでした。気になった所は、もう一度クリックで戻って確かめてみてください。'] },
+    { s: 28, sel: '.submit-box', tag: '提出課題', say: ['最後に提出課題です。2 次関数で表される費用を 1 つ用意し、微分 ＝ 0 を解いて、費用がいちばん小さくなる点を求めてみてください。', '同じ問題を勾配降下法で少しずつ近づけるとどうなるかも比べます。計算の確認は Gemini を相棒に使ってかまいません。'] }
   ];
 
 
@@ -4121,5 +4313,45 @@ window.HOSOKU_SUPP = {
 })();
 </script>
 
+<style id="brushup-fit-2026">
+/* === 16:9 FIT 手術・記号大文字化解除・みきコン位置（2026-06-29 ブラッシュアップ）=== */
+.slide-inner .section-sub { line-height: 1.72 !important; margin-bottom: 16px !important; }
+.slide-inner h2 { margin-bottom: 14px !important; }
+.slide-inner .block { padding: 20px 26px 18px !important; margin-bottom: 14px !important; }
+.slide-inner .block .eyebrow { margin-bottom: 12px !important; padding-bottom: 6px !important; }
+.slide-inner .control-row { margin-bottom: 10px !important; }
+.slide-inner .controls { margin-bottom: 0 !important; }
+.slide-inner .stat-row { margin-top: 12px !important; margin-bottom: 12px !important; gap: 12px !important; }
+.slide-inner .stat-row:has(> .stat:nth-child(4)) { grid-template-columns: repeat(4, 1fr) !important; }
+.slide-inner .flow-card { margin-top: 12px !important; }
+.slide-inner .callout { margin: 12px 0 !important; padding: 13px 18px !important; }
+.slide-inner .chart-wrap { height: 232px !important; }
+.gd-btns { margin: 10px 0 !important; }
+/* tocbar を 3 列で揃える（6 枚の孤立カード解消）*/
+.slide-inner .tocbar { display: grid !important; grid-template-columns: repeat(3, minmax(0,1fr)) !important; gap: 14px !important; margin-top: 16px !important; }
+/* SUMMARY を 1 画面に収める（hr の 80px 余白・原理カードを圧縮）*/
+.slide-inner .hr-section { margin: 4px 0 12px !important; }
+.slide-inner .principle-card { padding: 13px 22px !important; margin-bottom: 9px !important; gap: 18px !important; grid-template-columns: 60px 46px 1fr !important; }
+.slide-inner .principle-card .num { font-size: 42px !important; }
+.slide-inner .principle-card h4 { font-size: 18px !important; margin-bottom: 4px !important; }
+.slide-inner .principle-card p { font-size: 14.5px !important; line-height: 1.6 !important; }
+.slide-inner .principle-card .principle-icon { width: 46px !important; height: 46px !important; }
+/* 数式を含むラベルの大文字化を解除（x→X / f'(x)→F'(X) 防止）*/
+.stat-label, .flow-card .flow-label { text-transform: none !important; letter-spacing: 0.03em !important; }
+.rule-tbl th { text-transform: none !important; }
+.slide-inner .rule-tbl { border-spacing: 0 5px !important; }
+.slide-inner .rule-tbl td { padding: 8px 14px !important; font-size: 16px !important; }
+.slide-inner .equation { padding: 12px 18px !important; margin: 8px 0 !important; font-size: 19px !important; }
+.nav-link { word-break: keep-all !important; }
+/* 日本語: 文節境界（＝著者が入れた空白）以外で改行しない。語中改行・数値と単位の分断を防ぐ */
+.slide-inner h2, .slide-inner .section-sub, .gate-title, .gate-sub,
+.slide-inner .callout .body, .slide-inner .principle-card p,
+.toc-hint, .toc-name, .slide-inner .stat-label, .flow-card .flow-label,
+.sb-body, .sb-step .desc, .supp-sec .sec-p, .supp-sec .sec-h,
+.rev-body, .rev-it-text, .cover-sub
+{ word-break: keep-all; overflow-wrap: break-word; }
+/* みきコン: 既定位置を右下余白へ（中央下で図・式に被るのを解消・.collapsed の right:auto を上書き）*/
+#mikibar, #mikibar.collapsed { left: auto !important; right: 22px !important; bottom: 92px !important; transform: none !important; }
+</style>
 </body>
 </html>
