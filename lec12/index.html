@@ -1451,6 +1451,11 @@
 
 .stat .stat-k{display:block;font-size:12px;font-weight:700;color:var(--ink-3);letter-spacing:.02em;}
 .stat .stat-v{display:block;font-size:21px;font-weight:800;color:var(--blue-dark);font-family:var(--font-mono);margin-top:3px;}
+
+  /* ===== lec12 回転モチーフ 動径アニメ ===== */
+  @keyframes l12orbit{to{transform:rotate(360deg)}}
+  .slide.active .l12-orbit{animation:l12orbit 9s linear infinite}
+  @media (prefers-reduced-motion:reduce){.slide.active .l12-orbit{animation:none!important}}
 </style>
 </head>
 <body>
@@ -1671,8 +1676,8 @@
             <div class="rev-graph">
               <svg viewBox="0 0 200 120" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
                 <circle cx="52" cy="60" r="30" fill="none" stroke="#7C3AED" stroke-width="2.5"/>
-                <line x1="52" y1="60" x2="74" y2="39" stroke="#6D28D9" stroke-width="2.6"/>
-                <circle cx="74" cy="39" r="4.5" fill="#6D28D9"/>
+                <g class="l12-orbit" style="transform-origin:52px 60px;transform-box:view-box"><line x1="52" y1="60" x2="74" y2="39" stroke="#6D28D9" stroke-width="2.6"/>
+                <circle cx="74" cy="39" r="4.5" fill="#6D28D9"/></g>
                 <path d="M 92 39 Q 120 5, 140 60 T 188 60" fill="none" stroke="#7C3AED" stroke-width="2.6"/>
               </svg>
             </div>
@@ -1742,8 +1747,8 @@
         <div style="margin: 16px auto 0; max-width: 560px; text-align: center;">
           <svg viewBox="0 0 680 240" xmlns="http://www.w3.org/2000/svg" style="width: 100%; height: auto;" role="img" aria-label="回転を三つの言葉で書く">
             <circle cx="150" cy="120" r="74" fill="#EFF6FF" stroke="#2563EB" stroke-width="3"/>
-            <line x1="150" y1="120" x2="204" y2="70" stroke="#1D4ED8" stroke-width="4" stroke-linecap="round"/>
-            <circle cx="204" cy="70" r="7" fill="#1D4ED8"/>
+            <g class="l12-orbit" style="transform-origin:150px 120px;transform-box:view-box"><line x1="150" y1="120" x2="204" y2="70" stroke="#1D4ED8" stroke-width="4" stroke-linecap="round"/>
+            <circle cx="204" cy="70" r="7" fill="#1D4ED8"/></g>
             <path d="M 214 60 A 74 74 0 0 1 232 108" fill="none" stroke="#E11D48" stroke-width="3.5" stroke-linecap="round"/>
             <polyline points="224,104 232,109 236,100" fill="none" stroke="#E11D48" stroke-width="3.5" stroke-linejoin="round"/>
             <text x="150" y="128" text-anchor="middle" font-family="Zen Kaku Gothic New" font-size="18" font-weight="800" fill="#1E3A8A">回転</text>
@@ -2027,7 +2032,7 @@
       <div class="gate-inner">
         <div class="gate-icon"><svg viewBox="0 0 256 256" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
           <circle cx="128" cy="128" r="78" fill="none" stroke="#DBEAFE" stroke-width="6"/>
-          <line x1="128" y1="128" x2="196" y2="90" stroke="#A5B4FC" stroke-width="6"/>
+          <g class="l12-orbit" style="transform-origin:128px 128px;transform-box:view-box"><line x1="128" y1="128" x2="196" y2="90" stroke="#A5B4FC" stroke-width="6"/></g>
           <path d="M 176 62 A 78 78 0 0 1 206 112" fill="none" stroke="#C7D2FE" stroke-width="9" stroke-linecap="round"/>
           <polyline points="197,107 207,113 211,102" fill="none" stroke="#C7D2FE" stroke-width="9" stroke-linejoin="round"/>
         </svg></div>
@@ -2091,11 +2096,18 @@
         </p>
         <div style="margin-top:15px; display:flex; gap:10px; flex-wrap:wrap;"><button class="supp-chip" data-supp="ADDITION"><span class="sc-ic"><svg viewBox="0 0 24 24"><circle cx="10.5" cy="10.5" r="6.5"/><line x1="15" y1="15" x2="20" y2="20"/><line x1="7.5" y1="10.5" x2="13.5" y2="10.5"/><line x1="10.5" y1="7.5" x2="10.5" y2="13.5"/></svg></span><span class="sc-tag">補足</span>加法定理を導く</button><button class="supp-chip" data-supp="DEMOIVRE"><span class="sc-ic"><svg viewBox="0 0 24 24"><circle cx="10.5" cy="10.5" r="6.5"/><line x1="15" y1="15" x2="20" y2="20"/><line x1="7.5" y1="10.5" x2="13.5" y2="10.5"/><line x1="10.5" y1="7.5" x2="10.5" y2="13.5"/></svg></span><span class="sc-tag">補足</span>ド・モアブルと n 乗根</button></div>
         <div class="fig-wrap" style="margin:10px auto 0; max-width:480px; text-align:center;">
-          <svg viewBox="0 0 480 130" xmlns="http://www.w3.org/2000/svg" style="width:100%;height:auto;" role="img" aria-label="回転の合成 α+β">
-            <circle cx="90" cy="70" r="46" fill="none" stroke="#2563EB" stroke-width="2.2"/>
-            <path d="M 136 70 A 46 46 0 0 0 113 30" fill="none" stroke="#E11D48" stroke-width="3"/><text x="150" y="52" font-family="JetBrains Mono" font-size="14" fill="#BE123C">α</text>
-            <path d="M 113 30 A 46 46 0 0 0 66 27" fill="none" stroke="#7C3AED" stroke-width="3"/><text x="86" y="16" font-family="JetBrains Mono" font-size="14" fill="#6D28D9">β</text>
-            <text x="250" y="76" font-family="Zen Kaku Gothic New" font-size="18" font-weight="700" fill="#1E3A8A">重ねると α＋β</text>
+          <svg viewBox="0 0 560 180" xmlns="http://www.w3.org/2000/svg" style="width:100%;height:auto;" role="img" aria-label="αのあとさらにβ回すとα+β">
+            <circle cx="100" cy="95" r="60" fill="none" stroke="#2563EB" stroke-width="2.2"/>
+            <line x1="100" y1="95" x2="160" y2="95" stroke="#CBD5E1" stroke-width="2"/>
+            <path d="M 160 95 A 60 60 0 0 0 149 58" fill="none" stroke="#E11D48" stroke-width="3"/>
+            <line x1="100" y1="95" x2="149" y2="58" stroke="#E11D48" stroke-width="2.6"/>
+            <path d="M 149 58 A 60 60 0 0 0 115 37" fill="none" stroke="#7C3AED" stroke-width="3"/>
+            <line x1="100" y1="95" x2="115" y2="37" stroke="#7C3AED" stroke-width="2.8"/>
+            <circle cx="115" cy="37" r="5.5" fill="#7C3AED"/>
+            <text x="146" y="86" font-family="JetBrains Mono" font-size="13" fill="#BE123C">α</text>
+            <text x="120" y="60" font-family="JetBrains Mono" font-size="13" fill="#6D28D9">β</text>
+            <text x="250" y="80" font-family="Zen Kaku Gothic New" font-size="17" font-weight="700" fill="#1E3A8A">α 回した先を、</text>
+            <text x="250" y="112" font-family="Zen Kaku Gothic New" font-size="17" font-weight="700" fill="#1E3A8A">さらに β 回すと <tspan fill="#7C3AED" font-weight="800">α＋β</tspan></text>
           </svg>
         </div>
       </div>
@@ -2260,7 +2272,7 @@
         <div class="fig-wrap" style="margin:14px auto 0; max-width:420px; text-align:center;">
           <svg viewBox="0 0 300 210" xmlns="http://www.w3.org/2000/svg" style="width:100%;height:auto;" role="img" aria-label="e^iθ が三つを束ねる">
             <circle cx="150" cy="105" r="70" fill="#EFF6FF" stroke="#2563EB" stroke-width="3"/>
-            <line x1="150" y1="105" x2="200" y2="58" stroke="#1D4ED8" stroke-width="3.5"/><circle cx="200" cy="58" r="6" fill="#1D4ED8"/>
+            <g class="l12-orbit" style="transform-origin:150px 105px;transform-box:view-box"><line x1="150" y1="105" x2="200" y2="58" stroke="#1D4ED8" stroke-width="3.5"/><circle cx="200" cy="58" r="6" fill="#1D4ED8"/></g>
             <path d="M 208 50 A 70 70 0 0 1 224 88" fill="none" stroke="#E11D48" stroke-width="3"/>
             <text x="150" y="112" text-anchor="middle" font-family="DM Serif Display" font-size="30" fill="#1E3A8A">e<tspan baseline-shift="super" font-size="0.68em">iθ</tspan></text>
           </svg>
