@@ -16,3 +16,11 @@
 .venv/
 __pycache__/
 lec07/_brushup_work/
+
+# Copyrighted textbooks — DO NOT push to this PUBLIC repo
+# 開隆堂『高校情報I』の本文PDF・学習ノート・解答等。授業準備のためローカルに置くが公開しない。
+joho/
+**/本文PDF*/
+**/学習ノート*/
+**/高校情*
+.DS_Store
